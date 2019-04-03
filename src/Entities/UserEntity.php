@@ -18,9 +18,40 @@ namespace EGroupware\OpenID\Entities;
 
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use OpenIDConnectServer\Entities\ClaimSetInterface;
+use EGroupware\Api;
 
 class UserEntity implements UserEntityInterface, ClaimSetInterface
 {
+	/**
+	 * Nummeric account_id this class is instanciated for
+	 *
+	 * @var int
+	 */
+	protected $account_id;
+
+	/**
+	 * Construct by username or nummerical identifier
+	 *
+	 * @param string|int $account username or nummerical identifier
+	 * @throws Api\Exception\WrongParameter
+	 */
+	public function __construct($account)
+	{
+		$accounts = Api\Accounts::getInstance();
+
+		if ((is_int($account) || is_numeric($account)))
+		{
+			if ($accounts->exists($account) !== 1)
+			{
+				throw new Api\Exception\WrongParameter("Invalid identifier #$account!");
+			}
+			$this->account_id = (int)$account;
+		}
+		elseif (!($this->account_id = $accounts->name2id($account)))
+		{
+			throw new Api\Exception\WrongParameter("Invalid username '$account'!");
+		}
+	}
     /**
      * Return the user's identifier.
      *
@@ -28,35 +59,42 @@ class UserEntity implements UserEntityInterface, ClaimSetInterface
      */
     public function getIdentifier()
     {
-        return 1;
+        return $this->account_id;
     }
 
     public function getClaims()
     {
+		$contacts = new Api\Contacts();
+
+		if (!($contact = $contacts->read('account:'.$this->account_id)))
+		{
+			throw new Api\Exception\WrongParameter("No contact-data for account #$this->account_id found!");
+		}
         return [
             // profile
-            'name' => 'John Smith',
-            'family_name' => 'Smith',
-            'given_name' => 'John',
-            'middle_name' => 'Doe',
-            'nickname' => 'JDog',
-            'preferred_username' => 'jdogsmith77',
+            'name' => $contact['n_fn'],
+            'family_name' => $contact['n_family'],
+            'given_name' => $contact['n_given'],
+            'middle_name' => $contact['n_middle'],
+            'nickname' => '',
+            'preferred_username' => Api\Accounts::id2name($this->account_id),
             'profile' => '',
             'picture' => 'avatar.png',
-            'website' => 'http://www.google.com',
-            'gender' => 'M',
-            'birthdate' => '01/01/1990',
+            'website' => $contact['url'],
+            'gender' => 'n/a',
+            'birthdate' => $contact['bday'],	// format?
             'zoneinfo' => '',
-            'locale' => 'US',
-            'updated_at' => '01/01/2018',
+            'locale' => $contact['adr_one_countrycode'],
+            'updated_at' => Api\DateTime::to($contact['modified'], 'Y-m-d'),
             // email
-            'email' => 'john.doe@example.com',
+            'email' => $contact['email'],
             'email_verified' => true,
             // phone
-            'phone_number' => '(866) 555-5555',
-            'phone_number_verified' => true,
+            'phone_number' => !empty($contact['tel_prefer']) && !empty($contact[$contact['tel_prefer']]) ?
+				$contact[$contact['tel_prefer']] : $contact['tel_cell'],
+            'phone_number_verified' => false,
             // address
-            'address' => '50 any street, any state, 55555',
+            'address' => $contact['label'],
         ];
     }
 }

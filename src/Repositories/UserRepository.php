@@ -20,6 +20,8 @@ use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use EGroupware\OpenID\Entities\UserEntity;
 
+use EGroupware\Api\Auth;
+
 class UserRepository implements UserRepositoryInterface
 {
     /**
@@ -30,9 +32,13 @@ class UserRepository implements UserRepositoryInterface
         $password,
         $grantType,
         ClientEntityInterface $clientEntity
-    ) {
-        if ($username === 'alex' && $password === 'whisky') {
-            return new UserEntity();
+    )
+	{
+		$auth = new Auth();
+
+        if ($auth->authenticate($username, $password))
+		{
+            return new UserEntity($username);
         }
 
         return;

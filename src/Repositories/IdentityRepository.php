@@ -23,6 +23,6 @@ class IdentityRepository implements IdentityProviderInterface
 {
     public function getUserEntityByIdentifier($identifier)
     {
-        return new UserEntity();
+        return new UserEntity($identifier);
     }
 }
