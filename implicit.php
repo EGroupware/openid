@@ -29,15 +29,25 @@ use EGroupware\OpenID\Repositories\IdentityRepository;
 use EGroupware\OpenID\Repositories\ScopeRepository;
 use OpenIDConnectServer\ClaimExtractor;
 use EGroupware\OpenID\Key;
+use EGroupware\OpenID\Authorize;
+use EGroupware\Api;
+
+/**
+ * Check if we have a session
+ */
+$no_session = false;
 
 $GLOBALS['egw_info'] = array(
 	'flags' => array(
-		'currentapp'	=> 'api',	// anonymous should have NO ranking access
+		'currentapp'	=> 'api',
 		'nonavbar'		=> True,
 		'noheader'      => True,
-		'autocreate_session_callback' => function(&$anon_account)
+		'autocreate_session_callback' => function(&$anon_account) use (&$no_session)
 		{
 			$anon_account = null;
+
+			// we dont have a session, but want to continue
+			$no_session = true;
 
 			// create session without checking auth: create(..., false, false)
 			return $GLOBALS['egw']->session->create('anonymous@'.$GLOBALS['egw_info']['user']['domain'],
@@ -45,6 +55,8 @@ $GLOBALS['egw_info'] = array(
 		}
 ));
 include('../header.inc.php');
+
+include __DIR__ . '/vendor/autoload.php';
 
 $app = new App([
     'settings'    => [
@@ -78,21 +90,44 @@ $app = new App([
     },
 ]);
 
-$app->get('/authorize', function (ServerRequestInterface $request, ResponseInterface $response) use ($app) {
+$app->get('/authorize', function (ServerRequestInterface $request, ResponseInterface $response) use ($app, $no_session)
+{
     /* @var \League\OAuth2\Server\AuthorizationServer $server */
     $server = $app->getContainer()->get(AuthorizationServer::class);
 
     try {
-        // Validate the HTTP request and return an AuthorizationRequest object.
-        // The auth request object can be serialized into a user's session
-        $authRequest = $server->validateAuthorizationRequest($request);
+		// check if we have stored authRequest, restore it
+		if (!$no_session && ($ar = Api\Cache::getSession('openid', 'authRequest')))
+		{
+			$authRequest = unserialize($ar);
+		}
+		else
+		{
+			// Validate the HTTP request and return an AuthorizationRequest object.
+			// The auth request object can be serialized into a user's session
+			$authRequest = $server->validateAuthorizationRequest($request);
+
+			// if we have no user-session --> redirect to login
+			if ($no_session)
+			{
+				// we need to explicit serialize $authRequest, as our autoloader is not yet loaded at session_start!
+				Api\Cache::setSession('openid', 'authRequest', serialize($authRequest));
+				Api\Framework::redirect_link('/login.php', [
+					'phpgw_forward' => '/openid/'.basename(__FILE__).'/authorize',
+				]);
+			}
+		}
 
         // Once the user has logged in set the user on the AuthorizationRequest
-        $authRequest->setUser(new UserEntity());
+        $authRequest->setUser(new UserEntity($GLOBALS['egw_info']['user']['account_id']));
 
-        // Once the user has approved or denied the client update the status
+ 		// ToDo: show user page with requested permissions, so he can approve or deny
+		$auth = new Authorize($authRequest);
+		$approve = $auth->approve();
+
+       // Once the user has approved or denied the client update the status
         // (true = approved, false = denied)
-        $authRequest->setAuthorizationApproved(true);
+        $authRequest->setAuthorizationApproved($approve);
 
         // Return the HTTP redirect response
         return $server->completeAuthorizationRequest($authRequest, $response);
