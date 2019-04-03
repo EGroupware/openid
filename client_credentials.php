@@ -15,8 +15,8 @@
 
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
-use OAuth2ServerExamples\Repositories\AccessTokenRepository;
-use OAuth2ServerExamples\Repositories\ClientRepository;
+use EGroupware\OpenID\Repositories\AccessTokenRepository;
+use EGroupware\OpenID\Repositories\ClientRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;

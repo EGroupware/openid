@@ -16,11 +16,11 @@
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
-use OAuth2ServerExamples\Entities\UserEntity;
-use OAuth2ServerExamples\Repositories\AccessTokenRepository;
-use OAuth2ServerExamples\Repositories\AuthCodeRepository;
-use OAuth2ServerExamples\Repositories\ClientRepository;
-use OAuth2ServerExamples\Repositories\RefreshTokenRepository;
+use EGroupware\OpenID\Entities\UserEntity;
+use EGroupware\OpenID\Repositories\AccessTokenRepository;
+use EGroupware\OpenID\Repositories\AuthCodeRepository;
+use EGroupware\OpenID\Repositories\ClientRepository;
+use EGroupware\OpenID\Repositories\RefreshTokenRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;

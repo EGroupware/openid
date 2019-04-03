@@ -14,15 +14,14 @@
  * @copyright   Copyright (c) Alex Bilbie
  */
 
-namespace EGroupware\OpenID\Repositories;
+namespace EGroupware\OpenID\Entities;
 
-use OpenIDConnectServer\Repositories\IdentityProviderInterface;
-use EGroupware\OpenID\Entities\UserEntity;
+use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
+use League\OAuth2\Server\Entities\Traits\AuthCodeTrait;
+use League\OAuth2\Server\Entities\Traits\EntityTrait;
+use League\OAuth2\Server\Entities\Traits\TokenEntityTrait;
 
-class IdentityRepository implements IdentityProviderInterface
+class AuthCodeEntity implements AuthCodeEntityInterface
 {
-    public function getUserEntityByIdentifier($identifier)
-    {
-        return new UserEntity();
-    }
+    use EntityTrait, TokenEntityTrait, AuthCodeTrait;
 }

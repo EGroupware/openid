@@ -16,13 +16,25 @@
 
 namespace EGroupware\OpenID\Repositories;
 
-use OpenIDConnectServer\Repositories\IdentityProviderInterface;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use EGroupware\OpenID\Entities\UserEntity;
 
-class IdentityRepository implements IdentityProviderInterface
+class UserRepository implements UserRepositoryInterface
 {
-    public function getUserEntityByIdentifier($identifier)
-    {
-        return new UserEntity();
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserEntityByUserCredentials(
+        $username,
+        $password,
+        $grantType,
+        ClientEntityInterface $clientEntity
+    ) {
+        if ($username === 'alex' && $password === 'whisky') {
+            return new UserEntity();
+        }
+
+        return;
     }
 }

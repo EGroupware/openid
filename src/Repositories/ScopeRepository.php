@@ -3,21 +3,24 @@
  * EGroupware OpenID Connect / OAuth2 server
  *
  * @link https://www.egroupware.org
- * Based on the following MIT Licensed packages:
- * @link https://github.com/steverhoades/oauth2-openid-connect-server
- * @link https://github.com/thephpleague/oauth2-server
  * @author Ralf Becker <rb-At-egroupware.org>
  * @package openid
  * @license http://opensource.org/licenses/gpl-license.php GPL - GNU General Public License
+ *
+ * Based on the following MIT Licensed packages:
+ * @link https://github.com/steverhoades/oauth2-openid-connect-server
+ * @link https://github.com/thephpleague/oauth2-server
+ * @author      Alex Bilbie <hello@alexbilbie.com>
+ * @copyright   Copyright (c) Alex Bilbie
  */
 
 namespace EGroupware\OpenID\Repositories;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
-use OAuth2ServerExamples\Entities\ScopeEntity;
+use EGroupware\OpenID\Entities\ScopeEntity;
 
-class ScopeRepository extends \OAuth2ServerExamples\Repositories\ScopeRepository
+class ScopeRepository implements ScopeRepositoryInterface
 {
     /**
      * {@inheritdoc}
@@ -45,5 +48,24 @@ class ScopeRepository extends \OAuth2ServerExamples\Repositories\ScopeRepository
         $scope->setIdentifier($scopeIdentifier);
 
         return $scope;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function finalizeScopes(
+        array $scopes,
+        $grantType,
+        ClientEntityInterface $clientEntity,
+        $userIdentifier = null
+    ) {
+        // Example of programatically modifying the final scope of the access token
+        if ((int) $userIdentifier === 1) {
+            $scope = new ScopeEntity();
+            $scope->setIdentifier('email');
+            $scopes[] = $scope;
+        }
+
+        return $scopes;
     }
 }

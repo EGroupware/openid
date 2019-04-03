@@ -14,10 +14,10 @@
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Grant\PasswordGrant;
-use OAuth2ServerExamples\Repositories\AccessTokenRepository;
-use OAuth2ServerExamples\Repositories\ClientRepository;
-use OAuth2ServerExamples\Repositories\RefreshTokenRepository;
-use OAuth2ServerExamples\Repositories\UserRepository;
+use EGroupware\OpenID\Repositories\AccessTokenRepository;
+use EGroupware\OpenID\Repositories\ClientRepository;
+use EGroupware\OpenID\Repositories\RefreshTokenRepository;
+use EGroupware\OpenID\Repositories\UserRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;

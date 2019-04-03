@@ -14,15 +14,13 @@
  * @copyright   Copyright (c) Alex Bilbie
  */
 
-namespace EGroupware\OpenID\Repositories;
+namespace EGroupware\OpenID\Entities;
 
-use OpenIDConnectServer\Repositories\IdentityProviderInterface;
-use EGroupware\OpenID\Entities\UserEntity;
+use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
+use League\OAuth2\Server\Entities\Traits\EntityTrait;
+use League\OAuth2\Server\Entities\Traits\RefreshTokenTrait;
 
-class IdentityRepository implements IdentityProviderInterface
+class RefreshTokenEntity implements RefreshTokenEntityInterface
 {
-    public function getUserEntityByIdentifier($identifier)
-    {
-        return new UserEntity();
-    }
+    use RefreshTokenTrait, EntityTrait;
 }

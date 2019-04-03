@@ -14,15 +14,23 @@
  * @copyright   Copyright (c) Alex Bilbie
  */
 
-namespace EGroupware\OpenID\Repositories;
+namespace EGroupware\OpenID\Entities;
 
-use OpenIDConnectServer\Repositories\IdentityProviderInterface;
-use EGroupware\OpenID\Entities\UserEntity;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Entities\Traits\ClientTrait;
+use League\OAuth2\Server\Entities\Traits\EntityTrait;
 
-class IdentityRepository implements IdentityProviderInterface
+class ClientEntity implements ClientEntityInterface
 {
-    public function getUserEntityByIdentifier($identifier)
+    use EntityTrait, ClientTrait;
+
+    public function setName($name)
     {
-        return new UserEntity();
+        $this->name = $name;
+    }
+
+    public function setRedirectUri($uri)
+    {
+        $this->redirectUri = $uri;
     }
 }
