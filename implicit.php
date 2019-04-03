@@ -3,14 +3,15 @@
  * EGroupware OpenID Connect / OAuth2 server
  *
  * @link https://www.egroupware.org
+ * @author Ralf Becker <rb-At-egroupware.org>
+ * @package openid
+ * @license http://opensource.org/licenses/gpl-license.php GPL - GNU General Public License
+ *
  * Based on the following MIT Licensed packages:
  * @link https://github.com/steverhoades/oauth2-openid-connect-server
  * @author      Alex Bilbie <hello@alexbilbie.com>
  * @copyright   Copyright (c) Alex Bilbie
  * @link https://github.com/thephpleague/oauth2-server
- * @author Ralf Becker <rb-At-egroupware.org>
- * @package openid
- * @license http://opensource.org/licenses/gpl-license.php GPL - GNU General Public License
  */
 
 use League\OAuth2\Server\AuthorizationServer;
@@ -27,8 +28,23 @@ use OpenIDConnectServer\IdTokenResponse;
 use EGroupware\OpenID\Repositories\IdentityRepository;
 use EGroupware\OpenID\Repositories\ScopeRepository;
 use OpenIDConnectServer\ClaimExtractor;
+use EGroupware\OpenID\Key;
 
-include __DIR__ . '/vendor/autoload.php';
+$GLOBALS['egw_info'] = array(
+	'flags' => array(
+		'currentapp'	=> 'api',	// anonymous should have NO ranking access
+		'nonavbar'		=> True,
+		'noheader'      => True,
+		'autocreate_session_callback' => function(&$anon_account)
+		{
+			$anon_account = null;
+
+			// create session without checking auth: create(..., false, false)
+			return $GLOBALS['egw']->session->create('anonymous@'.$GLOBALS['egw_info']['user']['domain'],
+				'', 'text', false, false);
+		}
+));
+include('../header.inc.php');
 
 $app = new App([
     'settings'    => [
@@ -40,7 +56,7 @@ $app = new App([
         $scopeRepository = new ScopeRepository();
         $accessTokenRepository = new AccessTokenRepository();
 
-        $privateKeyPath = 'file://' . __DIR__ . '/private.key';
+        $privateKeyPath = Key::getPrivate();
 
         // OpenID Connect Response Type
         $responseType = new IdTokenResponse(new IdentityRepository(), new ClaimExtractor());
