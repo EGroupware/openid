@@ -66,7 +66,7 @@ class UserEntity implements UserEntityInterface, ClaimSetInterface
     {
 		$contacts = new Api\Contacts();
 
-		if (!($contact = $contacts->read('account:'.$this->account_id)))
+		if (!($contact = $contacts->read('account:'.$this->account_id, true)))	// no ACL check, as we might have no session
 		{
 			throw new Api\Exception\WrongParameter("No contact-data for account #$this->account_id found!");
 		}
