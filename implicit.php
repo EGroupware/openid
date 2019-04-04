@@ -47,7 +47,7 @@ $GLOBALS['egw_info'] = array(
 			$anon_account = null;
 
 			// we dont have a session, but want to continue
-			$no_session = true;
+			$no_session = !empty($_COOKIE['last_loginid']) ? $_COOKIE['last_loginid'] : true;
 
 			// create session without checking auth: create(..., false, false)
 			return $GLOBALS['egw']->session->create('anonymous@'.$GLOBALS['egw_info']['user']['domain'],
@@ -112,28 +112,39 @@ $app->get('/authorize', function (ServerRequestInterface $request, ResponseInter
 			{
 				// we need to explicit serialize $authRequest, as our autoloader is not yet loaded at session_start!
 				Api\Cache::setSession('openid', 'authRequest', serialize($authRequest));
+				// if we had a "last_loginid" cookie, before creating the anon session, restore it
+				if ($no_session !== true)
+				{
+					Api\Session::egw_setcookie('last_loginid', $no_session , Api\DateTime::to('+2weeks', 'ts'));
+				}
 				Api\Framework::redirect_link('/login.php', [
-					'phpgw_forward' => '/openid/'.basename(__FILE__).'/authorize',
+					'phpgw_forward' => '/openid/'.basename(__FILE__).'/authorize?cd=no',
+					'cd' => lang('Login to authorize %1', $authRequest->getClient()->getName())
 				]);
 			}
 		}
 
-        // Once the user has logged in set the user on the AuthorizationRequest
-        $authRequest->setUser(new UserEntity($GLOBALS['egw_info']['user']['account_id']));
+		if ($authRequest->isAuthorizationApproved() === false)
+		{
+			// Once the user has logged in set the user on the AuthorizationRequest
+			$authRequest->setUser(new UserEntity($GLOBALS['egw_info']['user']['account_id']));
 
- 		// ToDo: show user page with requested permissions, so he can approve or deny
-		$auth = new Authorize($authRequest);
-		$approve = $auth->approve();
+			// ToDo: show user page with requested permissions, so he can approve or deny
+			$auth = new Authorize($authRequest, '/openid/'.basename(__FILE__).'/authorize?cd=no');
+			$auth->approve();	// does NOT return
+		}
+		// remove it for the next request
+		Api\Cache::unsetSession('openid', 'authRequest');
 
-       // Once the user has approved or denied the client update the status
-        // (true = approved, false = denied)
-        $authRequest->setAuthorizationApproved($approve);
-
-        // Return the HTTP redirect response
+		// Return the HTTP redirect response
         return $server->completeAuthorizationRequest($authRequest, $response);
-    } catch (OAuthServerException $exception) {
+    }
+	catch (OAuthServerException $exception)
+	{
         return $exception->generateHttpResponse($response);
-    } catch (\Exception $exception) {
+    }
+	catch (\Exception $exception)
+	{
         $body = new Stream('php://temp', 'r+');
         $body->write($exception->getMessage());
 

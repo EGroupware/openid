@@ -22,30 +22,41 @@ use EGroupware\OpenID\Entities\ScopeEntity;
 
 class ScopeRepository implements ScopeRepositoryInterface
 {
+	protected static $scopes = [
+		// Without this OpenID Connect cannot work.
+		'openid' => [
+			'description' => 'Enable OpenID Connect support'
+		],
+		'basic' => [
+			'description' => 'Basic details about you',
+		],
+		'email' => [
+			'description' => 'Your email address',
+		],
+	];
+
+	/**
+	 * Get available scopes
+	 *
+	 * @return array
+	 */
+	public static function getScopes()
+	{
+		return self::$scopes;
+	}
+
     /**
      * {@inheritdoc}
      */
     public function getScopeEntityByIdentifier($scopeIdentifier)
     {
-        $scopes = [
-            // Without this OpenID Connect cannot work.
-            'openid' => [
-                'description' => 'Enable OpenID Connect support'
-            ],
-            'basic' => [
-                'description' => 'Basic details about you',
-            ],
-            'email' => [
-                'description' => 'Your email address',
-            ],
-        ];
-
-        if (array_key_exists($scopeIdentifier, $scopes) === false) {
+        if (array_key_exists($scopeIdentifier, self::$scopes) === false) {
             return;
         }
 
         $scope = new ScopeEntity();
         $scope->setIdentifier($scopeIdentifier);
+		$scope->setDescription(self::$scopes[$scopeIdentifier]['description']);
 
         return $scope;
     }
@@ -63,6 +74,7 @@ class ScopeRepository implements ScopeRepositoryInterface
         if ((int) $userIdentifier === 1) {
             $scope = new ScopeEntity();
             $scope->setIdentifier('email');
+			$scope->setDescription(self::$scopes[$scopeIdentifier]['description']);
             $scopes[] = $scope;
         }
 

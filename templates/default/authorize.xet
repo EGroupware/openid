@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2//EN" "http://www.egroupware.org/etemplate2.dtd">
+<overlay>
+	<template id="openid.authorize" template="" lang="" group="0" version="1.9.003">
+		<groupbox>
+			<description id="client" label="%s would like to access"/>
+			<hrule/>
+			<select id="scopes" multiple="true" readonly="true"/>
+			<hrule/>
+			<hbox>
+				<button id="button[approve]" label="Approve" image="check" background_image="true"
+					onclick="widget.getInstanceManager().postSubmit()"/>
+				<button id="button[deny]" label="Deny" image="cancelled" background_image="true"
+					onclick="widget.getInstanceManager().postSubmit()"/>
+			</hbox>
+		</groupbox>
+		<styles>
+			div#popupMainDiv {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+			}
+			fieldset {
+				position: relative;
+				left: -50%;
+				top: -150px;
+				width: 300px;
+			}
+			fieldset > label {
+				font-size: 150%;
+				white-space: nowrap !important;
+			}
+			fieldset > label > span#openid-authorize_client {
+				font-weight: bold;
+			}
+		</styles>
+	</template>
+</overlay>

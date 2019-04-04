@@ -22,5 +22,22 @@ use League\OAuth2\Server\Entities\Traits\ScopeTrait;
 
 class ScopeEntity implements ScopeEntityInterface
 {
-    use EntityTrait, ScopeTrait;
+	use EntityTrait, ScopeTrait;
+
+	/**
+	 * Description of scope
+	 *
+	 * @var string
+	 */
+	protected $description;
+
+	public function setDescription($description)
+	{
+		$this->description = $description;
+	}
+
+	public function getDescription()
+	{
+		return !empty($this->description) ? $this->description : $this->getIdentifier();
+	}
 }

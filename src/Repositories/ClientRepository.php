@@ -33,6 +33,12 @@ class ClientRepository implements ClientRepositoryInterface
                 'redirect_uri'    => 'http://foo/bar',
                 'is_confidential' => true,
             ],
+			'oidcdebugger.com' => [
+                'secret'          => password_hash('secret', PASSWORD_BCRYPT),
+                'name'            => 'oidcdebugger.com',
+                'redirect_uri'    => 'https://oidcdebugger.com/debug',
+                'is_confidential' => true,
+			]
         ];
 
         // Check if client is registered
