@@ -30,11 +30,6 @@ use OpenIDConnectServer\ClaimExtractor;
 use EGroupware\OpenID\Key;
 use EGroupware\OpenID\Authorize;
 
-/**
- * Check if we have a session
- */
-$no_session = false;
-
 $GLOBALS['egw_info'] = array(
 	'flags' => array(
 		'currentapp'	=> 'api',
@@ -47,61 +42,61 @@ include('../header.inc.php');
 include __DIR__ . '/vendor/autoload.php';
 
 $app = new App([
-    'settings'    => [
-        'displayErrorDetails' => true,
-    ],
-    AuthorizationServer::class => function () {
-        // Init our repositories
-        $clientRepository = new ClientRepository();
-        $scopeRepository = new ScopeRepository();
-        $accessTokenRepository = new AccessTokenRepository();
+	'settings'    => [
+		'displayErrorDetails' => true,
+	],
+	AuthorizationServer::class => function () {
+		// Init our repositories
+		$clientRepository = new ClientRepository();
+		$scopeRepository = new ScopeRepository();
+		$accessTokenRepository = new AccessTokenRepository();
 
-        $privateKeyPath = Key::getPrivate();
+		$privateKeyPath = Key::getPrivate();
 
-        // OpenID Connect Response Type
-        $responseType = new IdTokenResponse(new IdentityRepository(), new ClaimExtractor());
+		// OpenID Connect Response Type
+		$responseType = new IdTokenResponse(new IdentityRepository(), new ClaimExtractor());
 
-        // Setup the authorization server
-        $server = new AuthorizationServer(
-            $clientRepository,
-            $accessTokenRepository,
-            $scopeRepository,
-            $privateKeyPath,
-            'lxZFUEsBCJ2Yb14IF2ygAHI5N4+ZAUXXaSeeJm6+twsUmIen',
-            $responseType
-        );
+		// Setup the authorization server
+		$server = new AuthorizationServer(
+			$clientRepository,
+			$accessTokenRepository,
+			$scopeRepository,
+			$privateKeyPath,
+			'lxZFUEsBCJ2Yb14IF2ygAHI5N4+ZAUXXaSeeJm6+twsUmIen',
+			$responseType
+		);
 
-        // Enable the implicit grant on the server with a token TTL of 1 hour
-        $server->enableGrantType(new ImplicitGrant(new \DateInterval('PT1H')));
+		// Enable the implicit grant on the server with a token TTL of 1 hour
+		$server->enableGrantType(new ImplicitGrant(new \DateInterval('PT1H')));
 
-        return $server;
-    },
+		return $server;
+	},
 ]);
 
 $app->get('/authorize', function (ServerRequestInterface $request, ResponseInterface $response) use ($app)
 {
-    /* @var \League\OAuth2\Server\AuthorizationServer $server */
-    $server = $app->getContainer()->get(AuthorizationServer::class);
+	/* @var \League\OAuth2\Server\AuthorizationServer $server */
+	$server = $app->getContainer()->get(AuthorizationServer::class);
 
-    try {
+	try {
 		$auth = new Authorize('/openid/'.basename(__FILE__).'/authorize');
 		// validate does NOT return, before user has approved or denied the request!
 		$authRequest = $auth->validate($server, $request);
 
 		// Return the HTTP redirect response
-        return $server->completeAuthorizationRequest($authRequest, $response);
-    }
+		return $server->completeAuthorizationRequest($authRequest, $response);
+	}
 	catch (OAuthServerException $exception)
 	{
-        return $exception->generateHttpResponse($response);
-    }
+		return $exception->generateHttpResponse($response);
+	}
 	catch (\Exception $exception)
 	{
-        $body = new Stream('php://temp', 'r+');
-        $body->write($exception->getMessage());
+		$body = new Stream('php://temp', 'r+');
+		$body->write($exception->getMessage());
 
-        return $response->withStatus(500)->withBody($body);
-    }
+		return $response->withStatus(500)->withBody($body);
+	}
 });
 
 $app->run();
