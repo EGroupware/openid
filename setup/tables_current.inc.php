@@ -136,7 +136,7 @@ $phpgw_baseline = array(
 		'ix' => array('client_id','account_id','access_token_revoked'),
 		'uc' => array()
 	),
-	'egw_access_token_scopes' => array(
+	'egw_openid_access_token_scopes' => array(
 		'fd' => array(
 			'access_token_scope_id' => array('type' => 'auto','nullable' => False),
 			'access_token_id' => array('type' => 'int','precision' => '4','nullable' => False),
