@@ -89,7 +89,7 @@ class Authorize
 	public function validate(AuthorizationServer $server, ServerRequestInterface $request)
 	{
 		// check if we have stored authRequest, restore it
-		if (self::$anon_session || !$this->authRequest)
+		if (self::$anon_session || !$this->authRequest || isset($_GET['client_id']))
 		{
 			// Validate the HTTP request and return an AuthorizationRequest object.
 			// The auth request object can be serialized into a user's session
@@ -146,11 +146,12 @@ class Authorize
 				return $scope->getIdentifier();
 			}, $this->authRequest->getScopes()),
 		];
+		$scopeRespository = new Repositories\ScopeRepository();
 		$sel_options = [
 			'scopes' => array_map(function($scope)
 			{
 				return $scope['description'];
-			}, Repositories\ScopeRepository::getScopes()),
+			}, $scopeRespository->getScopes()),
 		];
 		$_GET['cd'] = 'no';	// hack to stop framework redirect
 		$GLOBALS['egw_info']['flags']['js_link_registry'] = true;	// as we have no regular framework

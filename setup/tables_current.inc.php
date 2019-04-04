@@ -176,8 +176,8 @@ $phpgw_baseline = array(
 		),
 		'pk' => array('auth_code_id'),
 		'fk' => array(),
-		'ix' => array(),
-		'uc' => array('account_id','client_id')
+		'ix' => array('account_id','client_id'),
+		'uc' => array()
 	),
 	'egw_openid_auth_code_scopes' => array(
 		'fd' => array(

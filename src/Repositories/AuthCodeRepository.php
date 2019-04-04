@@ -20,34 +20,88 @@ use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use EGroupware\OpenID\Entities\AuthCodeEntity;
 
-class AuthCodeRepository implements AuthCodeRepositoryInterface
+/**
+ * Auth code storage interface.
+ */
+class AuthCodeRepository extends Base implements AuthCodeRepositoryInterface
 {
+	/**
+	 * Name of auth-code table
+	 */
+	const TABLE = 'egw_openid_auth_codes';
+	const AUTH_CODE_SCOPES_TABLE = 'egw_openid_auth_code_scopes';
+
     /**
-     * {@inheritdoc}
+     * Persists a new auth code to permanent storage.
+     *
+     * @param AuthCodeEntityInterface $authCodeEntity
+     *
+     * @throws UniqueTokenIdentifierConstraintViolationException
      */
     public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity)
     {
-        // Some logic to persist the auth code to a database
+		//error_log(__METHOD__."(".array2string($authCodeEntity).")");
+
+		try {
+			$this->db->insert(self::TABLE, [
+				'auth_code_identifier' => $authCodeEntity->getIdentifier(),
+				'client_id' => $authCodeEntity->getClient()->getID(),
+				'account_id' => $authCodeEntity->getUserIdentifier(),
+				'auth_code_redirect_uri' => $authCodeEntity->getRedirectUri(),
+				'auth_code_expiration' => $authCodeEntity->getExpiryDateTime(),
+				'auth_code_created' => time(),
+			], false, __LINE__, __FILE__, self::APP);
+
+			$authCodeEntity->setID($this->db->get_last_insert_id(self::TABLE, 'auth_code_id'));
+
+			foreach($authCodeEntity->getScopes() as $scope)
+			{
+				$this->db->insert(self::AUTH_CODE_SCOPES_TABLE, [
+					'auth_code_id' => $authCodeEntity->getID(),
+					'scope_id' => $scope->getID(),
+				], false, __LINE__, __FILE__, self::APP);
+			}
+		}
+		catch(Api\Db\Exception\NotUnique $ex) {
+			unset($ex);
+			throw UniqueTokenIdentifierConstraintViolationException::create();
+		}
     }
 
     /**
-     * {@inheritdoc}
+     * Revoke an auth code.
+     *
+     * @param string $codeId
      */
     public function revokeAuthCode($codeId)
     {
-        // Some logic to revoke the auth code in a database
+		$this->db->update(self::TABLE, [
+			'auth_code_revoked' => true,
+		], [
+			'auth_code_identifier' => $codeId,
+		], __LINE__, __FILE__, self::APP);
     }
 
     /**
-     * {@inheritdoc}
+     * Check if the auth code has been revoked.
+     *
+     * @param string $codeId
+     *
+     * @return bool Return true if this code has been revoked
      */
     public function isAuthCodeRevoked($codeId)
     {
-        return false; // The auth code has not been revoked
+		$revoked = $this->db->select(self::TABLE, 'auth_code_revoked', [
+			'auth_code_identifier' => $codeId,
+		], __LINE__, __FILE__, false, '', self::APP)->fetchColumn();
+
+		return $revoked === false || $this->db->from_bool($revoked);
     }
 
     /**
-     * {@inheritdoc}
+     * Creates a new AuthCode
+     *
+     * @return AuthCodeEntityInterface
      */
     public function getNewAuthCode()
     {

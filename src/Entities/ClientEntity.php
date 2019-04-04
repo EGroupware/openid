@@ -20,7 +20,7 @@ use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\Traits\ClientTrait;
 use League\OAuth2\Server\Entities\Traits\EntityTrait;
 
-class ClientEntity implements ClientEntityInterface
+class ClientEntity extends Base implements ClientEntityInterface
 {
     use EntityTrait, ClientTrait;
 

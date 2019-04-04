@@ -21,7 +21,7 @@ use League\OAuth2\Server\Entities\Traits\AccessTokenTrait;
 use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use League\OAuth2\Server\Entities\Traits\TokenEntityTrait;
 
-class AccessTokenEntity implements AccessTokenEntityInterface
+class AccessTokenEntity extends Base implements AccessTokenEntityInterface
 {
-    use AccessTokenTrait, TokenEntityTrait, EntityTrait;
+	use AccessTokenTrait, TokenEntityTrait, EntityTrait;
 }

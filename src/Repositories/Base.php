@@ -10,17 +10,31 @@
  * Based on the following MIT Licensed packages:
  * @link https://github.com/steverhoades/oauth2-openid-connect-server
  * @link https://github.com/thephpleague/oauth2-server
- * @author      Alex Bilbie <hello@alexbilbie.com>
- * @copyright   Copyright (c) Alex Bilbie
  */
 
-namespace EGroupware\OpenID\Entities;
+namespace EGroupware\OpenID\Repositories;
 
-use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
-use League\OAuth2\Server\Entities\Traits\EntityTrait;
-use League\OAuth2\Server\Entities\Traits\RefreshTokenTrait;
+use EGroupware\Api;
 
-class RefreshTokenEntity extends Base implements RefreshTokenEntityInterface
+/**
+ * Base class for all OpenID repositories / storage objects
+ */
+class Base
 {
-    use RefreshTokenTrait, EntityTrait;
+	/**
+	 * Application name
+	 */
+	const APP = 'openid';
+
+	/**
+	 * Reference to global Db object
+	 *
+	 * @var Api\Db
+	 */
+	protected $db;
+
+	public function __construct()
+	{
+		$this->db = $GLOBALS['egw']->db;
+	}
 }

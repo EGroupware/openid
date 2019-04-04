@@ -10,17 +10,38 @@
  * Based on the following MIT Licensed packages:
  * @link https://github.com/steverhoades/oauth2-openid-connect-server
  * @link https://github.com/thephpleague/oauth2-server
- * @author      Alex Bilbie <hello@alexbilbie.com>
- * @copyright   Copyright (c) Alex Bilbie
  */
 
 namespace EGroupware\OpenID\Entities;
 
-use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
-use League\OAuth2\Server\Entities\Traits\EntityTrait;
-use League\OAuth2\Server\Entities\Traits\RefreshTokenTrait;
-
-class RefreshTokenEntity extends Base implements RefreshTokenEntityInterface
+/**
+ * Base class for all OpenID entities
+ */
+class Base
 {
-    use RefreshTokenTrait, EntityTrait;
+	/**
+	 *
+	 * @var int
+	 */
+	protected $id;
+
+	/**
+	 * Set nummeric ID
+	 *
+	 * @parm $id int
+	 */
+	public function setID($id)
+	{
+		$this->id = $id;
+	}
+
+	/**
+	 * Get nummeric ID
+	 *
+	 * @return int
+	 */
+	public function getID()
+	{
+		return $this->id;
+	}
 }

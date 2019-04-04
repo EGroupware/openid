@@ -22,6 +22,9 @@ use EGroupware\OpenID\Entities\UserEntity;
 
 use EGroupware\Api\Auth;
 
+/**
+ * User storage and authentication
+ */
 class UserRepository implements UserRepositoryInterface
 {
     /**

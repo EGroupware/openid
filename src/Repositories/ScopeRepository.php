@@ -18,66 +18,73 @@ namespace EGroupware\OpenID\Repositories;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use EGroupware\OpenID\Entities\ScopeEntity;
+use EGroupware\Api;
 
-class ScopeRepository implements ScopeRepositoryInterface
+class ScopeRepository extends Base implements ScopeRepositoryInterface
 {
-	protected static $scopes = [
-		// Without this OpenID Connect cannot work.
-		'openid' => [
-			'description' => 'Enable OpenID Connect support'
-		],
-		'basic' => [
-			'description' => 'Basic details about you',
-		],
-		'email' => [
-			'description' => 'Your email address',
-		],
-	];
+	/**
+	 * Name of scopes table
+	 */
+	const TABLE = 'egw_openid_scopes';
 
 	/**
 	 * Get available scopes
 	 *
-	 * @return array
+	 * @return array identifier => ['description'=>'...', ...]
 	 */
-	public static function getScopes()
+	public function getScopes()
 	{
-		return self::$scopes;
+		$scopes = [];
+		foreach($this->db->select(self::TABLE, '*', false,
+			__LINE__, __FILE__, false, '', self::APP) as $row)
+		{
+			$scopes[$row['scope_identifier']] = Api\Db::strip_array_keys($row, 'scope_');
+		}
+		return $scopes;
 	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getScopeEntityByIdentifier($scopeIdentifier)
-    {
-        if (array_key_exists($scopeIdentifier, self::$scopes) === false) {
-            return;
-        }
+	/**
+	 * Return information about a scope.
+	 *
+	 * @param string $identifier The scope identifier
+	 *
+	 * @return ScopeEntityInterface
+	 */
+	public function getScopeEntityByIdentifier($identifier)
+	{
+		if (!($data = $this->db->select(self::TABLE, '*', ['scope_identifier' => $identifier],
+			__LINE__, __FILE__, false, '', self::APP)->fetch()))
+		{
+			throw OAuthServerException::invalidScope($identifier);
+		}
 
-        $scope = new ScopeEntity();
-        $scope->setIdentifier($scopeIdentifier);
-		$scope->setDescription(self::$scopes[$scopeIdentifier]['description']);
+		$scope = new ScopeEntity();
+		$scope->setID($data['scope_id']);
+		$scope->setIdentifier($data['scope_identifier']);
+		$scope->setDescription($data['scope_description']);
 
-        return $scope;
-    }
+		return $scope;
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function finalizeScopes(
-        array $scopes,
-        $grantType,
-        ClientEntityInterface $clientEntity,
-        $userIdentifier = null
-    ) {
-        // Example of programatically modifying the final scope of the access token
-        if ((int) $userIdentifier === 1) {
-            $scope = new ScopeEntity();
-            $scope->setIdentifier('email');
+	/**
+	 * {@inheritdoc}
+	 */
+	public function finalizeScopes(
+		array $scopes,
+		$grantType,
+		ClientEntityInterface $clientEntity,
+		$userIdentifier = null
+	) {
+		/* Example of programatically modifying the final scope of the access token
+		if ((int) $userIdentifier === 1) {
+			$scope = new ScopeEntity();
+			$scope->setIdentifier('email');
 			$scope->setDescription(self::$scopes[$scopeIdentifier]['description']);
-            $scopes[] = $scope;
-        }
+			$scopes[] = $scope;
+		}*/
 
-        return $scopes;
-    }
+		return $scopes;
+	}
 }

@@ -19,46 +19,104 @@ namespace EGroupware\OpenID\Repositories;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
+use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use EGroupware\OpenID\Entities\AccessTokenEntity;
 
-class AccessTokenRepository implements AccessTokenRepositoryInterface
+/**
+ * Access token storage interface.
+ */
+class AccessTokenRepository extends Base implements AccessTokenRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity)
-    {
-        // Some logic here to save the access token to a database
-    }
+	/**
+	 * Table name
+	 */
+	const TABLE = 'egw_openid_access_tokens';
+	const TOKEN_SCOPES_TABLE = 'egw_openid_access_token_scopes';
 
-    /**
-     * {@inheritdoc}
-     */
-    public function revokeAccessToken($tokenId)
-    {
-        // Some logic here to revoke the access token
-    }
+	/**
+	 * Persists a new access token to permanent storage.
+	 *
+	 * @param AccessTokenEntityInterface $accessTokenEntity
+	 *
+	 * @throws UniqueTokenIdentifierConstraintViolationException
+	 */
+	public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity)
+	{
+		//error_log(__METHOD__."(".array2string($accessTokenEntity).")");
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isAccessTokenRevoked($tokenId)
-    {
-        return false; // Access token hasn't been revoked
-    }
+		try {
+			$this->db->insert(self::TABLE, [
+				'access_token_identifier' => $accessTokenEntity->getIdentifier(),
+				'client_id' => $accessTokenEntity->getClient()->getID(),
+				'account_id' => $accessTokenEntity->getUserIdentifier(),
+				'access_token_expiration' => $accessTokenEntity->getExpiryDateTime(),
+				'access_token_created' => time(),
+			], false, __LINE__, __FILE__, self::APP);
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null)
-    {
-        $accessToken = new AccessTokenEntity();
-        $accessToken->setClient($clientEntity);
-        foreach ($scopes as $scope) {
-            $accessToken->addScope($scope);
-        }
-        $accessToken->setUserIdentifier($userIdentifier);
+			$accessTokenEntity->setID($this->db->get_last_insert_id(self::TABLE, 'access_token_id'));
 
-        return $accessToken;
-    }
+			foreach($accessTokenEntity->getScopes() as $scope)
+			{
+				$this->db->insert(self::TOKEN_SCOPES_TABLE, [
+					'access_token_id' => $accessTokenEntity->getID(),
+					'scope_id' => $scope->getID(),
+				], false, __LINE__, __FILE__, self::APP);
+			}
+		}
+		catch(Api\Db\Exception\NotUnique $ex) {
+			unset($ex);
+			throw UniqueTokenIdentifierConstraintViolationException::create();
+		}
+	}
+
+	/**
+	 * Revoke an access token.
+	 *
+	 * @param string $tokenId
+	 */
+	public function revokeAccessToken($tokenId)
+	{
+		$this->db->update(self::TABLE, [
+			'access_token_revoked' => true,
+		], [
+			'access_token_identifier' => $tokenId,
+		], __LINE__, __FILE__, self::APP);
+	}
+
+	/**
+	 * Check if the access token has been revoked.
+	 *
+	 * @param string $tokenId
+	 *
+	 * @return bool Return true if this token has been revoked
+	 */
+	public function isAccessTokenRevoked($tokenId)
+	{
+		$revoked = $this->db->select(self::TABLE, 'access_token_revoked', [
+			'access_token_identifier' => $tokenId,
+		], __LINE__, __FILE__, false, '', self::APP)->fetchColumn();
+
+		return $revoked === false || $this->db->from_bool($revoked);
+	}
+
+	/**
+	 * Create a new access token
+	 *
+	 * @param ClientEntityInterface  $clientEntity
+	 * @param ScopeEntityInterface[] $scopes
+	 * @param mixed                  $userIdentifier
+	 *
+	 * @return AccessTokenEntityInterface
+	 */
+	public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null)
+	{
+		$accessToken = new AccessTokenEntity();
+		$accessToken->setClient($clientEntity);
+		foreach ($scopes as $scope) {
+			$accessToken->addScope($scope);
+		}
+		$accessToken->setUserIdentifier($userIdentifier);
+
+		return $accessToken;
+	}
 }

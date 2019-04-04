@@ -17,47 +17,52 @@
 namespace EGroupware\OpenID\Repositories;
 
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use EGroupware\OpenID\Entities\ClientEntity;
+use EGroupware\Api;
 
-class ClientRepository implements ClientRepositoryInterface
+class ClientRepository extends Base implements ClientRepositoryInterface
 {
+	/**
+	 * Name of clients table
+	 */
+	const TABLE = 'egw_openid_clients';
+
     /**
-     * {@inheritdoc}
+     * Get a client.
+     *
+     * @param string      $clientIdentifier   The client's identifier
+     * @param null|string $grantType          The grant type used (if sent)
+     * @param null|string $clientSecret       The client's secret (if sent)
+     * @param bool        $mustValidateSecret If true the client must attempt to validate the secret if the client
+     *                                        is confidential
+     *
+     * @return ClientEntityInterface
      */
     public function getClientEntity($clientIdentifier, $grantType = null, $clientSecret = null, $mustValidateSecret = true)
     {
-        $clients = [
-            'myawesomeapp' => [
-                'secret'          => password_hash('abc123', PASSWORD_BCRYPT),
-                'name'            => 'My Awesome App',
-                'redirect_uri'    => 'http://foo/bar',
-                'is_confidential' => true,
-            ],
-			'oidcdebugger.com' => [
-                'secret'          => password_hash('secret', PASSWORD_BCRYPT),
-                'name'            => 'oidcdebugger.com',
-                'redirect_uri'    => 'https://oidcdebugger.com/debug',
-                'is_confidential' => true,
-			]
-        ];
+		unset($grantType);	// currently now used, but required but interface
 
-        // Check if client is registered
-        if (array_key_exists($clientIdentifier, $clients) === false) {
-            return;
-        }
+		if (!($data = $this->db->select(self::TABLE, '*', ['client_identifier' => $clientIdentifier],
+			__LINE__, __FILE__, false, '', self::APP)->fetch()))
+		{
+			throw OAuthServerException::invalidClient();
+		}
+		$data = Api\Db::strip_array_keys($data, 'client_');
 
         if (
             $mustValidateSecret === true
-            && $clients[$clientIdentifier]['is_confidential'] === true
-            && password_verify($clientSecret, $clients[$clientIdentifier]['secret']) === false
+            && !empty($data['secret']) === true	// only store secrets for confidential clients
+            && password_verify($clientSecret, $data['secret']) === false
         ) {
             return;
         }
 
         $client = new ClientEntity();
-        $client->setIdentifier($clientIdentifier);
-        $client->setName($clients[$clientIdentifier]['name']);
-        $client->setRedirectUri($clients[$clientIdentifier]['redirect_uri']);
+		$client->setID($data['id']);
+        $client->setIdentifier($data['identifier']);
+        $client->setName($data['name']);
+        $client->setRedirectUri($data['redirect_uri']);
 
         return $client;
     }

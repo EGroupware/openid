@@ -18,39 +18,79 @@ namespace EGroupware\OpenID\Repositories;
 
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
+use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use EGroupware\OpenID\Entities\RefreshTokenEntity;
 
-class RefreshTokenRepository implements RefreshTokenRepositoryInterface
+/**
+ * Refresh token storage interface.
+ */
+class RefreshTokenRepository extends Base implements RefreshTokenRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity)
-    {
-        // Some logic to persist the refresh token in a database
-    }
+	/**
+	 * Create a new refresh token_name.
+	 *
+	 * @param RefreshTokenEntityInterface $refreshTokenEntity
+	 *
+	 * @throws UniqueTokenIdentifierConstraintViolationException
+	 */
+	public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity)
+	{
+		//error_log(__METHOD__."(".array2string($refreshTokenEntity).")");
 
-    /**
-     * {@inheritdoc}
-     */
-    public function revokeRefreshToken($tokenId)
-    {
-        // Some logic to revoke the refresh token in a database
-    }
+		try {
+			$this->db->insert(self::TABLE, [
+				'refresh_token_identifier' => $refreshTokenEntity->getIdentifier(),
+				'client_id' => $refreshTokenEntity->getClient()->getID(),
+				'account_id' => $refreshTokenEntity->getUserIdentifier(),
+				'refresh_token_expiration' => $refreshTokenEntity->getExpiryDateTime(),
+				'refresh_token_created' => time(),
+			], false, __LINE__, __FILE__, self::APP);
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isRefreshTokenRevoked($tokenId)
-    {
-        return false; // The refresh token has not been revoked
-    }
+			$refreshTokenEntity->setID($this->db->get_last_insert_id(self::TABLE, 'refresh_token_id'));
+		}
+		catch(Api\Db\Exception\NotUnique $ex) {
+			unset($ex);
+			throw UniqueTokenIdentifierConstraintViolationException::create();
+		}
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getNewRefreshToken()
-    {
-        return new RefreshTokenEntity();
-    }
+	/**
+	 * Revoke the refresh token.
+	 *
+	 * @param string $tokenId
+	 */
+	public function revokeRefreshToken($tokenId)
+	{
+		$this->db->update(self::TABLE, [
+			'refresh_token_revoked' => true,
+		], [
+			'refresh_token_identifier' => $tokenId,
+		], __LINE__, __FILE__, self::APP);
+	}
+
+	/**
+	 * Check if the refresh token has been revoked.
+	 *
+	 * @param string $tokenId
+	 *
+	 * @return bool Return true if this token has been revoked
+	 */
+	public function isRefreshTokenRevoked($tokenId)
+	{
+		$revoked = $this->db->select(self::TABLE, 'refresh_token_revoked', [
+			'refresh_token_identifier' => $tokenId,
+		], __LINE__, __FILE__, false, '', self::APP)->fetchColumn();
+
+		return $revoked === false || $this->db->from_bool($revoked);
+	}
+
+	/**
+	 * Creates a new refresh token
+	 *
+	 * @return RefreshTokenEntityInterface
+	 */
+	public function getNewRefreshToken()
+	{
+		return new RefreshTokenEntity();
+	}
 }
