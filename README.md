@@ -2,7 +2,7 @@
 
 This is work in progress, do NOT install on a production server!
 
-Open tasks:
+## Open tasks:
 - [ ] installation to automatic create public key pair and encryption key
 - [ ] password grant: record and check failed login attempts like login page (see [user.authentication.failed](https://oauth2.thephpleague.com/authorization-server/events/))
 - [ ] move to a single endpoint.php instead (implicit|auth_code|client_credentials|password).php
