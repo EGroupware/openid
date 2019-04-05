@@ -2,6 +2,17 @@
 
 This is work in progress, do NOT install on a production server!
 
+Open tasks:
+- [ ] installation to automatic create public key pair and encryption key
+- [ ] password grant: record and check failed login attempts like login page (see [user.authentication.failed](https://oauth2.thephpleague.com/authorization-server/events/))
+- [ ] move to a single endpoint.php instead (implicit|auth_code|client_credentials|password).php
+- [ ] limit clients to certain grant types and scopes (database schema supports that)
+- [ ] UI to add clients as admin for all users or personal ones
+- [ ] UI to view and revoke access- and refresh-tokes
+- [ ] fix League OAuth2 server to support hybrid flow (currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant
+- [ ] test with Rocket.Chat
+- [ ] test with more clients
+
 ## Installation
 
 0. Clone this repo into your EGroupware directory:
