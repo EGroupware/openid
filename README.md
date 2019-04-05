@@ -11,7 +11,7 @@ This is work in progress, do NOT install on a production server!
 - [ ] UI to view and revoke access- and refresh-tokes
 - [ ] fix League OAuth2 server to support hybrid flow (currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant
 - [ ] test with Rocket.Chat
-- [ ] implement [RFC7662 OAuth 2.0 Token Introspection](https://tools.ietf.org/html/rfc7662) to allow clients to validate tokens
+- [ ] implement [RFC7662 OAuth 2.0 Token Introspection](https://tools.ietf.org/html/rfc7662) to allow clients to validate tokens, see [oauth2-server pull request #925](https://github.com/thephpleague/oauth2-server/pull/925)
 - [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
 
 ## Installation
