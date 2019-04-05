@@ -27,6 +27,11 @@ use EGroupware\OpenID\Entities\RefreshTokenEntity;
 class RefreshTokenRepository extends Base implements RefreshTokenRepositoryInterface
 {
 	/**
+	 * Name of auth-code table
+	 */
+	const TABLE = 'egw_openid_refresh_tokens';
+
+	/**
 	 * Create a new refresh token_name.
 	 *
 	 * @param RefreshTokenEntityInterface $refreshTokenEntity
@@ -40,8 +45,7 @@ class RefreshTokenRepository extends Base implements RefreshTokenRepositoryInter
 		try {
 			$this->db->insert(self::TABLE, [
 				'refresh_token_identifier' => $refreshTokenEntity->getIdentifier(),
-				'client_id' => $refreshTokenEntity->getClient()->getID(),
-				'account_id' => $refreshTokenEntity->getUserIdentifier(),
+				'access_token_id' => $refreshTokenEntity->getAccessToken()->getID(),
 				'refresh_token_expiration' => $refreshTokenEntity->getExpiryDateTime(),
 				'refresh_token_created' => time(),
 			], false, __LINE__, __FILE__, self::APP);

@@ -34,7 +34,8 @@ use EGroupware\OpenID\Authorize;
 
 $GLOBALS['egw_info'] = array(
 	'flags' => array(
-		'currentapp'	=> 'api',
+		// only /authorize needs a session, /access_token does not
+		'currentapp'	=> $_SERVER['PATH_INFO'] === '/authorize' ? 'api' : 'login',
 		'nonavbar'		=> True,
 		'noheader'      => True,
 		'autocreate_session_callback' => Authorize::class.'::anon_session',
