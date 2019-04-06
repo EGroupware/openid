@@ -30,17 +30,9 @@ use EGroupware\OpenID\Key;
 
 $GLOBALS['egw_info'] = array(
 	'flags' => array(
-		'currentapp'	=> 'api',	// anonymous should have NO ranking access
+		'currentapp'	=> 'login',
 		'nonavbar'		=> True,
 		'noheader'      => True,
-		'autocreate_session_callback' => function(&$anon_account)
-		{
-			$anon_account = null;
-
-			// create session without checking auth: create(..., false, false)
-			return $GLOBALS['egw']->session->create('anonymous@'.$GLOBALS['egw_info']['user']['domain'],
-				'', 'text', false, false);
-		}
 ));
 include('../header.inc.php');
 
