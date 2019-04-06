@@ -95,11 +95,12 @@ class UserEntity implements UserEntityInterface, ClaimSetInterface
 			'nickname' => '',
 			'preferred_username' => Api\Accounts::id2name($this->account_id),
 			'profile' => '',
-			'picture' => 'avatar.png',
+			'picture' => 'https://www.gravatar.com/avatar/'.
+				md5(strtolower(trim($contact['email']))),
 			'website' => $contact['url'],
 			'gender' => 'n/a',
 			'birthdate' => $contact['bday'],	// format?
-			'zoneinfo' => '',
+			'zoneinfo' => Api\DateTime::$user_timezone->getName(),
 			'locale' => $contact['adr_one_countrycode'],
 			'updated_at' => Api\DateTime::to($contact['modified'], 'Y-m-d'),
 			// email

@@ -20,6 +20,8 @@ use League\OAuth2\Server\Grant\AuthCodeGrant;
 use League\OAuth2\Server\Grant\ImplicitGrant;
 use League\OAuth2\Server\Grant\PasswordGrant;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
+use League\OAuth2\Server\Middleware\ResourceServerMiddleware;
+use League\OAuth2\Server\ResourceServer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
@@ -33,6 +35,7 @@ use EGroupware\OpenID\Repositories\RefreshTokenRepository;
 use EGroupware\OpenID\Repositories\UserRepository;
 use EGroupware\OpenID\Repositories\IdentityRepository;
 use EGroupware\OpenID\Repositories\ScopeRepository;
+use EGroupware\OpenID\Entities\UserEntity;
 use EGroupware\OpenID\Key;
 use EGroupware\OpenID\Authorize;
 
@@ -117,6 +120,16 @@ $app = new App([
 
 		return $server;
 	},
+	ResourceServer::class => function () {
+		$publicKeyPath = Key::getPublic();
+
+		$server = new ResourceServer(
+			new AccessTokenRepository(),
+			$publicKeyPath
+		);
+
+		return $server;
+	},
 ]);
 
 $app->get('/authorize', function (ServerRequestInterface $request, ResponseInterface $response) use ($app)
@@ -167,5 +180,30 @@ $app->post('/access_token', function (ServerRequestInterface $request, ResponseI
 		return $response->withStatus(500)->withBody($body);
 	}
 });
+
+$app->get('/userinfo', function (ServerRequestInterface $request, ResponseInterface $response)
+{
+	$account_id = $request->getAttribute('oauth_user_id');
+	$params = ['sub' => $account_id];
+	$user = new UserEntity($account_id);
+	$claimExtractor = new ClaimExtractor();
+	$params += $claimExtractor->extract($request->getAttribute('oauth_scopes', []),
+		$user->getClaims());
+
+    $response->getBody()->write(json_encode($params));
+	return $response
+		->withStatus(200)
+		->withHeader('pragma', 'no-cache')
+		->withHeader('cache-control', 'no-store')
+		->withHeader('content-type', 'application/json; charset=UTF-8');
+
+})->add(new ResourceServerMiddleware($app->getContainer()->get(ResourceServer::class)));
+
+// Slim does NOT detect Authorization header with Apache not writing it to $_SERVER['HTTP_AUTHORIZATION']
+if (function_exists('apache_request_headers') && !isset($_SERVER['HTTP_AUTHORIZATION']) &&
+	($headers = apache_request_headers()) && isset($headers['Authorization']))
+{
+	$_SERVER['HTTP_AUTHORIZATION'] = $headers['Authorization'];
+}
 
 $app->run();

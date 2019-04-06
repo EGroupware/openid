@@ -5,17 +5,17 @@ This is work in progress, do NOT install on a production server!
 ## Open tasks:
 - [x] move to a single endpoint.php instead (implicit|auth_code|client_credentials|password).php
 - [x] add additional [OpenID Connect standard scopes](https://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims): profile, address, phone
+- [x] implement [OpenID Connect /userinfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo)
+- [x] test with Rocket.Chat, see below for Rocket.Chat custom OAuth configuration
 - [ ] installation to automatic create public key pair and encryption key
 - [ ] password grant: record and check failed login attempts like login page (see [user.authentication.failed](https://oauth2.thephpleague.com/authorization-server/events/))
 - [ ] limit clients to certain grant types and scopes (database schema supports that)
 - [ ] UI to add clients as admin for all users or personal ones
 - [ ] UI to view and revoke access- and refresh-tokes
 - [ ] fix League OAuth2 server to support hybrid flow (currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant
-- [ ] test with Rocket.Chat
 - [ ] implement [RFC7662 OAuth 2.0 Token Introspection](https://tools.ietf.org/html/rfc7662) to allow clients to validate tokens, see [oauth2-server pull request #925](https://github.com/thephpleague/oauth2-server/pull/925)
 - [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
 - [ ] wrong password on login looses oath request in session and theirfore fails after correct password was entered
-- [ ] implement [OpenID Connect /userinfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo)
 
 ## Installation
 
@@ -119,3 +119,53 @@ Content-Type: application/json; charset=UTF-8
 {"id_token":"<token-id>","token_type":"Bearer","expires_in":3600,"access_token":"<access-token>","refresh_token":"<refresh-token"}
 ```
 All 3 tokens and in case of the access-token also the scopes are now also in the egw_openid_(auth_codes|access_tokens|access_token_scopes|refres_tokens) tables.
+
+## Testing /userinfo endpoint
+
+You need a valid access_token, which you can get eg. with an implicit grant (see above), using scopes: openid profile email phone address
+```
+curl -i "http://example.org/egroupware/openid/endpoint.php/userinfo" \
+	-H 'Accept: application/json' \
+	-H "Authorization: Bearer <access-token>"
+HTTP/1.1 200 OK
+Date: Sat, 06 Apr 2019 18:16:38 GMT
+Server: Apache/2.4.38 (Unix) OpenSSL/1.0.2r PHP/7.3.3
+X-Powered-By: PHP/7.3.3
+pragma: no-cache
+cache-control: no-store
+Content-Length: 381
+Content-Type: application/json; charset=UTF-8
+
+{"sub":"5","name":"Ralf Becker","family_name":"Becker","given_name":"Ralf","middle_name":null,"nickname":"","preferred_username":"ralf","profile":"","picture":"https:\/\/www.gravatar.com\/avatar\/b7d0e97f58c03dd3fed9753fa25293dc","website":"http:\/\/www.egroupware.org\/","gender":"n\/a","birthdate":"1970-01-01","zoneinfo":"Europe\/Berlin","locale":"DE","updated_at":"2018-12-07"}```
+```
+
+## Rocket.Chat custom OAuth configuration
+
+Install Rocket.Chat eg. via [docker-compose](https://rocket.chat/docs/installation/docker-containers/docker-compose/).
+
+You need to create a Client-Id and -Secret currently only with a simmilar SQL statement to the one at the top of this Readme.
+
+Then head in the Rocket.Chat Administration down to OAuth and click [Add custom oauth], give it a name eg. "EGroupware" and add the following values:
+```
+Enable:	        True
+URL:	        https://example.org/egroupware/openid/endpoint.php
+Token Path:     /access_token
+Token Send Via: Payload
+Identity Token Send Via: Header
+Identity Path:  /userinfo
+Authorize Path: /authorize
+Scope:          openid email profile
+Id:             <client-id-from-egroupware>
+Secret:         <client-secret-from-egroupware>
+Login Style:    Redirect
+Button Text:    EGroupware
+Username field: email
+```
+Then click on [Save changes] to activate login and user creation through EGroupware.
+
+(If Rocket.Chat runs in Docker on a Mac and EGroupware directly on the Mac, use "docker.for.mac.localhost" as hostname, as it is different from localhost!)
+
+If you only want users from EGroupware and no free registration with local passwords, go to Adminstration >> Accounts and set:
+```
+Show Default Login Form: False
+```
