@@ -17,10 +17,10 @@
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
-use OAuth2ServerExamples\Repositories\AccessTokenRepository;
-use OAuth2ServerExamples\Repositories\ClientRepository;
-use OAuth2ServerExamples\Repositories\RefreshTokenRepository;
-use OAuth2ServerExamples\Repositories\ScopeRepository;
+use EGroupware\OpenID\Repositories\AccessTokenRepository;
+use EGroupware\OpenID\Repositories\ClientRepository;
+use EGroupware\OpenID\Repositories\RefreshTokenRepository;
+use EGroupware\OpenID\Repositories\ScopeRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
@@ -28,19 +28,13 @@ use EGroupware\OpenID\Key;
 
 $GLOBALS['egw_info'] = array(
 	'flags' => array(
-		'currentapp'	=> 'api',	// anonymous should have NO ranking access
+		'currentapp'	=> 'login',
 		'nonavbar'		=> True,
 		'noheader'      => True,
-		'autocreate_session_callback' => function(&$anon_account)
-		{
-			$anon_account = null;
-
-			// create session without checking auth: create(..., false, false)
-			return $GLOBALS['egw']->session->create('anonymous@'.$GLOBALS['egw_info']['user']['domain'],
-				'', 'text', false, false);
-		}
 ));
 include('../header.inc.php');
+
+include __DIR__ . '/vendor/autoload.php';
 
 $app = new App([
     'settings'    => [
