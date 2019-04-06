@@ -3,9 +3,9 @@
 This is work in progress, do NOT install on a production server!
 
 ## Open tasks:
+- [x] move to a single endpoint.php instead (implicit|auth_code|client_credentials|password).php
 - [ ] installation to automatic create public key pair and encryption key
 - [ ] password grant: record and check failed login attempts like login page (see [user.authentication.failed](https://oauth2.thephpleague.com/authorization-server/events/))
-- [ ] move to a single endpoint.php instead (implicit|auth_code|client_credentials|password).php
 - [ ] limit clients to certain grant types and scopes (database schema supports that)
 - [ ] UI to add clients as admin for all users or personal ones
 - [ ] UI to view and revoke access- and refresh-tokes
@@ -45,7 +45,7 @@ The following test assume your EGroupware installation is reachable under http:/
 Send the following cURL request:
 
 ```
-curl -X "POST" "http://example.org/egroupware/openid/client_credentials.php/access_token" \
+curl -X "POST" "http://example.org/egroupware/openid/endpoint.php/access_token" \
 	-H "Content-Type: application/x-www-form-urlencoded" \
 	-H "Accept: 1.0" \
 	--data-urlencode "grant_type=client_credentials" \
@@ -59,7 +59,7 @@ curl -X "POST" "http://example.org/egroupware/openid/client_credentials.php/acce
 Send the following cURL request (replacing <username>/<password> with one valid for your EGroupware!):
 
 ```
-curl -X "POST" "http://example.org/egroupware/openid/password.php/access_token" \
+curl -X "POST" "http://example.org/egroupware/openid/endpoint.php/access_token" \
 	-H "Content-Type: application/x-www-form-urlencoded" \
 	-H "Accept: 1.0" \
 	--data-urlencode "grant_type=password" \
@@ -74,7 +74,7 @@ curl -X "POST" "http://example.org/egroupware/openid/password.php/access_token" 
 
 Here we use the OpenID Connect Debugger site, so head to https://oidcdebugger.com and add the following data:
 ```
-Authorize URI: http://example.com/egroupware/openid/implicit.php/authorize
+Authorize URI: http://example.com/egroupware/openid/endpoint.php/authorize
 Redirect URI:  https://oidcdebugger.com/debug
 Client ID:     oidcdebugger.com
 Scope:         openid
@@ -87,7 +87,7 @@ Hit [Send request] and you will be redirected to your EGroupware, have to log in
 
 Here we use again the OpenID Connect Debugger site for the first step, so head to https://oidcdebugger.com and change the URI and Response code as below:
 ```
-Authorize URI: http://example.com/egroupware/openid/auth_code.php/authorize
+Authorize URI: http://example.com/egroupware/openid/endpoint.php/authorize
 Redirect URI:  https://oidcdebugger.com/debug
 Client ID:     oidcdebugger.com
 Scope:         openid
@@ -96,7 +96,7 @@ Response Mode: form_post
 ```
 Hit [Send request] and you will be redirected to your EGroupware, have to log in, if you not already are, and authorize the request. After that you will be redirected back to the OpenID Connect debuger, which will show if it was successful and in that case and temporary auth-code which now needs to be exchanged in a 2. step into an access- and a refresh-token.
 ```
-curl -X POST -i http://example.org/egroupware/openid/auth_code.php/access_token \
+curl -X POST -i http://example.org/egroupware/openid/endpoint.php/access_token \
 	-H "Content-Type: application/x-www-form-urlencoded" \
 	--data-urlencode "grant_type=authorization_code" \
 	--data-urlencode "code=<auth-code-displayed-by-debugger>" \
