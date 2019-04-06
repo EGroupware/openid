@@ -20,6 +20,9 @@ use League\OAuth2\Server\Entities\UserEntityInterface;
 use OpenIDConnectServer\Entities\ClaimSetInterface;
 use EGroupware\Api;
 
+/**
+ * User entity
+ */
 class UserEntity implements UserEntityInterface, ClaimSetInterface
 {
 	/**
@@ -39,6 +42,10 @@ class UserEntity implements UserEntityInterface, ClaimSetInterface
 	{
 		$accounts = Api\Accounts::getInstance();
 
+		if (empty($account))
+		{
+			return;	// otherwise client credentials claims allways fail
+		}
 		if ((is_int($account) || is_numeric($account)))
 		{
 			if ($accounts->exists($account) !== 1)
@@ -52,49 +59,58 @@ class UserEntity implements UserEntityInterface, ClaimSetInterface
 			throw new Api\Exception\WrongParameter("Invalid username '$account'!");
 		}
 	}
-    /**
-     * Return the user's identifier.
-     *
-     * @return mixed
-     */
-    public function getIdentifier()
-    {
-        return $this->account_id;
-    }
+	/**
+	 * Return the user's identifier.
+	 *
+	 * @return mixed
+	 */
+	public function getIdentifier()
+	{
+		return $this->account_id;
+	}
 
-    public function getClaims()
-    {
+	/**
+	 * Get claims / user profile data
+	 *
+	 * @return array
+	 */
+	public function getClaims()
+	{
 		$contacts = new Api\Contacts();
 
+		if (empty($this->account_id))
+		{
+			return [];
+		}
 		if (!($contact = $contacts->read('account:'.$this->account_id, true)))	// no ACL check, as we might have no session
 		{
 			throw new Api\Exception\WrongParameter("No contact-data for account #$this->account_id found!");
 		}
-        return [
-            // profile
-            'name' => $contact['n_fn'],
-            'family_name' => $contact['n_family'],
-            'given_name' => $contact['n_given'],
-            'middle_name' => $contact['n_middle'],
-            'nickname' => '',
-            'preferred_username' => Api\Accounts::id2name($this->account_id),
-            'profile' => '',
-            'picture' => 'avatar.png',
-            'website' => $contact['url'],
-            'gender' => 'n/a',
-            'birthdate' => $contact['bday'],	// format?
-            'zoneinfo' => '',
-            'locale' => $contact['adr_one_countrycode'],
-            'updated_at' => Api\DateTime::to($contact['modified'], 'Y-m-d'),
-            // email
-            'email' => $contact['email'],
-            'email_verified' => true,
-            // phone
-            'phone_number' => !empty($contact['tel_prefer']) && !empty($contact[$contact['tel_prefer']]) ?
+		return [
+			// profile
+			'name' => $contact['n_fn'],
+			'family_name' => $contact['n_family'],
+			'given_name' => $contact['n_given'],
+			'middle_name' => $contact['n_middle'],
+			'nickname' => '',
+			'preferred_username' => Api\Accounts::id2name($this->account_id),
+			'profile' => '',
+			'picture' => 'avatar.png',
+			'website' => $contact['url'],
+			'gender' => 'n/a',
+			'birthdate' => $contact['bday'],	// format?
+			'zoneinfo' => '',
+			'locale' => $contact['adr_one_countrycode'],
+			'updated_at' => Api\DateTime::to($contact['modified'], 'Y-m-d'),
+			// email
+			'email' => $contact['email'],
+			'email_verified' => true,
+			// phone
+			'phone_number' => !empty($contact['tel_prefer']) && !empty($contact[$contact['tel_prefer']]) ?
 				$contact[$contact['tel_prefer']] : $contact['tel_cell'],
-            'phone_number_verified' => false,
-            // address
-            'address' => $contact['label'],
-        ];
-    }
+			'phone_number_verified' => false,
+			// address
+			'address' => $contact['label'],
+		];
+	}
 }
