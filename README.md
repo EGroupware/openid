@@ -4,6 +4,7 @@ This is work in progress, do NOT install on a production server!
 
 ## Open tasks:
 - [x] move to a single endpoint.php instead (implicit|auth_code|client_credentials|password).php
+- [x] add additional [OpenID Connect standard scopes](https://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims): profile, address, phone
 - [ ] installation to automatic create public key pair and encryption key
 - [ ] password grant: record and check failed login attempts like login page (see [user.authentication.failed](https://oauth2.thephpleague.com/authorization-server/events/))
 - [ ] limit clients to certain grant types and scopes (database schema supports that)
@@ -13,6 +14,8 @@ This is work in progress, do NOT install on a production server!
 - [ ] test with Rocket.Chat
 - [ ] implement [RFC7662 OAuth 2.0 Token Introspection](https://tools.ietf.org/html/rfc7662) to allow clients to validate tokens, see [oauth2-server pull request #925](https://github.com/thephpleague/oauth2-server/pull/925)
 - [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
+- [ ] wrong password on login looses oath request in session and theirfore fails after correct password was entered
+- [ ] implement [OpenID Connect /userinfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo)
 
 ## Installation
 
