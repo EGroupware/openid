@@ -3,41 +3,31 @@
 This is work in progress, do NOT install on a production server!
 
 ## Open tasks:
-- [x] move to a single endpoint.php instead (implicit|auth_code|client_credentials|password).php
-- [x] add additional [OpenID Connect standard scopes](https://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims): profile, address, phone
-- [x] implement [OpenID Connect /userinfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo)
-- [x] test with Rocket.Chat, see below for Rocket.Chat custom OAuth configuration
-- [x] add [oauth2-server pull request #925](https://github.com/thephpleague/oauth2-server/pull/925) to implement [RFC7662 OAuth 2.0 Token Introspection](https://tools.ietf.org/html/rfc7662) to allow clients to validate tokens
-- [ ] installation to automatic create public key pair and encryption key
 - [ ] password grant: record and check failed login attempts like login page (see [user.authentication.failed](https://oauth2.thephpleague.com/authorization-server/events/))
-- [ ] limit clients to certain grant types and scopes (database schema supports that)
 - [ ] UI to add clients as admin for all users or personal ones
 - [ ] UI to view and revoke access- and refresh-tokes
 - [ ] fix League OAuth2 server to support hybrid flow (currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant
 - [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
 - [ ] wrong password on login looses oath request in session and therefore fails after correct password was entered
+- [x] move to a single endpoint.php instead (implicit|auth_code|client_credentials|password).php
+- [x] add additional [OpenID Connect standard scopes](https://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims): profile, address, phone
+- [x] implement [OpenID Connect /userinfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo)
+- [x] test with Rocket.Chat, see below for Rocket.Chat custom OAuth configuration
+- [x] add [oauth2-server pull request #925](https://github.com/thephpleague/oauth2-server/pull/925) to implement [RFC7662 OAuth 2.0 Token Introspection](https://tools.ietf.org/html/rfc7662) to allow clients to validate tokens
+- [x] automatic generation of public key pair and encryption key on first use
+- [x] limit clients to certain grant types and scopes (database schema supports that)
 
 ## Installation
 
-0. Clone this repo into your EGroupware directory:
-0. Run `composer install --prefer-source` in this directory to install dependencies
-0. Create a private and public key pair in EGroupware's files directory
+1. Clone this repo into your EGroupware directory:
+2. Run `composer install --prefer-source` in this directory to install dependencies
+3. Install openid app via EGroupware setup
 
-```
-cd /path/to/egroupware/files
-mkdir openid
-openssl genrsa -out openid/private.key 2048
-openssl rsa -in openid/private.key -pubout > openid/public.key
-# /introspect endpoint requires public-key explicit included with private-key!
-cat openid/public.key >> openid/private.key
-chgrp -R www-run openid
-chmod -R o-rwx openid
-```
 ## Rocket.Chat custom OAuth configuration
 
 Install Rocket.Chat eg. via [docker-compose](https://rocket.chat/docs/installation/docker-containers/docker-compose/).
 
-You need to create a Client-Id and -Secret currently only with a simmilar SQL statement to the one at the top of this Readme.
+You need to create a Client-Id and -Secret currently only with a simmilar SQL statement to the one below for testing.
 
 Then head in the Rocket.Chat Administration down to OAuth and click [Add custom oauth], give it a name eg. "EGroupware" and add the following values:
 ```

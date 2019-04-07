@@ -9,7 +9,6 @@
  * @subpackage setup
  */
 
-
 $phpgw_baseline = array(
 	'egw_openid_scopes' => array(
 		'fd' => array(
@@ -22,30 +21,6 @@ $phpgw_baseline = array(
 		'pk' => array('scope_id'),
 		'fk' => array(),
 		'ix' => array(),
-		'uc' => array()
-	),
-	'egw_openid_grants' => array(
-		'fd' => array(
-			'grant_id' => array('type' => 'auto','nullable' => False),
-			'grant_identifier' => array('type' => 'ascii','precision' => '128','nullable' => False),
-			'grant_description' => array('type' => 'varchar','precision' => '255'),
-			'grant_created' => array('type' => 'timestamp','nullable' => False),
-			'grant_updated' => array('type' => 'timestamp','nullable' => False,'default' => 'current_timestamp')
-		),
-		'pk' => array('grant_id'),
-		'fk' => array(),
-		'ix' => array(),
-		'uc' => array()
-	),
-	'egw_openid_grant_scopes' => array(
-		'fd' => array(
-			'grant_scope_id' => array('type' => 'auto','nullable' => False),
-			'grant_id' => array('type' => 'int','precision' => '4','nullable' => False),
-			'scope_id' => array('type' => 'int','precision' => '4','nullable' => False)
-		),
-		'pk' => array('grant_scope_id'),
-		'fk' => array(),
-		'ix' => array(array('grant_id','scope_id')),
 		'uc' => array()
 	),
 	'egw_openid_clients' => array(
@@ -66,55 +41,50 @@ $phpgw_baseline = array(
 	),
 	'egw_openid_client_scopes' => array(
 		'fd' => array(
-			'client_scope_id' => array('type' => 'auto','nullable' => False),
 			'client_id' => array('type' => 'int','precision' => '4','nullable' => False),
 			'scope_id' => array('type' => 'int','precision' => '4','nullable' => False)
 		),
-		'pk' => array('client_scope_id'),
+		'pk' => array('client_id','scope_id'),
 		'fk' => array(),
-		'ix' => array(array('client_id','scope_id')),
+		'ix' => array(),
 		'uc' => array()
 	),
 	'egw_openid_client_grants' => array(
 		'fd' => array(
-			'client_grant_id' => array('type' => 'auto','nullable' => False),
 			'client_id' => array('type' => 'int','precision' => '4','nullable' => False),
-			'grant_id' => array('type' => 'int','precision' => '4','nullable' => False)
+			'grant_id' => array('type' => 'int','precision' => '1','nullable' => False)
 		),
-		'pk' => array('client_grant_id'),
+		'pk' => array('client_id','grant_id'),
 		'fk' => array(),
-		'ix' => array(array('client_id','grant_id')),
+		'ix' => array(),
 		'uc' => array()
 	),
 	'egw_openid_user_grants' => array(
 		'fd' => array(
-			'user_grant_id' => array('type' => 'auto','nullable' => False),
 			'account_id' => array('type' => 'int','meta' => 'user','precision' => '4','nullable' => False),
-			'grant_id' => array('type' => 'int','precision' => '4','nullable' => False)
+			'grant_id' => array('type' => 'int','precision' => '1','nullable' => False)
 		),
-		'pk' => array('user_grant_id'),
+		'pk' => array('account_id','grant_id'),
 		'fk' => array(),
-		'ix' => array(array('account_id','grant_id')),
+		'ix' => array(),
 		'uc' => array()
 	),
 	'egw_openid_user_scopes' => array(
 		'fd' => array(
-			'user_scope_id' => array('type' => 'auto','nullable' => False),
 			'account_id' => array('type' => 'int','meta' => 'user','precision' => '4','nullable' => False),
 			'scope_id' => array('type' => 'int','precision' => '4','nullable' => False)
 		),
-		'pk' => array('user_scope_id'),
+		'pk' => array('account_id','scope_id'),
 		'fk' => array(),
-		'ix' => array(array('account_id','scope_id')),
+		'ix' => array(),
 		'uc' => array()
 	),
 	'egw_openid_user_clients' => array(
 		'fd' => array(
-			'user_client_id' => array('type' => 'auto','nullable' => False),
 			'account_id' => array('type' => 'int','meta' => 'user','precision' => '4','nullable' => False),
 			'client_id' => array('type' => 'int','precision' => '4','nullable' => False)
 		),
-		'pk' => array('user_client_id'),
+		'pk' => array('account_id','client_id'),
 		'fk' => array(),
 		'ix' => array(),
 		'uc' => array()
@@ -181,13 +151,12 @@ $phpgw_baseline = array(
 	),
 	'egw_openid_auth_code_scopes' => array(
 		'fd' => array(
-			'auth_code_scope_id' => array('type' => 'auto','nullable' => False),
 			'auth_code_id' => array('type' => 'int','precision' => '4','nullable' => False),
 			'scope_id' => array('type' => 'int','precision' => '4','nullable' => False)
 		),
-		'pk' => array('auth_code_scope_id'),
+		'pk' => array('auth_code_id','scope_id'),
 		'fk' => array(),
-		'ix' => array(array('auth_code_id','scope_id')),
+		'ix' => array(),
 		'uc' => array()
 	),
 );

@@ -68,22 +68,40 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 		return $scope;
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * Given a client, grant type and optional user identifier validate the set of scopes requested are valid and optionally
+     * append additional scopes or remove requested scopes.
+     *
+     * @param ScopeEntityInterface[] $scopes
+     * @param string                 $grantType
+     * @param ClientEntityInterface  $clientEntity
+     * @param null|string            $userIdentifier
+     *
+     * @return ScopeEntityInterface[]
+     */
 	public function finalizeScopes(
 		array $scopes,
 		$grantType,
 		ClientEntityInterface $clientEntity,
 		$userIdentifier = null
 	) {
-		/* Example of programatically modifying the final scope of the access token
-		if ((int) $userIdentifier === 1) {
-			$scope = new ScopeEntity();
-			$scope->setIdentifier('email');
-			$scope->setDescription(self::$scopes[$scopeIdentifier]['description']);
-			$scopes[] = $scope;
-		}*/
+		unset($userIdentifier);	// not used, but required by function signature
+
+		// check if grantType is allowed for the client
+		if ($grantType && ($limitGrants = $clientEntity->getGrants()) &&
+			!in_array($grantType, $limitGrants))
+		{
+			return [];
+		}
+
+		// check if scopes are allowed for the client
+		if (($limitScopes = $clientEntity->getScopes()))
+		{
+			$scopes = array_filter($scopes, function($scope) use ($limitScopes)
+			{
+				return in_array($scope->getIdentifier(), $limitScopes);
+			});
+		}
 
 		return $scopes;
 	}

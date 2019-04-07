@@ -33,4 +33,54 @@ class ClientEntity extends Base implements ClientEntityInterface
     {
         $this->redirectUri = $uri;
     }
+
+	/**
+	 * @var array
+	 */
+	protected $scopes;
+
+	/**
+	 * Set supported scope identifiers
+	 *
+	 * @param array $scopes
+	 */
+	public function setScopes(array $scopes=null)
+	{
+		$this->scopes = $scopes;
+	}
+
+	/**
+	 * Get supported scope identifiers
+	 *
+	 * @return array|null null: all
+	 */
+	public function getScopes()
+	{
+		return $this->scopes;
+	}
+
+	/**
+	 * @var array
+	 */
+	protected $grants;
+
+	/**
+	 * Set supported grant identifiers
+	 *
+	 * @param array $grants
+	 */
+	public function setGrants(array $grants=null)
+	{
+		$this->grants = $grants;
+	}
+
+	/**
+	 * Get supported grant ideentifiers
+	 *
+	 * @return array|null null: all
+	 */
+	public function getGrants()
+	{
+		return $this->grants;
+	}
 }

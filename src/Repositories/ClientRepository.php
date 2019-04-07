@@ -27,6 +27,8 @@ class ClientRepository extends Base implements ClientRepositoryInterface
 	 * Name of clients table
 	 */
 	const TABLE = 'egw_openid_clients';
+	const CLIENT_GRANTS_TABLE = 'egw_openid_client_grants';
+	const CLIENT_SCOPES_TABLE = 'egw_openid_client_scopes';
 
     /**
      * Get a client.
@@ -41,14 +43,38 @@ class ClientRepository extends Base implements ClientRepositoryInterface
      */
     public function getClientEntity($clientIdentifier, $grantType = null, $clientSecret = null, $mustValidateSecret = true)
     {
-		unset($grantType);	// currently now used, but required but interface
+		$grants = 'SELECT '.$this->db->group_concat('grant_id').
+			' FROM '.self::CLIENT_GRANTS_TABLE.
+			' WHERE '.self::CLIENT_GRANTS_TABLE.'.client_id='.self::TABLE.'.client_id';
 
-		if (!($data = $this->db->select(self::TABLE, '*', ['client_identifier' => $clientIdentifier],
-			__LINE__, __FILE__, false, '', self::APP)->fetch()))
+		$scopes = 'SELECT '.$this->db->group_concat('scope_identifier').
+			' FROM '.self::CLIENT_SCOPES_TABLE.
+			' JOIN '.ScopeRepository::TABLE.' ON '.ScopeRepository::TABLE.'.scope_id='.self::CLIENT_SCOPES_TABLE.'.scope_id'.
+			' WHERE '.self::CLIENT_SCOPES_TABLE.'.client_id='.self::TABLE.'.client_id';
+
+		$where = ['client_identifier' => $clientIdentifier];
+
+		if (!empty($grantType))
+		{
+			$where[] = $this->db->expression(self::CLIENT_GRANTS_TABLE, ['grant_id' => GrantRepository::getGrantId($grantType)]);
+			$join = 'JOIN '.self::CLIENT_GRANTS_TABLE.' ON '.self::CLIENT_GRANTS_TABLE.'.client_id='.self::TABLE.'.client_id';
+		}
+
+		if (!($data = $this->db->select(self::TABLE, "*,($grants) AS grants,($scopes) AS scopes",
+			$where, __LINE__, __FILE__, false, '', self::APP, null, $join)->fetch()))
 		{
 			throw OAuthServerException::invalidClient();
 		}
 		$data = Api\Db::strip_array_keys($data, 'client_');
+
+		if (!empty($data['grants']))
+		{
+			$data['grants'] = array_map(GrantRepository::class.'::getGrantById', explode(',', $data['grants']));
+		}
+		if (!empty($data['scopes']))
+		{
+			$data['grants'] = explode(',', $data['scopes']);
+		}
 
         if (
             $mustValidateSecret === true
@@ -63,6 +89,8 @@ class ClientRepository extends Base implements ClientRepositoryInterface
         $client->setIdentifier($data['identifier']);
         $client->setName($data['name']);
         $client->setRedirectUri($data['redirect_uri']);
+		$client->setScopes($data['scopes']);
+		$client->setGrants($data['grants']);
 
         return $client;
     }

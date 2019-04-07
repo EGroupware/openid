@@ -37,7 +37,7 @@ use EGroupware\OpenID\Repositories\UserRepository;
 use EGroupware\OpenID\Repositories\IdentityRepository;
 use EGroupware\OpenID\Repositories\ScopeRepository;
 use EGroupware\OpenID\Entities\UserEntity;
-use EGroupware\OpenID\Key;
+use EGroupware\OpenID\Keys;
 use EGroupware\OpenID\Authorize;
 
 $GLOBALS['egw_info'] = array(
@@ -63,8 +63,7 @@ $app = new App([
 		$accessTokenRepository = new AccessTokenRepository();
 		$authCodeRepository = new AuthCodeRepository();
 		$refreshTokenRepository = new RefreshTokenRepository();
-
-		$privateKeyPath = Key::getPrivate();
+		$keys = new Keys();
 
 		// OpenID Connect Response Type
 		$responseType = new IdTokenResponse(new IdentityRepository(), new ClaimExtractor());
@@ -74,8 +73,8 @@ $app = new App([
 			$clientRepository,
 			$accessTokenRepository,
 			$scopeRepository,
-			$privateKeyPath,
-			'lxZFUEsBCJ2Yb14IF2ygAHI5N4+ZAUXXaSeeJm6+twsUmIen',
+			$keys->getPrivateKey(),
+			$keys->getEncryptionKey(),
 			$responseType
 		);
 
@@ -122,11 +121,9 @@ $app = new App([
 		return $server;
 	},
 	ResourceServer::class => function () {
-		$publicKeyPath = Key::getPublic();
-
 		$server = new ResourceServer(
 			new AccessTokenRepository(),
-			$publicKeyPath
+			(new Keys())->getPublicKey()
 		);
 
 		return $server;
