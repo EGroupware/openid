@@ -15,7 +15,7 @@ This is work in progress, do NOT install on a production server!
 - [ ] UI to view and revoke access- and refresh-tokes
 - [ ] fix League OAuth2 server to support hybrid flow (currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant
 - [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
-- [ ] wrong password on login looses oath request in session and theirfore fails after correct password was entered
+- [ ] wrong password on login looses oath request in session and therefore fails after correct password was entered
 
 ## Installation
 
