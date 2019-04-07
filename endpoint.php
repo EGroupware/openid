@@ -183,20 +183,30 @@ $app->post('/access_token', function (ServerRequestInterface $request, ResponseI
 
 $app->get('/userinfo', function (ServerRequestInterface $request, ResponseInterface $response)
 {
-	$account_id = $request->getAttribute('oauth_user_id');
-	$params = ['sub' => $account_id];
-	$user = new UserEntity($account_id);
-	$claimExtractor = new ClaimExtractor();
-	$params += $claimExtractor->extract($request->getAttribute('oauth_scopes', []),
-		$user->getClaims());
+	try {
+		$account_id = $request->getAttribute('oauth_user_id');
+		$params = ['sub' => $account_id];
+		$user = new UserEntity($account_id);
+		$claimExtractor = new ClaimExtractor();
+		$params += $claimExtractor->extract(
+			$request->getAttribute('oauth_scopes', []),
+			$user->getClaims()
+		);
+		$response->getBody()->write(json_encode($params));
+		return $response
+			->withStatus(200)
+			->withHeader('pragma', 'no-cache')
+			->withHeader('cache-control', 'no-store')
+			->withHeader('content-type', 'application/json; charset=UTF-8');
+	}
+	catch (\Exception $exception)
+	{
+		_egw_log_exception($exception);
+		$body = new Stream('php://temp', 'r+');
+		$body->write($exception->getMessage());
 
-    $response->getBody()->write(json_encode($params));
-	return $response
-		->withStatus(200)
-		->withHeader('pragma', 'no-cache')
-		->withHeader('cache-control', 'no-store')
-		->withHeader('content-type', 'application/json; charset=UTF-8');
-
+		return $response->withStatus(500)->withBody($body);
+	}
 })->add(new ResourceServerMiddleware($app->getContainer()->get(ResourceServer::class)));
 
 // Slim does NOT detect Authorization header with Apache not writing it to $_SERVER['HTTP_AUTHORIZATION']
