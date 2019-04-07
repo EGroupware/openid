@@ -7,13 +7,13 @@ This is work in progress, do NOT install on a production server!
 - [x] add additional [OpenID Connect standard scopes](https://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims): profile, address, phone
 - [x] implement [OpenID Connect /userinfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo)
 - [x] test with Rocket.Chat, see below for Rocket.Chat custom OAuth configuration
+- [x] add [oauth2-server pull request #925](https://github.com/thephpleague/oauth2-server/pull/925) to implement [RFC7662 OAuth 2.0 Token Introspection](https://tools.ietf.org/html/rfc7662) to allow clients to validate tokens
 - [ ] installation to automatic create public key pair and encryption key
 - [ ] password grant: record and check failed login attempts like login page (see [user.authentication.failed](https://oauth2.thephpleague.com/authorization-server/events/))
 - [ ] limit clients to certain grant types and scopes (database schema supports that)
 - [ ] UI to add clients as admin for all users or personal ones
 - [ ] UI to view and revoke access- and refresh-tokes
 - [ ] fix League OAuth2 server to support hybrid flow (currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant
-- [ ] implement [RFC7662 OAuth 2.0 Token Introspection](https://tools.ietf.org/html/rfc7662) to allow clients to validate tokens, see [oauth2-server pull request #925](https://github.com/thephpleague/oauth2-server/pull/925)
 - [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
 - [ ] wrong password on login looses oath request in session and theirfore fails after correct password was entered
 
@@ -28,9 +28,42 @@ cd /path/to/egroupware/files
 mkdir openid
 openssl genrsa -out openid/private.key 2048
 openssl rsa -in openid/private.key -pubout > openid/public.key
+# /introspect endpoint requires public-key explicit included with private-key!
+cat openid/public.key >> openid/private.key
 chgrp -R www-run openid
 chmod -R o-rwx openid
 ```
+## Rocket.Chat custom OAuth configuration
+
+Install Rocket.Chat eg. via [docker-compose](https://rocket.chat/docs/installation/docker-containers/docker-compose/).
+
+You need to create a Client-Id and -Secret currently only with a simmilar SQL statement to the one at the top of this Readme.
+
+Then head in the Rocket.Chat Administration down to OAuth and click [Add custom oauth], give it a name eg. "EGroupware" and add the following values:
+```
+Enable:	        True
+URL:	        https://example.org/egroupware/openid/endpoint.php
+Token Path:     /access_token
+Token Send Via: Payload
+Identity Token Send Via: Header
+Identity Path:  /userinfo
+Authorize Path: /authorize
+Scope:          openid email profile
+Id:             <client-id-from-egroupware>
+Secret:         <client-secret-from-egroupware>
+Login Style:    Redirect
+Button Text:    EGroupware
+Username field: email
+```
+Then click on [Save changes] to activate login and user creation through EGroupware.
+
+(If Rocket.Chat runs in Docker on a Mac and EGroupware directly on the Mac, use "docker.for.mac.localhost" as hostname, as it is different from localhost!)
+
+If you only want users from EGroupware and no free registration with local passwords, go to Adminstration >> Accounts and set:
+```
+Show Default Login Form: False
+```
+
 ## Testing available grants
 A grant is a method of acquiring an access token. Deciding which grants to use depends on the type of client the end user will be using, and the experience you want for your users.
 
@@ -138,34 +171,26 @@ Content-Type: application/json; charset=UTF-8
 
 {"sub":"5","name":"Ralf Becker","family_name":"Becker","given_name":"Ralf","middle_name":null,"nickname":"","preferred_username":"ralf","profile":"","picture":"https:\/\/www.gravatar.com\/avatar\/b7d0e97f58c03dd3fed9753fa25293dc","website":"http:\/\/www.egroupware.org\/","gender":"n\/a","birthdate":"1970-01-01","zoneinfo":"Europe\/Berlin","locale":"DE","updated_at":"2018-12-07"}```
 ```
+## Testing /introspect endpoint with a client-id and -secret
 
-## Rocket.Chat custom OAuth configuration
+You need an access_token to test, which you can get eg. with an implicit grant (see above).
 
-Install Rocket.Chat eg. via [docker-compose](https://rocket.chat/docs/installation/docker-containers/docker-compose/).
-
-You need to create a Client-Id and -Secret currently only with a simmilar SQL statement to the one at the top of this Readme.
-
-Then head in the Rocket.Chat Administration down to OAuth and click [Add custom oauth], give it a name eg. "EGroupware" and add the following values:
+The basic authorization header below uses: base64_encode("<client-id>:<client-secret>").
 ```
-Enable:	        True
-URL:	        https://example.org/egroupware/openid/endpoint.php
-Token Path:     /access_token
-Token Send Via: Payload
-Identity Token Send Via: Header
-Identity Path:  /userinfo
-Authorize Path: /authorize
-Scope:          openid email profile
-Id:             <client-id-from-egroupware>
-Secret:         <client-secret-from-egroupware>
-Login Style:    Redirect
-Button Text:    EGroupware
-Username field: email
-```
-Then click on [Save changes] to activate login and user creation through EGroupware.
+curl -i "http://example.org/egroupware/openid/endpoint.php/introspect" \
+	-H "Accept: application/json" \
+	-H "Content-Type: application/x-www-form-urlencoded" \
+	-H "Authorization: Basic b2lkY2RlYnVnZ2VyLmNvbTpzZWNyZXQ=" \
+	--data-urlencode "token=<access-token>"
+	--data-urlencode "token_type_hint=access_token"
+HTTP/1.1 200 OK
+Date: Sun, 07 Apr 2019 09:17:44 GMT
+Server: Apache/2.4.38 (Unix) OpenSSL/1.0.2r PHP/7.3.3
+X-Powered-By: PHP/7.3.3
+pragma: no-cache
+cache-control: no-store
+Content-Length: 236
+Content-Type: application/json; charset=UTF-8
 
-(If Rocket.Chat runs in Docker on a Mac and EGroupware directly on the Mac, use "docker.for.mac.localhost" as hostname, as it is different from localhost!)
-
-If you only want users from EGroupware and no free registration with local passwords, go to Adminstration >> Accounts and set:
-```
-Show Default Login Form: False
+{"active":true,"token_type":"access_token","scope":["openid","profile"],"client_id":"oidcdebugger.com","exp":1554629779,"iat":1554626179,"sub":"2","jti":"2ab5f9fe5f4cfe0eeb49491e4cc9a313b2fb11f74969d52b8bd60ba8ec9894ae7f1c9eee697e74f2"}
 ```

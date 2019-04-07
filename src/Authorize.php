@@ -14,8 +14,9 @@
 
 namespace EGroupware\OpenID;
 
+// until #925 is merged: use League\OAuth2\Server\AuthorizationServer;
+use EGroupware\OpenId\AuthorizationServer;
 use League\OAuth2\Server\RequestTypes\AuthorizationRequest;
-use League\OAuth2\Server\AuthorizationServer;
 use Psr\Http\Message\ServerRequestInterface;
 use EGroupware\Api;
 

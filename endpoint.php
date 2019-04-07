@@ -14,7 +14,8 @@
  * @link https://github.com/thephpleague/oauth2-server
  */
 
-use League\OAuth2\Server\AuthorizationServer;
+// until #925 is merged: use League\OAuth2\Server\AuthorizationServer;
+use EGroupware\OpenId\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
 use League\OAuth2\Server\Grant\ImplicitGrant;
@@ -145,12 +146,10 @@ $app->get('/authorize', function (ServerRequestInterface $request, ResponseInter
 		// Return the HTTP redirect response
 		return $server->completeAuthorizationRequest($authRequest, $response);
 	}
-	catch (OAuthServerException $exception)
-	{
+	catch (OAuthServerException $exception) {
 		return $exception->generateHttpResponse($response);
 	}
-	catch (\Exception $exception)
-	{
+	catch (\Exception $exception) {
 		_egw_log_exception($exception);
 		$body = new Stream('php://temp', 'r+');
 		$body->write($exception->getMessage());
@@ -167,12 +166,10 @@ $app->post('/access_token', function (ServerRequestInterface $request, ResponseI
 	try {
 		return $server->respondToAccessTokenRequest($request, $response);
 	}
-	catch (OAuthServerException $exception)
-	{
+	catch (OAuthServerException $exception) {
 		return $exception->generateHttpResponse($response);
 	}
-	catch (\Exception $exception)
-	{
+	catch (\Exception $exception) {
 		_egw_log_exception($exception);
 		$body = new Stream('php://temp', 'r+');
 		$body->write($exception->getMessage());
@@ -180,6 +177,31 @@ $app->post('/access_token', function (ServerRequestInterface $request, ResponseI
 		return $response->withStatus(500)->withBody($body);
 	}
 });
+
+$app->post(
+    '/introspect',
+    function (ServerRequestInterface $request, ResponseInterface $response) use ($app) {
+         /* @var \League\OAuth2\Server\AuthorizationServer $server */
+        $server = $app->getContainer()->get(AuthorizationServer::class);
+
+         try {
+            // Validate the given introspect request
+            $server->validateIntrospectionRequest($request);
+             // Try to respond to the introspection request
+            return $server->respondToIntrospectionRequest($request, $response);
+        }
+		catch (OAuthServerException $exception) {
+             // All instances of OAuthServerException can be converted to a PSR-7 response
+            return $exception->generateHttpResponse($response);
+        }
+		catch (\Exception $exception) {
+			_egw_log_exception($exception);
+            $body = $response->getBody();
+            $body->write($exception->getMessage());
+             return $response->withStatus(500)->withBody($body);
+        }
+    }
+);
 
 $app->get('/userinfo', function (ServerRequestInterface $request, ResponseInterface $response)
 {
@@ -199,8 +221,7 @@ $app->get('/userinfo', function (ServerRequestInterface $request, ResponseInterf
 			->withHeader('cache-control', 'no-store')
 			->withHeader('content-type', 'application/json; charset=UTF-8');
 	}
-	catch (\Exception $exception)
-	{
+	catch (\Exception $exception) {
 		_egw_log_exception($exception);
 		$body = new Stream('php://temp', 'r+');
 		$body->write($exception->getMessage());
