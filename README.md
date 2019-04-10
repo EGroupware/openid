@@ -82,7 +82,7 @@ curl -X "POST" "http://example.org/egroupware/openid/endpoint.php/access_token" 
 
 ## Testing the password grant
 
-Send the following cURL request (replacing <username>/<password> with one valid for your EGroupware!):
+Send the following cURL request (replacing &lt;username>/&lt;password> with one valid for your EGroupware!):
 
 ```
 curl -X "POST" "http://example.org/egroupware/openid/endpoint.php/access_token" \
@@ -165,7 +165,7 @@ Content-Type: application/json; charset=UTF-8
 
 You need an access_token to test, which you can get eg. with an implicit grant (see above).
 
-The basic authorization header below uses: base64_encode("<client-id>:<client-secret>").
+The basic authorization header below uses: base64_encode("&lt;client-id>:&lt;client-secret>").
 ```
 curl -i "http://example.org/egroupware/openid/endpoint.php/introspect" \
 	-H "Accept: application/json" \
