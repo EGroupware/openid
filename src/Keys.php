@@ -72,7 +72,7 @@ class Keys
 	/**
 	 * Get the private key
 	 *
-	 * @return string|CryptKey path to file or CryptKey object
+	 * @return CryptKey path to file or CryptKey object
 	 */
 	public function getPrivateKey()
 	{
