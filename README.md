@@ -44,6 +44,7 @@ Secret:         <client-secret-from-egroupware>
 Login Style:    Redirect
 Button Text:    EGroupware
 Username field: email
+Merge Users:    True
 ```
 Then click on [Save changes] to activate login and user creation through EGroupware.
 
