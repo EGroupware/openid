@@ -29,6 +29,7 @@ use Slim\App;
 use Zend\Diactoros\Stream;
 use OpenIDConnectServer\IdTokenResponse;
 use OpenIDConnectServer\ClaimExtractor;
+use Bnf\Slim3Psr15\CallableResolver;
 use EGroupware\OpenID\Repositories\AccessTokenRepository;
 use EGroupware\OpenID\Repositories\AuthCodeRepository;
 use EGroupware\OpenID\Repositories\ClientRepository;
@@ -39,6 +40,7 @@ use EGroupware\OpenID\Repositories\ScopeRepository;
 use EGroupware\OpenID\Entities\UserEntity;
 use EGroupware\OpenID\Keys;
 use EGroupware\OpenID\Authorize;
+use EGroupware\OpenID\Log;
 
 $GLOBALS['egw_info'] = array(
 	'flags' => array(
@@ -233,5 +235,16 @@ if (function_exists('apache_request_headers') && !isset($_SERVER['HTTP_AUTHORIZA
 {
 	$_SERVER['HTTP_AUTHORIZATION'] = $headers['Authorization'];
 }
+
+// Supply a custom callable resolver for Slim v3, which resolves PSR-15 middlewares
+$container = $app->getContainer();
+$container['callableResolver'] = function ($container)
+{
+    return new CallableResolver($container);
+};
+// Add our PSR-15 middleware logger
+$formatter = new Log\HttpFormatter();
+// create a full request log in "$files/openid/request.log"
+$app->add(new Log\Middleware($formatter, $formatter, new Log\Logger('openid')));
 
 $app->run();
