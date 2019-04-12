@@ -23,6 +23,8 @@ use PhpMiddleware\LogHttpMessages\Formatter\FormattedMessage;
 
 /**
  * Format request and response as they have been originaly send or will be send
+ *
+ * Does log all tokens and usernames, but no cleartext-passwords (replaced with "...")
  */
 class HttpFormatter implements ServerRequestFormatter, ResponseFormatter
 {
@@ -32,9 +34,7 @@ class HttpFormatter implements ServerRequestFormatter, ResponseFormatter
 			'HTTP/'.$response->getProtocolVersion().' '.
 				$response->getStatusCode().' '.$response->getReasonPhrase()."\r\n".
 			self::formatHeaders($response->getHeaders())."\r\n".
-			// do NOT log cleartext passwords / client_secret
-			preg_replace('/&client_secret=secret(&|$)/', '********', $response->getBody()).
-			"\n"	// not part of HTTP response, but for better readability in logs
+			self::formatBody($response->getBody())
 		);
 	}
 
@@ -44,8 +44,15 @@ class HttpFormatter implements ServerRequestFormatter, ResponseFormatter
 			$request->getMethod().' '.$request->getRequestTarget().
 				' HTTP/'.$request->getProtocolVersion()."\r\n".
 			self::formatHeaders($request->getHeaders())."\r\n".
-			$request->getBody()
+			self::formatBody($request->getBody())
 		);
+	}
+
+	protected static function formatBody($body)
+	{
+		// do NOT log cleartext passwords / client_secret
+		return preg_replace('/&(client_secret|password)=[^&]*(&|$)/', '&$1=...$2', $body).
+			"\n";	// not part of HTTP response, but for better readability in logs
 	}
 
 	protected static function formatHeaders(array $headers)
@@ -53,20 +60,28 @@ class HttpFormatter implements ServerRequestFormatter, ResponseFormatter
 		$str = '';
 		foreach($headers as $name => $values)
 		{
+			switch(strtoupper($name))
+			{
+				case 'PHP_AUTH_USER':
+				case 'PHP_AUTH_PW':
+					continue 2;
+				case 'HTTP_AUTHORIZATION':
+					// do NOT log cleartext passwords
+					if (strpos($values[0], 'Basic ') === 0)
+					{
+						list($type, $value) = explode(' ', $values[0]);
+						list($user) = explode(':', base64_decode($value));
+						$values = [$type.' '.trim(base64_encode($user.':'), '=').
+							"... = base64('$user:...')"];
+					}
+					break;
+			}
 			foreach($values as $value)
 			{
-				// write heads like they look by default
+				// write headers like they look by default
 				if (stripos($name, 'HTTP_') === 0) $name = substr($name, 5);
-				$str .= implode('-', array_map('ucfirst', explode('-', strtolower($name))));
+				$str .= implode('-', array_map('ucfirst', preg_split('/[_-]/', strtolower($name))));
 
-				// do NOT log cleartext passwords
-				if ($name === 'Authorization' && strpos($value, 'Basic ') === 0)
-				{
-					list($type, $val) = explode(' ', $value);
-					list($user) = explode(':', base64_decode($val));
-					$value = $type.' '.trim(base64_encode($user.':'), '=').
-						"... = base64('$user:...')";
-				}
 				$str .= ': '.$value."\r\n";
 			}
 		}
