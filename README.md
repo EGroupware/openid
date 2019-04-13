@@ -60,10 +60,12 @@ A grant is a method of acquiring an access token. Deciding which grants to use d
 
 https://oauth2.thephpleague.com/authorization-server/which-grant/
 
-All examples require to create a client first, eg. via the following SQL:
+All examples require to create a client and allowed grants first, eg. via the following SQL:
 ```
 INSERT INTO `egw_openid_clients` (`client_name`, `client_identifier`, `client_secret`, `client_redirect_uri`, `client_created`) VALUES
 ('oidcdebugger.com', 'oidcdebugger.com', '$2y$10$n3ETBDdoXZDxcn9PUl2qyuKWjKxz.HW6o8ub8c/8FdYzdWL/qKjCu' /* "secret" */, 'https://oidcdebugger.com/debug', NOW());
+SELECT client_id FROM `egw_openid_clients` WHERE `client_name`='oidcdebugger.com';
+INSERT INTO `egw_openid_client_grants` (`client_id`,`grant_id`) VALUES (<client-id>, 1),(<client-id>, 2),(<client-id>, 3),(<client-id>, 4),(<client-id>, 5);
 ```
 The following test assume your EGroupware installation is reachable under http://example.com/egroupware/
 
