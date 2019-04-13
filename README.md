@@ -142,7 +142,7 @@ Content-Type: application/json; charset=UTF-8
 
 {"id_token":"<token-id>","token_type":"Bearer","expires_in":3600,"access_token":"<access-token>","refresh_token":"<refresh-token"}
 ```
-All 3 tokens and in case of the access-token also the scopes are now also in the egw_openid_(auth_codes|access_tokens|access_token_scopes|refres_tokens) tables.
+All 3 tokens and in case of the access-token also the scopes are now also in the egw_openid_(auth_codes|access_tokens|access_token_scopes|refresh_tokens) tables.
 
 ## Testing /userinfo endpoint
 
