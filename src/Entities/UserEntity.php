@@ -23,24 +23,28 @@ use EGroupware\Api;
 /**
  * User entity
  */
-class UserEntity implements UserEntityInterface, ClaimSetInterface
+class UserEntity extends Base implements UserEntityInterface, ClaimSetInterface
 {
 	/**
-	 * Nummeric account_id this class is instanciated for
+	 * Domain used to construct user-identifiers
 	 *
-	 * @var int
+	 * @var string
 	 */
-	protected $account_id;
+	protected $account_domain;
 
 	/**
 	 * Construct by username or nummerical identifier
 	 *
-	 * @param string|int $account username or nummerical identifier
+	 * @param string|int $account user-identifier, username or nummerical account_id
 	 * @throws Api\Exception\WrongParameter
 	 */
 	public function __construct($account)
 	{
 		$accounts = Api\Accounts::getInstance();
+
+		$this->account_domain = !empty($GLOBALS['egw_info']['user']['domain']) ?
+			$GLOBALS['egw_info']['user']['domain'] :
+			$GLOBALS['egw_info']['server']['default_domain'];
 
 		if (empty($account))
 		{
@@ -52,11 +56,19 @@ class UserEntity implements UserEntityInterface, ClaimSetInterface
 			{
 				throw new Api\Exception\WrongParameter("Invalid identifier #$account!");
 			}
-			$this->account_id = (int)$account;
+			$this->id = (int)$account;
 		}
-		elseif (!($this->account_id = $accounts->name2id($account)))
+		else
 		{
-			throw new Api\Exception\WrongParameter("Invalid username '$account'!");
+			if (strpos($account, '@') !== false &&
+				substr($account, -strlen($this->account_domain)-1) === '@'.$this->account_domain)
+			{
+				$account = substr($account, 0, -strlen($this->account_domain)-1);
+			}
+			if (!($this->id = $accounts->name2id($account)))
+			{
+				throw new Api\Exception\WrongParameter("Invalid username '$account'!");
+			}
 		}
 	}
 	/**
@@ -66,7 +78,8 @@ class UserEntity implements UserEntityInterface, ClaimSetInterface
 	 */
 	public function getIdentifier()
 	{
-		return $this->account_id;
+		return empty($this->id) ? null :
+			Api\Accounts::id2name($this->id).'@'.$this->account_domain;
 	}
 
 	/**
@@ -78,22 +91,23 @@ class UserEntity implements UserEntityInterface, ClaimSetInterface
 	{
 		$contacts = new Api\Contacts();
 
-		if (empty($this->account_id))
+		if (empty($this->id))
 		{
 			return [];
 		}
-		if (!($contact = $contacts->read('account:'.$this->account_id, true)))	// no ACL check, as we might have no session
+		if (!($contact = $contacts->read('account:'.$this->id, true)))	// no ACL check, as we might have no session
 		{
-			throw new Api\Exception\WrongParameter("No contact-data for account #$this->account_id found!");
+			throw new Api\Exception\WrongParameter("No contact-data for account #$this->id found!");
 		}
 		return [
+			'id' => $this->getIdentifier(),
 			// profile
 			'name' => $contact['n_fn'],
 			'family_name' => $contact['n_family'],
 			'given_name' => $contact['n_given'],
 			'middle_name' => $contact['n_middle'],
 			'nickname' => '',
-			'preferred_username' => Api\Accounts::id2name($this->account_id),
+			'preferred_username' => Api\Accounts::id2name($this->id),
 			'profile' => '',
 			'picture' => 'https://www.gravatar.com/avatar/'.
 				md5(strtolower(trim($contact['email']))),

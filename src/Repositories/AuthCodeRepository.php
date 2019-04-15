@@ -19,6 +19,7 @@ namespace EGroupware\OpenID\Repositories;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use EGroupware\OpenID\Entities\AuthCodeEntity;
+use EGroupware\OpenID\Entities\UserEntity;
 
 /**
  * Auth code storage interface.
@@ -43,10 +44,12 @@ class AuthCodeRepository extends Base implements AuthCodeRepositoryInterface
 		//error_log(__METHOD__."(".array2string($authCodeEntity).")");
 
 		try {
+			$userEntity = new UserEntity($authCodeEntity->getUserIdentifier());
+
 			$this->db->insert(self::TABLE, [
 				'auth_code_identifier' => $authCodeEntity->getIdentifier(),
 				'client_id' => $authCodeEntity->getClient()->getID(),
-				'account_id' => $authCodeEntity->getUserIdentifier(),
+				'account_id' => $userEntity->getUserID(),
 				'auth_code_redirect_uri' => $authCodeEntity->getRedirectUri(),
 				'auth_code_expiration' => $authCodeEntity->getExpiryDateTime(),
 				'auth_code_created' => time(),

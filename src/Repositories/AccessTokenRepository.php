@@ -21,6 +21,7 @@ use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use EGroupware\OpenID\Entities\AccessTokenEntity;
+use EGroupware\OpenID\Entities\UserEntity;
 
 /**
  * Access token storage interface.
@@ -45,10 +46,12 @@ class AccessTokenRepository extends Base implements AccessTokenRepositoryInterfa
 		//error_log(__METHOD__."(".array2string($accessTokenEntity).")");
 
 		try {
+			$userEntity = new UserEntity($accessTokenEntity->getUserIdentifier());
+
 			$this->db->insert(self::TABLE, [
 				'access_token_identifier' => $accessTokenEntity->getIdentifier(),
 				'client_id' => $accessTokenEntity->getClient()->getID(),
-				'account_id' => $accessTokenEntity->getUserIdentifier(),
+				'account_id' => $userEntity->getID(),
 				'access_token_expiration' => $accessTokenEntity->getExpiryDateTime(),
 				'access_token_created' => time(),
 			], false, __LINE__, __FILE__, self::APP);
