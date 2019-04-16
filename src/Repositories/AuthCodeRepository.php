@@ -49,7 +49,7 @@ class AuthCodeRepository extends Base implements AuthCodeRepositoryInterface
 			$this->db->insert(self::TABLE, [
 				'auth_code_identifier' => $authCodeEntity->getIdentifier(),
 				'client_id' => $authCodeEntity->getClient()->getID(),
-				'account_id' => $userEntity->getUserID(),
+				'account_id' => $userEntity->getID(),
 				'auth_code_redirect_uri' => $authCodeEntity->getRedirectUri(),
 				'auth_code_expiration' => $authCodeEntity->getExpiryDateTime(),
 				'auth_code_created' => time(),
