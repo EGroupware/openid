@@ -206,8 +206,8 @@ $app->get('/userinfo', function (ServerRequestInterface $request, ResponseInterf
 {
 	try {
 		$account_id = $request->getAttribute('oauth_user_id');
-		$params = ['sub' => $account_id];
 		$user = new UserEntity($account_id);
+		$params = ['sub' => $user->getIdentifier()];
 		$claimExtractor = new ClaimExtractor();
 		$params += $claimExtractor->extract(
 			$request->getAttribute('oauth_scopes', []),
