@@ -79,7 +79,7 @@ class UserEntity extends Base implements UserEntityInterface, ClaimSetInterface
 	public function getIdentifier()
 	{
 		return empty($this->id) ? null :
-			Api\Accounts::id2name($this->id).'@'.$this->account_domain;
+			Api\Accounts::id2name($this->id);//.'@'.$this->account_domain;
 	}
 
 	/**
