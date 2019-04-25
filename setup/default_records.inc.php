@@ -26,6 +26,7 @@ foreach([
 	'phone'   => 'Your phone number',
 	'address' => 'Your address',
 	'profile' => 'Your full profile',
+	'roles'   => 'Administration rights or regular user',
 ] as $identifier => $description)
 {
 	$GLOBALS['egw_setup']->db->insert('egw_openid_scopes', [

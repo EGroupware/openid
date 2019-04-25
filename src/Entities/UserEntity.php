@@ -125,7 +125,16 @@ class UserEntity extends Base implements UserEntityInterface, ClaimSetInterface
 				$contact[$contact['tel_prefer']] : $contact['tel_cell'],
 			'phone_number_verified' => false,
 			// address
-			'address' => $contact['label'],
+			'address' => [
+				'formatted' => $contact['label'],
+				'street_address' => $contact['adr_one_street'],
+				'locality' => $contact['adr_one_locality'],
+				'postal_code' => $contact['adr_one_postalcode'],
+				'country' => $contact['adr_one_countryname'],
+				'region' => $contact['adr_one_region'],
+			],
+			// user roles: "user", "admin"
+			'roles' => array_merge(['user'], array_intersect(array_keys($GLOBALS['egw']->acl->get_user_applications($this->id)), ['admin'])),
 		];
 	}
 }

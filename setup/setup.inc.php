@@ -14,7 +14,7 @@
 
 $setup_info['openid']['name']    = 'openid';
 $setup_info['openid']['title']   = 'OpenID';
-$setup_info['openid']['version'] = '19.1';
+$setup_info['openid']['version'] = '19.1.001';
 $setup_info['openid']['app_order'] = 1;
 $setup_info['openid']['tables']  = array(
 	'egw_openid_access_tokens','egw_openid_access_token_scopes','egw_openid_refresh_tokens',

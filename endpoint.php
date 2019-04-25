@@ -28,7 +28,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 use Zend\Diactoros\Stream;
 use OpenIDConnectServer\IdTokenResponse;
-use OpenIDConnectServer\ClaimExtractor;
 use Bnf\Slim3Psr15\CallableResolver;
 use EGroupware\OpenID\Repositories\AccessTokenRepository;
 use EGroupware\OpenID\Repositories\AuthCodeRepository;
@@ -41,6 +40,7 @@ use EGroupware\OpenID\Entities\UserEntity;
 use EGroupware\OpenID\Keys;
 use EGroupware\OpenID\Authorize;
 use EGroupware\OpenID\Log;
+use EGroupware\OpenID\ClaimExtractor;
 
 $GLOBALS['egw_info'] = array(
 	'flags' => array(
