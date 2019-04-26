@@ -20,6 +20,9 @@
 				top: 32%;
 				height: 200px !important;
 			}
+			#openid-authorize_scopes li{
+				text-style-type:initial;
+			}
 			div#popupMainDiv {
 				margin: 0 auto;
 				width: 300px;
