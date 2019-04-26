@@ -15,15 +15,13 @@
 			</hbox>
 		</groupbox>
 		<styles>
-			div#popupMainDiv {
+			body {
 				position: absolute;
-				left: 50%;
-				top: 50%;
+				top: 32%;
+				height: 200px !important;
 			}
-			fieldset {
-				position: relative;
-				left: -50%;
-				top: -150px;
+			div#popupMainDiv {
+				margin: 0 auto;
 				width: 300px;
 			}
 			fieldset > label {
