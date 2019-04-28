@@ -34,4 +34,24 @@ class ClaimExtractor extends \OpenIDConnectServer\ClaimExtractor
 
 		$this->addClaimSet(new ClaimSetEntity('roles', ['roles']));
 	}
+
+	/**
+	 * For given scopes and aggregated claims get all claims that have been configured on the extractor.
+	 *
+	 * Reimplement to cast key picture to string (it might be an object and cast creates sharing link).
+	 *
+	 * @param array $scopes
+	 * @param array $claims
+	 * @return array
+	 */
+	public function extract(array $scopes, array $claims)
+	{
+		$data = parent::extract($scopes, $claims);
+
+		if (isset($data['picture']))
+		{
+			$data['picture'] = (string)$data['picture'];
+		}
+		return $data;
+	}
 }

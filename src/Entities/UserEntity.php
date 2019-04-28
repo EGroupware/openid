@@ -99,6 +99,21 @@ class UserEntity extends Base implements UserEntityInterface, ClaimSetInterface
 		{
 			throw new Api\Exception\WrongParameter("No contact-data for account #$this->id found!");
 		}
+
+		// create a session-independent url / sharing link of the photo
+		$photo = new Api\Contacts\Photo($contact);
+		// we run as anonymous user, which might have not rights for addressbook
+		$GLOBALS['egw_info']['user']['apps']['addressbook'] = true;
+		// create sharing-link of picture for the current user (no session!)
+		Api\Vfs::$user = $this->getID();
+
+		if (!$photo->hasPhoto())
+		{
+			$photo = empty($contact['email']) ? null :
+				// can't hurt to try Gravatar, if we have no picture but an email address
+				'https://www.gravatar.com/avatar/'.md5(strtolower(trim($contact['email'])));
+		}
+
 		return [
 			'id' => $this->getIdentifier(),
 			// profile
@@ -109,8 +124,7 @@ class UserEntity extends Base implements UserEntityInterface, ClaimSetInterface
 			'nickname' => '',
 			'preferred_username' => Api\Accounts::id2name($this->id),
 			'profile' => '',
-			'picture' => 'https://www.gravatar.com/avatar/'.
-				md5(strtolower(trim($contact['email']))),
+			'picture' => $photo,
 			'website' => $contact['url'],
 			'gender' => 'n/a',
 			'birthdate' => $contact['bday'],	// format?
