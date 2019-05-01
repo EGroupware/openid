@@ -114,6 +114,20 @@ class UserEntity extends Base implements UserEntityInterface, ClaimSetInterface
 				'https://www.gravatar.com/avatar/'.md5(strtolower(trim($contact['email'])));
 		}
 
+		// change our 2 or 5 letter (es-es, pt-br, zh-tw --> lang-country) lang code and country into a locale
+		$preferences = new Api\Preferences($this->getID());
+		$prefs = $preferences->read_repository();
+		if (strlen($prefs['common']['lang']) === 5)
+		{
+			list($lang, $country) = explode('-', $prefs['common']['lang']);
+		}
+		else
+		{
+			$lang = $prefs['common']['lang'];
+			$country = $prefs['common']['country'];
+		}
+		$locale = strtolower($lang).'_'.strtoupper($country);
+
 		return [
 			'id' => $this->getIdentifier(),
 			// profile
@@ -129,7 +143,7 @@ class UserEntity extends Base implements UserEntityInterface, ClaimSetInterface
 			'gender' => 'n/a',
 			'birthdate' => $contact['bday'],	// format?
 			'zoneinfo' => Api\DateTime::$user_timezone->getName(),
-			'locale' => $contact['adr_one_countrycode'],
+			'locale' => $locale,
 			'updated_at' => Api\DateTime::to($contact['modified'], 'Y-m-d'),
 			// email
 			'email' => $contact['email'],
