@@ -5,10 +5,11 @@ This is work in progress, do NOT install on a production server!
 ## Open tasks:
 - [ ] password grant: record and check failed login attempts like login page (see [user.authentication.failed](https://oauth2.thephpleague.com/authorization-server/events/))
 - [ ] UI to add clients as admin for all users or personal ones
-- [ ] UI to view and revoke access- and refresh-tokes
-- [ ] fix League OAuth2 server to support hybrid flow (currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant
-- [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
+- [ ] UI to view and revoke access- and refresh-tokens
 - [ ] wrong password on login looses oath request in session and therefore fails after correct password was entered
+- [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
+- [ ] implement [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
+- [ ] fix League OAuth2 server to support hybrid flow (currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant
 - [x] move to a single endpoint.php instead (implicit|auth_code|client_credentials|password).php
 - [x] add additional [OpenID Connect standard scopes](https://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims): profile, address, phone
 - [x] implement [OpenID Connect /userinfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo)
@@ -35,15 +36,18 @@ Enable:	        True
 URL:	        https://example.org/egroupware/openid/endpoint.php
 Token Path:     /access_token
 Token Send Via: Payload
-Identity Token Send Via: Header
+Identity Token Send Via:  Header
 Identity Path:  /userinfo
 Authorize Path: /authorize
-Scope:          openid email profile
+Scope:          openid email profile roles
+Param Name for access token: access_token
 Id:             <client-id-from-egroupware>
 Secret:         <client-secret-from-egroupware>
 Login Style:    Redirect
-Button Text:    EGroupware
+Button Text:    EGroupware users click here
 Username field: id
+Roles/Groups field name:  roles
+Merge roles from SSO:     True (currently role got lost when rocketchat/status app login to RC api!)
 Merge Users:    True
 ```
 Then click on [Save changes] to activate login and user creation through EGroupware.
