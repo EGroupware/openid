@@ -1,1 +1,31 @@
-openid / oauth2 server	common	en	OpenID / OAuth2 Server
+%s would like to access	openid	en	%s would like to access
+allowed grants	openid	en	Allowed grants
+approve	openid	en	Approve
+client	openid	en	Client
+client copied. please enter a new (unique) identifer and secret.	openid	en	Client copied. Please enter a new (unique) identifer and secret.
+client disabled.	openid	en	Client disabled.
+client not found!	openid	en	Client not found!
+client saved.	openid	en	Client saved.
+created	openid	en	Created
+deny	openid	en	Deny
+disable	openid	en	Disable
+disable this client	openid	en	Disable this client
+error saving client!	openid	en	Error saving client!
+exists without saving the changes	openid	en	exists without saving the changes
+general	openid	en	General
+grants	openid	en	Grants
+identifier	openid	en	Identifier
+identifier to enter at the client	openid	en	Identifier to enter at the client
+limit scopes	openid	en	Limit scopes
+login to authorize %1	openid	en	Login to authorize %1
+name	openid	en	Name
+name used inside egroupware	openid	en	Name used inside EGroupware
+openid	common	en	OpenID / OAuth2 Server
+openid / oauth2 server	openid	en	OpenID / OAuth2 Server
+redirect uri	openid	en	Redirect URI
+saves the changes made	openid	en	Saves the changes made
+scopes	openid	en	Scopes
+secret	openid	en	Secret
+secret/password to enter at the client	openid	en	Secret/password to enter at the client
+status	openid	en	Status
+updated	openid	en	Updated

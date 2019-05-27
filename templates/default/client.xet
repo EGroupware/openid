@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2//EN" "http://www.egroupware.org/etemplate2.dtd">
+<overlay>
+	<template id="openid.client.edit" template="" lang="" group="0" version="1.9.001">
+		<grid width="100%">
+			<columns>
+				<column width="120"/>
+				<column width="480"/>
+			</columns>
+			<rows>
+				<row>
+					<label value="Identifier" for="client_identifier"/>
+					<textbox id="client_identifier" statustext="Identifier to enter at the client"
+						maxlength="128" needed="true" class="et2_fullWidth"/>
+				</row>
+				<row>
+					<label value="Secret" for="client_secret"/>
+					<textbox id="client_secret" statustext="Secret/password to enter at the client"
+						type="passwd" maxlength="128" class="et2_fullWidth"/>
+				</row>
+				<row>
+					<label value="Redirect URI" for="client_redirect_uri"/>
+					<url id="client_redirect_uri" maxlength="255" needed="true" class="et2_fullWidth"/>
+				</row>
+				<row>
+					<label value="Allowed grants" for="client_grants" class="et2_nowrap"/>
+					<select id="client_grants" multiple="true" tags="true" needed="true" class="et2_fullWidth"/>
+				</row>
+				<row>
+					<label value="Limit scopes" for="client_scopes"/>
+					<select id="client_scopes" multiple="true" tags="true" class="et2_fullWidth"/>
+				</row>
+				<row>
+					<label value="Status" for="client_status"/>
+					<select id="client_status"/>
+				</row>
+			</rows>
+		</grid>
+	</template>
+	<template id="openid.client" template="" lang="" group="0" version="1.9.001">
+		<grid width="100%">
+			<columns>
+				<column width="120"/>
+				<column width="450"/>
+			</columns>
+			<rows>
+				<row>
+					<label value="Name" for="client_name"/>
+					<textbox id="client_name" statustext="Name used inside EGroupware"
+						maxlength="128" needed="true" class="et2_fullWidth"/>
+				</row>
+				<tabbox id="tabs" class="et2_nowrap" span="all" width="100%" tab_height="230px">
+					<tabs>
+						<tab id="general" label="General"/>
+					</tabs>
+					<tabpanels>
+						<template id="openid.client.edit"/>
+					</tabpanels>
+				</tabbox>
+				<row disabled="!@client_created">
+					<label value="Created"/>
+					<date-time id="client_created" readonly="true"/>
+				</row>
+				<row disabled="!@client_updated">
+					<label value="Updated"/>
+					<date-time id="client_updated" readonly="true"/>
+				</row>
+				<row class="dialogFooterToolbar">
+					<hbox span="all">
+						<button statustext="Saves the changes made" label="Save" id="button[save]"/>
+						<button statustext="Applies the changes made" label="Apply" id="button[apply]"/>
+						<button statustext="exists without saving the changes" label="Cancel" id="button[cancel]" onclick="window.close();"/>
+						<button align="right" statustext="Disable this client" label="Disable" id="button[delete]"
+							onclick="et2_dialog.confirm(widget,'Disable this client','Disable');"/>
+					</hbox>
+				</row>
+			</rows>
+		</grid>
+	</template>
+</overlay>

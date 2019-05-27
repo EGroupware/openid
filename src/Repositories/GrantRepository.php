@@ -22,14 +22,25 @@ namespace EGroupware\OpenID\Repositories;
 class GrantRepository
 {
 	/**
+	 * Numerical values for available grants
+	 */
+	const CLIENT_CREDENTIALS = 1;
+	const PASSWORD = 2;
+	const IMPLICIT = 3;
+	const AUTHORIZATION_CODE = 4;
+	const REFRESH_TOKEN = 5;
+
+	/**
 	 * Ids to store in database for grants
+	 *
+	 * @var array
 	 */
 	protected static $grants_ids = [
-		'client_credentials' => 1,
-		'password' => 2,
-		'implicit' => 3,
-		'authorization_code' => 4,
-		'refresh_token' => 5,
+		'client_credentials' => self::CLIENT_CREDENTIALS,
+		'password' => self::PASSWORD,
+		'implicit' => self::IMPLICIT,
+		'authorization_code' => self::AUTHORIZATION_CODE,
+		'refresh_token' => self::REFRESH_TOKEN,
 	];
 	/**
 	 * Description for grants
@@ -62,5 +73,54 @@ class GrantRepository
 	public static function getGrantDescriptions()
 	{
 		return self::$grants_descriptions;
+	}
+
+	/**
+	 * Get available grants as selectbox options for eT2
+	 *
+	 * @param boolean $short =false true: remove "Grant" from all labels
+	 * @return array
+	 */
+	public static function selOptions($short=false)
+	{
+		static $grants = null;
+
+		if (!isset($grants))
+		{
+			$grants = [];
+			foreach(self::$grants_ids as $identifier => $id)
+			{
+				$grants[$id] = self::$grants_descriptions[$identifier];
+			}
+		}
+		return $short ? str_replace(' Grant', '', $grants) : $grants;
+	}
+
+	/**
+	 * Check given grants are valid
+	 *
+	 * @param string|array $grants multiple grant-ids or -identifiers
+	 * @return array with integer grant-id => identifier
+	 * @throws Api\Exception\WrongParameter for invalid values in $grants
+	 */
+	public function checkGrants($grants)
+	{
+		$ids = [];
+		foreach(is_array($grants) ? $grants : explode(',', $grants) as $grant)
+		{
+			if (isset(self::$grants_ids[$grant]))
+			{
+				$ids[self::$grants_ids[$grant]] = $grant;
+			}
+			elseif(($identifier = array_search($grant, self::$grants_ids)) !== false)
+			{
+				$ids[(int)$grant] = $identifier;
+			}
+			else
+			{
+				throw new WrongParameter("Invalid grant '$grant'!");
+			}
+		}
+		return $ids;
 	}
 }

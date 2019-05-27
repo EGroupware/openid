@@ -105,4 +105,61 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 
 		return $scopes;
 	}
+
+	/**
+	 * Get available scopes as selectbox options for eT2
+	 *
+	 * @return array id => label
+	 */
+	public function selOptions()
+	{
+		static $scopes = null;
+
+		if (!isset($scopes))
+		{
+			$scopes = [];
+			foreach($this->db->select(self::TABLE, 'scope_id,scope_identifier,scope_description', false,
+				__LINE__, __FILE__, false, '', self::APP) as $row)
+			{
+				$scopes[$row['scope_id']] = [
+					'label' => $row['scope_identifier'],
+					'title' => $row['scope_description'],
+				];
+			}
+		}
+		return $scopes;
+	}
+
+	/**
+	 * Check given grants are valid
+	 *
+	 * @param string|array $scopes multiple scope-ids or -identifiers
+	 * @return array with integer scope_id => scope_identifier
+	 * @throws Api\Exception\WrongParameter for invalid values in $scopes
+	 */
+	public function checkScopes($scopes)
+	{
+		$valid_scopes = array_map(function($s)
+		{
+			return $s['title'];
+		}, $this->selOptions());
+
+		$ids = [];
+		foreach(is_array($scopes) ? $scopes : ($scopes ? explode(',', $scopes) : []) as $scope)
+		{
+			if (isset($valid_scopes[$scope]))
+			{
+				$ids[(int)$scope] = $valid_scopes[$scope];
+			}
+			elseif(($id = array_search($scope, $valid_scopes)) !== false)
+			{
+				$ids[(int)$id] = $scope;
+			}
+			else
+			{
+				throw new WrongParameter("Invalid scope '$scope'!");
+			}
+		}
+		return $ids;
+	}
 }

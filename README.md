@@ -4,12 +4,13 @@ This is work in progress, do NOT install on a production server!
 
 ## Open tasks:
 - [ ] password grant: record and check failed login attempts like login page (see [user.authentication.failed](https://oauth2.thephpleague.com/authorization-server/events/))
-- [ ] UI to add clients as admin for all users or personal ones
 - [ ] UI to view and revoke access- and refresh-tokens
 - [ ] wrong password on login looses oath request in session and therefore fails after correct password was entered
 - [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
 - [ ] implement [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
 - [ ] fix League OAuth2 server to support hybrid flow (currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant
+- [x] allow users to create personal clients
+- [x] UI to add clients as admin for all users
 - [x] move to a single endpoint.php instead (implicit|auth_code|client_credentials|password).php
 - [x] add additional [OpenID Connect standard scopes](https://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims): profile, address, phone
 - [x] implement [OpenID Connect /userinfo endpoint](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo)
@@ -28,7 +29,10 @@ This is work in progress, do NOT install on a production server!
 
 Install Rocket.Chat eg. via [docker-compose](https://rocket.chat/docs/installation/docker-containers/docker-compose/).
 
-You need to create a Client-Id and -Secret currently only with a simmilar SQL statement to the one below for testing.
+You need to create a Client-Identifier and -Secret via Admin >> OpenID / OAuth2 server >> Clients with the followin grants:
+* Authorization Code
+* Refresh Token
+* Implicit
 
 Then head in the Rocket.Chat Administration down to OAuth and click [Add custom oauth], give it a name eg. "EGroupware" and add the following values:
 ```
@@ -64,12 +68,15 @@ A grant is a method of acquiring an access token. Deciding which grants to use d
 
 https://oauth2.thephpleague.com/authorization-server/which-grant/
 
-All examples require to create a client and allowed grants first, eg. via the following SQL:
+All examples require to create a client under Admin >> OpenID / OAuth2 server >> Clients with ALL grants first:
 ```
-INSERT INTO `egw_openid_clients` (`client_name`, `client_identifier`, `client_secret`, `client_redirect_uri`, `client_created`) VALUES
-('oidcdebugger.com', 'oidcdebugger.com', '$2y$10$n3ETBDdoXZDxcn9PUl2qyuKWjKxz.HW6o8ub8c/8FdYzdWL/qKjCu' /* "secret" */, 'https://oidcdebugger.com/debug', NOW());
-SELECT client_id FROM `egw_openid_clients` WHERE `client_name`='oidcdebugger.com';
-INSERT INTO `egw_openid_client_grants` (`client_id`,`grant_id`) VALUES (<client-id>, 1),(<client-id>, 2),(<client-id>, 3),(<client-id>, 4),(<client-id>, 5);
+Name:           oidcdebugger.com
+Identifier:     oidcdebugger.com
+Secret:         secret
+Redirect URI:   https://oidcdebugger.com/debug
+Allowed Grants: select all available ones
+Limit Scopes:   don't select one
+Status:         Active
 ```
 The following test assume your EGroupware installation is reachable under http://example.com/egroupware/
 

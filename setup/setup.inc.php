@@ -12,6 +12,8 @@
  * @link https://github.com/thephpleague/oauth2-server
  */
 
+use EGroupware\OpenID;
+
 $setup_info['openid']['name']    = 'openid';
 $setup_info['openid']['title']   = 'OpenID';
 $setup_info['openid']['version'] = '19.1.001';
@@ -34,11 +36,9 @@ $setup_info['openid']['maintainer'] = [
 $setup_info['openid']['license']  = 'GPL2+';
 $setup_info['openid']['description'] = 'OpenID Connect and OAuth server for EGroupware';
 
-/* The hooks this app includes, needed for hooks registration */
-//$setup_info['openid']['hooks']['settings'] = 'EGroupware\OpenID\Preferences::settings';
-//$setup_info['openid']['hooks']['admin'] = 'EGroupware\OpenID\Admin::admin_sidebox';
-//$setup_info['openid']['hooks']['config'] = 'EGroupware\OpenID\Admin::config';
-//$setup_info['openid']['hooks']['config_validate'] = 'EGroupware\OpenID\Admin::validate';
+// The hooks this app includes, needed for hooks registration
+$setup_info['openid']['hooks']['admin']   = OpenID\Ui::class.'::menu';
+$setup_info['openid']['hooks']['sidebox']   = OpenID\Ui::class.'::menu';
 
 $setup_info['openid']['depends'][] = [
 	'appname' => 'api',
