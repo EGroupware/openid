@@ -9,7 +9,7 @@ This is work in progress, do NOT install on a production server!
 - [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
 - [ ] implement [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
 - [ ] fix League OAuth2 server to support hybrid flow (currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant
-- [x] allow users to create personal clients
+- [ ] allow users to create personal clients
 - [x] UI to add clients as admin for all users
 - [x] move to a single endpoint.php instead (implicit|auth_code|client_credentials|password).php
 - [x] add additional [OpenID Connect standard scopes](https://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims): profile, address, phone
