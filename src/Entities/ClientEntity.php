@@ -83,4 +83,58 @@ class ClientEntity extends Base implements ClientEntityInterface
 	{
 		return $this->grants;
 	}
+
+	/**
+	 * TTL for access-tokens, to overwrite global default
+	 *
+	 * @var string
+	 */
+	protected $access_token_ttl;
+
+	/**
+	 * Set access-token TTL
+	 *
+	 * @param string|null $ttl null to use global default
+	 */
+	function setAccessTokenTTL($ttl)
+	{
+		$this->access_token_ttl = $ttl;
+	}
+
+	/**
+	 * Get access-token TTL
+	 *
+	 * @return string|null null to use global default
+	 */
+	function getAccessTokenTTL()
+	{
+		return $this->access_token_ttl;
+	}
+
+	/**
+	 * TTL for refresh-tokens, to overwrite global default
+	 *
+	 * @var string
+	 */
+	protected $refresh_token_ttl;
+
+	/**
+	 * Set refresh-token TTL
+	 *
+	 * @param string|null $ttl null to use global default
+	 */
+	function setRefreshTokenTTL($ttl)
+	{
+		$this->refresh_token_ttl = $ttl;
+	}
+
+	/**
+	 * Get refresh-token TTL
+	 *
+	 * @return string|null null to use global default
+	 */
+	function getRefreshTokenTTL()
+	{
+		return $this->refresh_token_ttl;
+	}
 }

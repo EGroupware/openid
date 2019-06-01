@@ -83,8 +83,12 @@ class Ui
 			}
 			else
 			{
-				$content = ['client_grants' => Repositories\GrantRepository::AUTHORIZATION_CODE.','.Repositories\GrantRepository::REFRESH_TOKEN];
+				$content = [
+					'client_grants' => Repositories\GrantRepository::AUTHORIZATION_CODE.','.Repositories\GrantRepository::REFRESH_TOKEN,
+					'client_status' => true,
+				];
 			}
+			$content['client_status'] = (string)$content['client_status'];	// eT2 selectbox has trouble with boolean values
 			unset($content['client_secret']);
 		}
 		else
@@ -109,6 +113,8 @@ class Ui
 							'scopes' => $content['client_scopes'],
 							'active' => $content['client_status'],
 							'redirect_uri' => $content['client_redirect_uri'],
+							'access_token_ttl' => $content['client_access_token_ttl'],
+							'refresh_token_ttl' => $content['client_refresh_token_ttl'],
 						]));
 
 						$content['msg'] = $cmd->run();
@@ -125,13 +131,20 @@ class Ui
 		}
 		$sel_options = [
 			'client_status' => [
-				1 => 'Active',
-				0 => 'Disabled',
+				'1' => 'Active',
+				'' => 'Disabled',
 			],
 			'client_grants' => Repositories\GrantRepository::selOptions(true),
 			'client_scopes' => (new Repositories\ScopeRepository())->selOptions(),
+			'client_access_token_ttl'  => self::tokenTTLoptions($content['client_access_token_ttl']),
+			'client_refresh_token_ttl' => self::tokenTTLoptions($content['client_refresh_token_ttl']),
 		];
 		$tpl = new Api\Etemplate('openid.client');
+		$tpl->setElementAttribute('client_access_token_ttl', 'empty_label',
+			lang('Use default of').': '.$sel_options['client_access_token_ttl'][Repositories\ClientRepository::getDefaultAccessTokenTTL()]);
+		$tpl->setElementAttribute('client_refresh_token_ttl', 'empty_label',
+			lang('Use default of').': '.$sel_options['client_refresh_token_ttl'][Repositories\ClientRepository::getDefaultRefreshTokenTTL()]);
+
 		// secret/password is required to create new clients
 		if (empty($content['client_id']))
 		{
@@ -155,6 +168,7 @@ class Ui
 	{
 		if (($ret = $this->clientRepo->get_rows($query, $rows, $readonlys)))
 		{
+			$access_token_ttls = $refresh_token_ttls = [];
 			foreach($rows as $key => &$row)
 			{
 				if (!is_int($key)) continue;
@@ -162,7 +176,20 @@ class Ui
 				// boolean does NOT work as key for select-box
 				$row['client_status'] = (string)(int)$row['client_status'];
 				$row['client_scopes'] = (string)$row['client_scopes'];
+
+				if (!empty($row['client_access_token_ttl']))
+				{
+					$access_token_ttls[$row['client_access_token_ttl']] = $row['client_access_token_ttl'];
+				}
+				if (!empty($row['client_access_token_ttl']))
+				{
+					$refresh_token_ttls[$row['client_refresh_token_ttl']] = $row['client_refresh_token_ttl'];
+				}
 			}
+			$rows['sel_options'] = [
+				'client_access_token_ttl'  => self::tokenTTLoptions($access_token_ttls),
+				'client_refresh_token_ttl' => self::tokenTTLoptions($refresh_token_ttls),
+			];
 		}
 		return $ret;
 	}
@@ -213,7 +240,7 @@ class Ui
 				'order' => 'client_updated',
 				'sort' => 'DESC',
 				'row_id' => 'client_id',
-				'default_cols' => '!client_id',
+				'default_cols' => '!client_id,client_access_token_ttl,client_refresh_token_ttl',
 				'actions' => self::clientActions(),
 			]
 		];
@@ -224,6 +251,44 @@ class Ui
 		];
 		$tpl = new Api\Etemplate('openid.clients');
 		$tpl->exec(self::APP.'.'.__CLASS__.'.'.__FUNCTION__, $content, $sel_options);
+	}
+
+	/**
+	 * Return options for tokenTTL incl. ones for $values
+	 *
+	 * @param string|array $values make sure these value(s) are included
+	 */
+	static function tokenTTLoptions($values=[])
+	{
+		static $units = [
+			'H' => ['1 hour', '%1 hours'],  // lang('1 hour'), lang('%1 hours, ...
+			'D' => ['1 day', '%1 days'],    // lang('1 day'), lang('%1 days, ...
+			'W' => ['1 week', '%1 weeks'],  // lang('1 week'), lang('%1 weeks, ...
+			'M' => ['1 month', '%1 month'], // lang('1 month'), lang('%1 month, ...
+			'Y' => ['1 year', '%1 years'],  // lang('1 year'), lang('%1 years, ...
+		];
+		static $stock = [
+			'PT1H', 'PT2H', 'PT4H', 'PT8H', 'PT12H',
+			'P1D', 'P2D', 'P3D', 'P5D',
+			'P1W', 'P2W', 'P3W', 'P4W',
+			'P1M', 'P2M', 'P3M', 'P4M', 'P6M',
+			'P1Y', 'P2Y', 'P3Y', 'P5Y',
+ 		];
+		foreach(array_unique(array_merge($stock, (array)$values)) as $value)
+		{
+			$parts = $matches = [];
+			if (!empty($value) && preg_match('/^P(T?\d+H|\d+[DWMY])+$/', $value) &&
+				preg_match_all('/T?(\d+)([HDWMY])/', substr($value, 1), $matches))
+			{
+				foreach($matches[2] as $n => $unit)
+				{
+					$parts[] = ($num = $matches[1][$n]) == 1 ?
+						lang($units[$unit][0]) : lang($units[$unit][1], $num);
+				}
+				$options[$value] = implode(', ', $parts);
+			}
+		}
+		return $options;
 	}
 
 	/**
@@ -239,19 +304,19 @@ class Ui
 				'default' => true,
 				'allowOnMultiple' => false,
 				'url' => 'menuaction='.self::APP.'.'.__CLASS__.'.client&client_id=$id',
-				'popup' => '600x450',
+				'popup' => '600x480',
 				'group' => $group=0,
 			),
 			'add' => array(
 				'caption' => 'Add',
 				'url' => 'menuaction='.self::APP.'.'.__CLASS__.'.client',
-				'popup' => '600x420',
+				'popup' => '600x450',
 				'group' => $group,
 			),
 			'copy' => array(
 				'caption' => 'Copy',
 				'url' => 'menuaction='.self::APP.'.'.__CLASS__.'.client&copy=$id',
-				'popup' => '600x420',
+				'popup' => '600x450',
 				'allowOnMultiple' => false,
 				'group' => $group,
 			),

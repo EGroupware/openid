@@ -19,3 +19,28 @@ function openid_upgrade19_1()
 
 	return $GLOBALS['setup_info']['openid']['currentver'] = '19.1.001';
 }
+
+function openid_upgrade19_1_001()
+{
+	$GLOBALS['egw_setup']->oProc->AddColumn('egw_openid_clients','client_creator',array(
+		'type' => 'int',
+		'meta' => 'user',
+		'precision' => '4'
+	));
+	$GLOBALS['egw_setup']->oProc->AddColumn('egw_openid_clients','client_modifier',array(
+		'type' => 'int',
+		'meta' => 'user',
+		'precision' => '4'
+	));
+	$GLOBALS['egw_setup']->oProc->AddColumn('egw_openid_clients','client_access_token_ttl',array(
+		'type' => 'varchar',
+		'precision' => '16'
+	));
+	$GLOBALS['egw_setup']->oProc->AddColumn('egw_openid_clients','client_refresh_token_ttl',array(
+		'type' => 'varchar',
+		'precision' => '16'
+	));
+
+	return $GLOBALS['setup_info']['openid']['currentver'] = '19.1.002';
+}
+

@@ -34,6 +34,14 @@
 					<label value="Status" for="client_status"/>
 					<select id="client_status"/>
 				</row>
+				<row>
+					<label value="Access-Token TTL" for="client_access_token_ttl"/>
+					<select id="client_access_token_ttl" empty_label="{Use default of} $cont[default_access_token_ttl]"/>
+				</row>
+				<row>
+					<label value="Refresh-Token TTL" for="client_refresh_token_ttl"/>
+					<select id="client_refresh_token_ttl" empty_label="{Use default of} $cont[default_refresh_token_ttl]"/>
+				</row>
 			</rows>
 		</grid>
 	</template>
@@ -49,7 +57,7 @@
 					<textbox id="client_name" statustext="Name used inside EGroupware"
 						maxlength="128" needed="true" class="et2_fullWidth"/>
 				</row>
-				<tabbox id="tabs" class="et2_nowrap" span="all" width="100%" tab_height="230px">
+				<tabbox id="tabs" class="et2_nowrap" span="all" width="100%" tab_height="270px">
 					<tabs>
 						<tab id="general" label="General"/>
 					</tabs>
@@ -59,11 +67,17 @@
 				</tabbox>
 				<row disabled="!@client_created">
 					<label value="Created"/>
-					<date-time id="client_created" readonly="true"/>
+					<hbox>
+						<select-account id="client_creator" readonly="true"/>
+						<date-time id="client_created" readonly="true" align="right"/>
+					</hbox>"
 				</row>
 				<row disabled="!@client_updated">
-					<label value="Updated"/>
-					<date-time id="client_updated" readonly="true"/>
+					<label value="Last modified"/>
+					<hbox>
+						<select-account id="client_modifier" readonly="true"/>
+						<date-time id="client_updated" readonly="true" align="right"/>
+					</hbox>
 				</row>
 				<row class="dialogFooterToolbar">
 					<hbox span="all">

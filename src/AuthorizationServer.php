@@ -2,6 +2,9 @@
 /**
  * EGroupware OpenID Connect / OAuth2 server
  *
+ * Reimplemented/Overwritten to:
+ * Set client-specific access-token TTL (respondToAccessTokenRequest)
+ *
  * Implement RFC7662 OAuth 2.0 Token Introspection
  * Until OAuth2 server pull request #925 is not merged:
  * @link https://github.com/thephpleague/oauth2-server/pull/925
@@ -215,10 +218,21 @@ class AuthorizationServer implements EmitterAwareInterface
             if (!$grantType->canRespondToAccessTokenRequest($request)) {
                 continue;
             }
+			// set client-specific token TTL, if specified in client
+			$client = $grantType->validateClient($request);
+			if (!($ttl = $client->getAccessTokenTTL()))
+			{
+				$ttl = $this->grantTypeAccessTokenTTL[$grantType->getIdentifier()];
+			}
+			if ($grantType->getIdentifier() !== 'implicit' &&
+				($refresh_ttl = $client->getRefreshTokenTTL()))
+			{
+				$grantType->setRefreshTokenTTL($refresh_ttl);
+			}
             $tokenResponse = $grantType->respondToAccessTokenRequest(
                 $request,
                 $this->getResponseType(),
-                $this->grantTypeAccessTokenTTL[$grantType->getIdentifier()]
+                $ttl
             );
 
             if ($tokenResponse instanceof ResponseTypeInterface) {

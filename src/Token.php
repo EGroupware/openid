@@ -21,7 +21,7 @@ use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * Generate tokens (programaitic) for current user
+ * Generate tokens (programatic) for current user
  */
 class Token extends AbstractGrant
 {
@@ -38,20 +38,23 @@ class Token extends AbstractGrant
 
 		$this->clientRepository = new Repositories\ClientRepository();
 		$this->accessTokenRepository = new Repositories\AccessTokenRepository();
+		$this->refreshTokenRepository = new Repositories\RefreshTokenRepository();
 		$this->authCodeRepository = new Repositories\AuthCodeRepository();
 		$this->scopeRepository = new Repositories\ScopeRepository();
 		$this->privateKey = (new Keys)->getPrivateKey();
 	}
 
 	/**
-	 * Generate an access-token for current-user and given client
+	 * Find or generate an access-token for current-user and given client
+	 *
+	 * Returns NULL if user has not authorized client: no valid access- or refresh-token exists
 	 *
 	 * @param string $clientIdentifier client-identifier
 	 * @param string[] $scopeIdentifiers scope-identifiers
-	 * @param string $lifetime ='DT1H' lifetime of token
+	 * @param string $min_lifetime =null min. lifetime for existing token, null: create new token with default TTL
 	 * @return string access-token as (signed) JWT
 	 */
-	public function accessToken($clientIdentifier, array $scopeIdentifiers, $lifetime='PT1H')
+	public function accessToken($clientIdentifier, array $scopeIdentifiers, $min_lifetime=null)
 	{
 		$scopes = array_map(function($id)
 		{
@@ -59,10 +62,28 @@ class Token extends AbstractGrant
 		}, $scopeIdentifiers);
 
 		$client = $this->clientRepository->getClientEntity($clientIdentifier, null, null, false);
-		$ttl = new DateInterval($lifetime);
 
-		$token = $this->issueAccessToken($ttl, $client, $this->user, $scopes);
+		if (!empty($min_lifetime))
+		{
+			$token = $this->accessTokenRepository->findToken($client, $this->user, $min_lifetime);
+		}
+		// if no valid token is found
+		if (!isset($token))
+		{
+			if (!$this->refreshTokenRepository->findToken($client, $this->user, $min_lifetime))
+			{
+				return NULL;	// user has not yes authorized client
+			}
+			// ToDo: do a propper refresh using RefreshTokenGrant->respondToAccessTokenRequest()
+			// for now we just create a new access-token
+			if (empty($lifetime = $client->getAccessTokenTTL()))
+			{
+				$lifetime = Repositories\ClientRepository::getDefaultAccessTokenTTL();
+			}
+			$ttl = new DateInterval($lifetime);
 
+			$token = $this->issueAccessToken($ttl, $client, $this->user, $scopes);
+		}
 		return (string)$token->convertToJWT($this->privateKey);
 	}
 
@@ -71,10 +92,10 @@ class Token extends AbstractGrant
 	 *
 	 * @param string $clientIdentifier client-identifier
 	 * @param string[] $scopeIdentifiers scope-identifiers
-	 * @param string $lifetime ='DT10M' lifetime of token
+	 * @param string $lifetime =null lifetime of auth-code, null: use default
 	 * @return string access-token
 	 */
-	public function authCode($clientIdentifier, array $scopeIdentifiers, $lifetime='PT10M')
+	public function authCode($clientIdentifier, array $scopeIdentifiers, $lifetime=null)
 	{
 		$scopes = array_map(function($id)
 		{
@@ -82,7 +103,7 @@ class Token extends AbstractGrant
 		}, $scopeIdentifiers);
 
 		$client = $this->clientRepository->getClientEntity($clientIdentifier, null, null, false);
-		$ttl = new DateInterval($lifetime);
+		$ttl = new DateInterval(empty($lifetime) ? $lifetime : Repositories\ClientRepository::getDefaultAuthCodeTTL());
 
 		$token = $this->issueAuthCode($ttl, $client, $this->user, $client->getRedirectUri(), $scopes);
 

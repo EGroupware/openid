@@ -83,20 +83,20 @@ $app = new App([
 		// Enable the client credentials grant on the server
 		$server->enableGrantType(
 			new \League\OAuth2\Server\Grant\ClientCredentialsGrant(),
-			new \DateInterval('PT1H') // access tokens will expire after 1 hour
+			new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
 		);
 
 		// Enable the implicit grant on the server with a token TTL of 1 hour
-		$server->enableGrantType(new ImplicitGrant(new \DateInterval('PT1H')));
+		$server->enableGrantType(new ImplicitGrant(new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())));
 
-		// Enable the authentication code grant on the server with a token TTL of 1 hour
+		// Enable the authentication code grant on the server
 		$server->enableGrantType(
 			new AuthCodeGrant(
 				$authCodeRepository,
 				$refreshTokenRepository,
-				new \DateInterval('PT10M')
+				new \DateInterval(ClientRepository::getDefaultAuthCodeTTL())
 			),
-			new \DateInterval('PT1H')
+			new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
 		);
 
 		// Enable the password grant on the server with a token TTL of 1 hour
@@ -104,20 +104,20 @@ $app = new App([
 			new UserRepository(),           // instance of UserRepositoryInterface
 			$refreshTokenRepository
 		);
-		$pwGrant->setRefreshTokenTTL(new \DateInterval('P1M')); // refresh tokens will expire after 1 month
+		$pwGrant->setRefreshTokenTTL(new \DateInterval(ClientRepository::getDefaultRefreshTokenTTL()));
 
 		$server->enableGrantType(
 			$pwGrant,
-			new \DateInterval('PT1H') // access tokens will expire after 1 hour
+			new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
 		);
 
 		// Enable the refresh token grant on the server
 		$refreshGrant = new RefreshTokenGrant($refreshTokenRepository);
-		$refreshGrant->setRefreshTokenTTL(new \DateInterval('P1M')); // The refresh token will expire in 1 month
+		$refreshGrant->setRefreshTokenTTL(new \DateInterval(ClientRepository::getDefaultRefreshTokenTTL()));
 
 		$server->enableGrantType(
 			$refreshGrant,
-			new \DateInterval('PT1H') // The new access token will expire after 1 hour
+			new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
 		);
 
 		return $server;

@@ -32,7 +32,11 @@ $phpgw_baseline = array(
 			'client_redirect_uri' => array('type' => 'ascii','precision' => '255','nullable' => False),
 			'client_status' => array('type' => 'bool','nullable' => False,'default' => '1','comment' => '1=active'),
 			'client_created' => array('type' => 'timestamp','nullable' => False),
-			'client_updated' => array('type' => 'timestamp','nullable' => False,'default' => 'current_timestamp')
+			'client_updated' => array('type' => 'timestamp','nullable' => False,'default' => 'current_timestamp'),
+			'client_creator' => array('type' => 'int','meta' => 'user','precision' => '4'),
+			'client_modifier' => array('type' => 'int','meta' => 'user','precision' => '4'),
+			'client_access_token_ttl' => array('type' => 'varchar','precision' => '16'),
+			'client_refresh_token_ttl' => array('type' => 'varchar','precision' => '16')
 		),
 		'pk' => array('client_id'),
 		'fk' => array(),
@@ -158,5 +162,5 @@ $phpgw_baseline = array(
 		'fk' => array(),
 		'ix' => array(),
 		'uc' => array()
-	),
+	)
 );

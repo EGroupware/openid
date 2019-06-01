@@ -112,9 +112,41 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
         $client->setRedirectUri($data['redirect_uri']);
 		$client->setScopes($data['scopes']);
 		$client->setGrants($data['grants']);
+		$client->setAccessTokenTTL($data['access_token_ttl']);
+		$client->setRefreshTokenTTL($data['refresh_token_ttl']);
 
         return $client;
     }
+
+	/**
+	 * Default refresh-token TTL
+	 *
+	 * @return string
+	 */
+	static function getDefaultRefreshTokenTTL()
+	{
+		return 'P1M';
+	}
+
+	/**
+	 * Default access-token TTL
+	 *
+	 * @return string
+	 */
+	static function getDefaultAccessTokenTTL()
+	{
+		return 'PT1H';
+	}
+
+	/**
+	 * Default auth-code TTL
+	 *
+	 * @return string
+	 */
+	static function getDefaultAuthCodeTTL()
+	{
+		return 'PT10M';
+	}
 
 	/**
 	 * Changes the data from work-format to the db-format

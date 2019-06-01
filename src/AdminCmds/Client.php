@@ -142,6 +142,8 @@ class Client extends admin_cmd
 				'client_status' => isset($this->active) ? (bool)$this->active : true,
 				'client_updated' => $this->repo->now,
 				'client_created' => $this->repo->now,
+				'client_creator' => $GLOBALS['egw_info']['user']['account_id'],
+				'client_modifier' => $GLOBALS['egw_info']['user']['account_id'],
 			]);
 			if ($this->repo->save())
 			{
@@ -169,8 +171,11 @@ class Client extends admin_cmd
 			$this->old = array_intersect_key($this->old, Api\Db::strip_array_keys($to_update, 'client_'));
 
 			$to_update['client_updated'] = $this->repo->now;
-			$to_update['client_status'] = $to_update['client_active'];
-
+			$to_update['client_modifier'] = $GLOBALS['egw_info']['user']['account_id'];
+			if (isset($to_update['client_status']))
+			{
+				$to_update['client_status'] = $to_update['client_active'];
+			}
 			if ($this->repo->update($to_update))
 			{
 				throw new WrongParameter(lang("Error saving client!"));

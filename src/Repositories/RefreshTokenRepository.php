@@ -20,6 +20,8 @@ use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use EGroupware\OpenID\Entities\RefreshTokenEntity;
+use EGroupware\OpenID\Entities\AccessTokenEntity;
+use EGroupware\OpenID\Entities\ClientEntity;
 
 /**
  * Refresh token storage interface.
@@ -96,5 +98,47 @@ class RefreshTokenRepository extends Base implements RefreshTokenRepositoryInter
 	public function getNewRefreshToken()
 	{
 		return new RefreshTokenEntity();
+	}
+
+	/**
+	 * Find a non-revoked access-token for a given client and user with given minimum lifetime
+	 *
+	 * @param ClientEntity $clientEntity
+	 * @param UserEntity|int $userIdentifier
+	 * @param string $min_lifetime ='PT1H' minimum lifetime to return existing token
+	 * @return AccessTokenEntity|null null if no (matching) token found
+	 */
+	public function findToken(ClientEntity $clientEntity, $userIdentifier, $min_lifetime='PT1H')
+	{
+		$min_expiration = new \DateTime('now');
+		$min_expiration->add(new \DateInterval($min_lifetime));
+
+		$data = $this->db->select(self::TABLE, '*', [
+			'refresh_token_revoked' => false,
+			'refresh_token_expiration >= '.$this->db->quote($min_expiration, 'timestamp'),
+			$this->db->expression(AccessTokenRepository::TABLE, [
+				'client_id' => $clientEntity->getID(),
+				'account_id' => is_a($userIdentifier, UserEntity::class) ? $userIdentifier->getID() : $userIdentifier,
+				'access_token_revoked' => false,
+			]),
+		], __LINE__, __FILE__, 0, 'ORDER BY refresh_token_expiration DESC', self::APP, 1,
+		' JOIN '.AccessTokenRepository::TABLE.' ON '.self::TABLE.'.access_token_id='.
+			AccessTokenRepository::TABLE.'.access_token_id')->fetch();
+
+		if ($data)
+		{
+			$token = new RefreshTokenEntity();
+			$token->setId($data['refresh_token_id']);
+			$token->setIdentifier($data['refresh_token_identifier']);
+			$token->setExpiryDateTime(new \DateTime($data['refresh_token_expiration']));
+			$access_token = new AccessTokenEntity();
+			$access_token->setClient($clientEntity);
+			$access_token->setId($data['access_token_id']);
+			$access_token->setIdentifier($data['access_token_identifier']);
+			$access_token->setExpiryDateTime(new \DateTime($data['access_token_expiration']));
+			$access_token->setUserIdentifier((int)$data['account_id']);
+			$token->setAccessToken($access_token);
+		}
+		return $token;
 	}
 }
