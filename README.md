@@ -50,6 +50,8 @@ Secret:         <client-secret-from-egroupware>
 Login Style:    Redirect
 Button Text:    EGroupware users click here
 Username field: id
+Name field:     name
+Avatar field:   picture
 Roles/Groups field name:  roles
 Merge roles from SSO:     True (currently role got lost when rocketchat/status app login to RC api!)
 Merge Users:    True
