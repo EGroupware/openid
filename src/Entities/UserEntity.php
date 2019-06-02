@@ -23,8 +23,10 @@ use EGroupware\Api;
 /**
  * User entity
  */
-class UserEntity extends Base implements UserEntityInterface, ClaimSetInterface
+class UserEntity implements UserEntityInterface, ClaimSetInterface
 {
+	use Traits\IdTrait;
+
 	/**
 	 * Domain used to construct user-identifiers
 	 *

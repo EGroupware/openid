@@ -35,22 +35,3 @@ foreach([
 		'scope_created'    => time(),
 	], false, __LINE__, __FILE__, 'openid');
 }
-
-/* one testclient, should not be enabled on production sites!
-foreach([
-	'oidcdebugger.com' => [
-		'secret'          => password_hash('secret', PASSWORD_BCRYPT),
-		'name'            => 'oidcdebugger.com',
-		'redirect_uri'    => 'https://oidcdebugger.com/debug',
-		'is_confidential' => true,
-	]
-] as $identifier => $data)
-{
-	$GLOBALS['egw_setup']->db->insert('egw_openid_clients', [
-		'client_identifier' => $identifier,
-		'client_name'       => $data['name'],
-		'client_secret'     => $data['secret'],
-		'client_redirect_uri' => $data['redirect_uri'],
-		'client_created'    => time(),
-	], false, __LINE__, __FILE__, 'openid');
-} */

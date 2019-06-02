@@ -44,3 +44,34 @@ function openid_upgrade19_1_001()
 	return $GLOBALS['setup_info']['openid']['currentver'] = '19.1.002';
 }
 
+function openid_upgrade19_1_002()
+{
+	$GLOBALS['egw_setup']->oProc->AddColumn('egw_openid_auth_codes','auth_code_ip',array(
+		'type' => 'ascii',
+		'precision' => '48',
+		'comment' => 'ip address'
+	));
+	$GLOBALS['egw_setup']->oProc->AddColumn('egw_openid_auth_codes','auth_code_user_agent',array(
+		'type' => 'ascii',
+		'precision' => '255',
+		'comment' => 'user agent'
+	));
+
+	return $GLOBALS['setup_info']['openid']['currentver'] = '19.1.003';
+}
+
+function openid_upgrade19_1_003()
+{
+	$GLOBALS['egw_setup']->oProc->AddColumn('egw_openid_access_tokens','access_token_ip',array(
+		'type' => 'ascii',
+		'precision' => '48',
+		'comment' => 'ip address'
+	));
+	$GLOBALS['egw_setup']->oProc->AddColumn('egw_openid_access_tokens','access_token_user_agent',array(
+		'type' => 'ascii',
+		'precision' => '255',
+		'comment' => 'user agent'
+	));
+
+	return $GLOBALS['setup_info']['openid']['currentver'] = '19.1.004';
+}

@@ -53,6 +53,8 @@ class AuthCodeRepository extends Base implements AuthCodeRepositoryInterface
 				'auth_code_redirect_uri' => $authCodeEntity->getRedirectUri(),
 				'auth_code_expiration' => $authCodeEntity->getExpiryDateTime(),
 				'auth_code_created' => time(),
+				'auth_code_user_agent' => $authCodeEntity->getUserAgent(),
+				'auth_code_ip' => $authCodeEntity->getIP(),
 			], false, __LINE__, __FILE__, self::APP);
 
 			$authCodeEntity->setID($this->db->get_last_insert_id(self::TABLE, 'auth_code_id'));
@@ -108,6 +110,10 @@ class AuthCodeRepository extends Base implements AuthCodeRepositoryInterface
      */
     public function getNewAuthCode()
     {
-        return new AuthCodeEntity();
+        $auth_code = new AuthCodeEntity();
+		$auth_code->setUserAgent();
+		$auth_code->setIP();
+
+		return $auth_code;
     }
 }

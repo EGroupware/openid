@@ -20,9 +20,9 @@ use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use League\OAuth2\Server\Entities\Traits\ScopeTrait;
 
-class ScopeEntity extends Base implements ScopeEntityInterface
+class ScopeEntity implements ScopeEntityInterface
 {
-	use EntityTrait, ScopeTrait;
+	use EntityTrait, ScopeTrait, Traits\IdTrait;
 
 	/**
 	 * Description of scope

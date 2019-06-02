@@ -20,7 +20,7 @@ use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use League\OAuth2\Server\Entities\Traits\RefreshTokenTrait;
 
-class RefreshTokenEntity extends Base implements RefreshTokenEntityInterface
+class RefreshTokenEntity implements RefreshTokenEntityInterface
 {
-    use RefreshTokenTrait, EntityTrait;
+    use RefreshTokenTrait, EntityTrait, Traits\IdTrait;
 }

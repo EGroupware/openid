@@ -56,6 +56,8 @@ class AccessTokenRepository extends Base implements AccessTokenRepositoryInterfa
 				'account_id' => $userEntity->getID(),
 				'access_token_expiration' => $accessTokenEntity->getExpiryDateTime(),
 				'access_token_created' => time(),
+				'access_token_user_agent' => $accessTokenEntity->getUserAgent(),
+				'access_token_ip' => $accessTokenEntity->getIP(),
 			], false, __LINE__, __FILE__, self::APP);
 
 			$accessTokenEntity->setID($this->db->get_last_insert_id(self::TABLE, 'access_token_id'));
@@ -121,6 +123,8 @@ class AccessTokenRepository extends Base implements AccessTokenRepositoryInterfa
 			$accessToken->addScope($scope);
 		}
 		$accessToken->setUserIdentifier($userIdentifier);
+		$accessToken->setUserAgent();
+		$accessToken->setIP();
 
 		return $accessToken;
 	}

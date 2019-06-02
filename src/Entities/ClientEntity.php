@@ -20,9 +20,9 @@ use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\Traits\ClientTrait;
 use League\OAuth2\Server\Entities\Traits\EntityTrait;
 
-class ClientEntity extends Base implements ClientEntityInterface
+class ClientEntity implements ClientEntityInterface
 {
-    use EntityTrait, ClientTrait;
+    use EntityTrait, ClientTrait, Traits\IdTrait;
 
     public function setName($name)
     {

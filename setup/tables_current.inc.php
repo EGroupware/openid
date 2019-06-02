@@ -103,7 +103,9 @@ $phpgw_baseline = array(
 			'access_token_revoked' => array('type' => 'bool','precision' => '1','nullable' => False,'default' => '0'),
 			'access_token_type' => array('type' => 'int','precision' => '1','nullable' => False,'default' => '1'),
 			'access_token_created' => array('type' => 'timestamp','nullable' => False),
-			'access_token_updated' => array('type' => 'timestamp','nullable' => False,'default' => 'current_timestamp')
+			'access_token_updated' => array('type' => 'timestamp','nullable' => False,'default' => 'current_timestamp'),
+			'access_token_ip' => array('type' => 'ascii','precision' => '48','comment' => 'ip address'),
+			'access_token_user_agent' => array('type' => 'ascii','precision' => '255','comment' => 'user agent')
 		),
 		'pk' => array('access_token_id'),
 		'fk' => array(),
@@ -146,7 +148,9 @@ $phpgw_baseline = array(
 			'auth_code_redirect_uri' => array('type' => 'ascii','precision' => '255','nullable' => False),
 			'auth_code_revoked' => array('type' => 'bool','nullable' => False,'default' => '0'),
 			'auth_code_created' => array('type' => 'timestamp','nullable' => False),
-			'auth_code_updated' => array('type' => 'timestamp','nullable' => False,'default' => 'current_timestamp')
+			'auth_code_updated' => array('type' => 'timestamp','nullable' => False,'default' => 'current_timestamp'),
+			'auth_code_ip' => array('type' => 'ascii','precision' => '48','comment' => 'ip address'),
+			'auth_code_user_agent' => array('type' => 'ascii','precision' => '255','comment' => 'user agent')
 		),
 		'pk' => array('auth_code_id'),
 		'fk' => array(),

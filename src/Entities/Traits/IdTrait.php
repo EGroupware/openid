@@ -12,12 +12,12 @@
  * @link https://github.com/thephpleague/oauth2-server
  */
 
-namespace EGroupware\OpenID\Entities;
+namespace EGroupware\OpenID\Entities\Traits;
 
 /**
- * Base class for all OpenID entities
+ * Trait to manage (nummerical) IDs for entities
  */
-class Base
+trait IdTrait
 {
 	/**
 	 *
@@ -28,7 +28,7 @@ class Base
 	/**
 	 * Set nummeric ID
 	 *
-	 * @parm $id int
+	 * @param int $id
 	 */
 	public function setID($id)
 	{
