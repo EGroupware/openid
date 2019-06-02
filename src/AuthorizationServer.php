@@ -219,15 +219,19 @@ class AuthorizationServer implements EmitterAwareInterface
                 continue;
             }
 			// set client-specific token TTL, if specified in client
-			$client = $grantType->validateClient($request);
-			if (!($ttl = $client->getAccessTokenTTL()))
+			$client = $grantType->getClient($request);
+			if (($ttl = $client->getAccessTokenTTL()))
+			{
+				$ttl = new \DateInterval($ttl);
+			}
+			else
 			{
 				$ttl = $this->grantTypeAccessTokenTTL[$grantType->getIdentifier()];
 			}
 			if ($grantType->getIdentifier() !== 'implicit' &&
 				($refresh_ttl = $client->getRefreshTokenTTL()))
 			{
-				$grantType->setRefreshTokenTTL($refresh_ttl);
+				$grantType->setRefreshTokenTTL(new \DateInterval($refresh_ttl));
 			}
             $tokenResponse = $grantType->respondToAccessTokenRequest(
                 $request,
