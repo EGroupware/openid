@@ -63,13 +63,13 @@ class RefreshTokenRepository extends Base implements RefreshTokenRepositoryInter
 	/**
 	 * Revoke the refresh token.
 	 *
-	 * @param string $tokenId
+	 * @param string|array $tokenId token-identifier or array with query eg. ['access_token_id' => $id]
 	 */
 	public function revokeRefreshToken($tokenId)
 	{
 		$this->db->update(self::TABLE, [
 			'refresh_token_revoked' => true,
-		], [
+		], is_array($tokenId) ? $tokenId : [
 			'refresh_token_identifier' => $tokenId,
 		], __LINE__, __FILE__, self::APP);
 	}

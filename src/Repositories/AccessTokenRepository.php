@@ -16,6 +16,9 @@
 
 namespace EGroupware\OpenID\Repositories;
 
+// require autoloader, so access-token repo class can be used externally too
+require_once __DIR__.'/../../vendor/autoload.php';
+
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
@@ -28,13 +31,34 @@ use EGroupware\Api;
 /**
  * Access token storage interface.
  */
-class AccessTokenRepository extends Base implements AccessTokenRepositoryInterface
+class AccessTokenRepository extends Api\Storage\Base implements AccessTokenRepositoryInterface
 {
+	const APP = 'openid';
+
 	/**
 	 * Table name
 	 */
 	const TABLE = 'egw_openid_access_tokens';
 	const TOKEN_SCOPES_TABLE = 'egw_openid_access_token_scopes';
+
+	/**
+	 * SQL to generate comma-separated scopes
+	 *
+	 * @var string
+	 */
+	protected $scopes_sql;
+
+	/**
+	 * Constructor
+	 */
+	function __construct()
+	{
+		parent::__construct(self::APP, self::TABLE, null, '', true);
+
+		$this->scopes_sql = 'SELECT '.$this->db->group_concat('scope_id').
+			' FROM '.self::TOKEN_SCOPES_TABLE.
+			' WHERE '.self::TOKEN_SCOPES_TABLE.'.access_token_id='.self::TABLE.'.access_token_id';
+	}
 
 	/**
 	 * Persists a new access token to permanent storage.
@@ -79,13 +103,13 @@ class AccessTokenRepository extends Base implements AccessTokenRepositoryInterfa
 	/**
 	 * Revoke an access token.
 	 *
-	 * @param string $tokenId
+	 * @param string|array $tokenId token identifier or array with query
 	 */
 	public function revokeAccessToken($tokenId)
 	{
 		$this->db->update(self::TABLE, [
 			'access_token_revoked' => true,
-		], [
+		], is_array($tokenId) ? $tokenId : [
 			'access_token_identifier' => $tokenId,
 		], __LINE__, __FILE__, self::APP);
 	}
@@ -159,5 +183,84 @@ class AccessTokenRepository extends Base implements AccessTokenRepositoryInterfa
 			$token->setUserIdentifier((int)$data['account_id']);
 		}
 		return $token;
+	}
+
+	/**
+	 * Searches db for rows matching searchcriteria
+	 *
+	 * Reimplemented to get comma-separated access_token_scopes and allow to filter by them.
+	 *
+	 * @param array|string $criteria array of key and data cols, OR string with search pattern (incl. * or ? as wildcards)
+	 * @param boolean|string|array $only_keys =true True returns only keys, False returns all cols. or
+	 *	comma seperated list or array of columns to return
+	 * @param string $order_by ='' fieldnames + {ASC|DESC} separated by colons ',', can also contain a GROUP BY (if it contains ORDER BY)
+	 * @param string|array $extra_cols ='' string or array of strings to be added to the SELECT, eg. "count(*) as num"
+	 * @param string $wildcard ='' appended befor and after each criteria
+	 * @param boolean $empty =false False=empty criteria are ignored in query, True=empty have to be empty in row
+	 * @param string $op ='AND' defaults to 'AND', can be set to 'OR' too, then criteria's are OR'ed together
+	 * @param mixed $start =false if != false, return only maxmatch rows begining with start, or array($start,$num), or 'UNION' for a part of a union query
+	 * @param array $filter =null if set (!=null) col-data pairs, to be and-ed (!) into the query without wildcards
+	 * @param string $join ='' sql to do a join, added as is after the table-name, eg. "JOIN table2 ON x=y" or
+	 *	"LEFT JOIN table2 ON (x=y AND z=o)", Note: there's no quoting done on $join, you are responsible for it!!!
+	 * @param boolean $need_full_no_count =false If true an unlimited query is run to determine the total number of rows, default false
+	 * @return array|NULL array of matching rows (the row is an array of the cols) or NULL
+	 */
+	function &search($criteria, $only_keys=True, $order_by='', $extra_cols='', $wildcard='', $empty=False, $op='AND', $start=false, $filter=null, $join='', $need_full_no_count=false)
+	{
+		if ($extra_cols)
+		{
+			$extra_cols = is_array($extra_cols) ? $extra_cols : implode(',', $extra_cols);
+		}
+		else
+		{
+			$extra_cols = [];
+		}
+		$extra_cols[] = "($this->scopes_sql) AS access_token_scopes";
+
+		if ($join === '')
+		{
+			// join clients to get client name and status
+			$join .= ' LEFT JOIN '.ClientRepository::TABLE.' ON '.ClientRepository::TABLE.'.client_id='.self::TABLE.'.client_id';
+			$extra_cols[] = ClientRepository::TABLE.'.client_name AS client_name';
+			$extra_cols[] = ClientRepository::TABLE.'.client_status AS client_status';
+
+			// join auth-codes to get real user-agent and ip
+			// egw_openid_auth_codes has no foreign key to issued access-token nor the other way arround
+			// --> use auth_code of same client and user revoked at the time access_code was created (+/-1sec)
+			$join .= ' LEFT JOIN '.AuthCodeRepository::TABLE.' ON '.AuthCodeRepository::TABLE.'.client_id='.self::TABLE.'.client_id'.
+				' AND '.AuthCodeRepository::TABLE.'.account_id='.self::TABLE.'.account_id'.
+				' AND ABS('.$this->db->unix_timestamp(AuthCodeRepository::TABLE.'.auth_code_updated').'-'.
+					$this->db->unix_timestamp(self::TABLE.'.access_token_created').')<=1'.
+				' AND '.AuthCodeRepository::TABLE.'.auth_code_revoked='.$this->db->quote(true, 'boolean');
+			$extra_cols[] = AuthCodeRepository::TABLE.'.auth_code_ip AS auth_code_ip';
+			$extra_cols[] = AuthCodeRepository::TABLE.'.auth_code_user_agent AS auth_code_user_agent';
+
+			// join refresh-token to get it's expiration
+			$join .= ' LEFT JOIN '.RefreshTokenRepository::TABLE.' ON '.RefreshTokenRepository::TABLE.'.access_token_id='.self::TABLE.'.access_token_id';
+			$extra_cols[] = RefreshTokenRepository::TABLE.'.refresh_token_expiration AS refresh_token_expiration';
+
+			if ($only_keys === false || $only_keys === '*')
+			{
+				$only_keys = self::TABLE.'.*';
+			}
+		}
+
+		// by default, query only own tokens
+		if (!isset($filter['account_id']))
+		{
+			$filter['account_id'] = $GLOBALS['egw_info']['user']['account_id'];
+		}
+		if (!empty($filter['access_token_scopes']))
+		{
+			$join .= ' JOIN '.self::TOKEN_SCOPES_TABLE.' ON '.self::TOKEN_SCOPES_TABLE.'.access_token_id='.self::TABLE.'.access_token_id';
+			$filter[] = $this->db->expression(self::TOKEN_SCOPES_TABLE, ['scope_id' => $filter['access_token_scopes']]);
+		}
+		if (!empty($filter['client_status']))
+		{
+			$filter[] = $this->db->expression(ClientRepository::TABLE, ['client_status' => $filter['client_status']]);
+		}
+		unset($filter['access_token_scopes'], $filter['client_status']);
+
+		return parent::search($criteria, $only_keys, $order_by, $extra_cols, $wildcard, $empty, $op, $start, $filter, $join, $need_full_no_count);
 	}
 }
