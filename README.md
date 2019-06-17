@@ -21,9 +21,8 @@ This is work in progress, do NOT install on a production server!
 
 ## Installation
 
-1. Clone this repo into your EGroupware directory:
-2. Run `composer install --prefer-source` in this directory to install dependencies
-3. Install openid app via EGroupware setup
+1. EGroupware master and 19.1 install this app by default: composer install or install-cli.php
+2. Install openid app via EGroupware setup
 
 ## Rocket.Chat custom OAuth configuration
 
