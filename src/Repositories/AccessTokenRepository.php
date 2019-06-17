@@ -16,9 +16,6 @@
 
 namespace EGroupware\OpenID\Repositories;
 
-// require autoloader, so access-token repo class can be used externally too
-require_once __DIR__.'/../../vendor/autoload.php';
-
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;

@@ -52,8 +52,6 @@ $GLOBALS['egw_info'] = array(
 ));
 include('../header.inc.php');
 
-include __DIR__ . '/vendor/autoload.php';
-
 $app = new App([
 	'settings'    => [
 		'displayErrorDetails' => true,

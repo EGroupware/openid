@@ -14,7 +14,6 @@
 
 namespace EGroupware\OpenID;
 
-require_once __DIR__.'/../vendor/autoload.php';
 use DateInterval;
 use League\OAuth2\Server\Grant\AbstractGrant;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;

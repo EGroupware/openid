@@ -76,8 +76,6 @@ class Authorize
 			Api\Cache::setSession('openid', 'url', $this->url=$url);
 		}
 
-		require_once __DIR__.'/../vendor/autoload.php';
-
 		if (($ar = Api\Cache::getSession('openid', 'authRequest')))
 		{
 			$this->authRequest = unserialize($ar);
