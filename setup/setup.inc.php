@@ -37,6 +37,6 @@ $setup_info['openid']['hooks']['sidebox']   = OpenID\Ui::class.'::menu';
 
 $setup_info['openid']['depends'][] = [
 	'appname' => 'api',
-	'versions' => ['17.1'],
+	'versions' => ['19.1'],
 ];
 
