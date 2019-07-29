@@ -1,21 +1,32 @@
+%1 days, ...	openid	en	%1 days, ...
+%1 hours, ...	openid	en	%1 hours, ...
+%1 month, ...	openid	en	%1 month, ...
+%1 weeks, ...	openid	en	%1 weeks, ...
 %s would like to access	openid	en	%s would like to access
+1 year	openid	en	1 year
+access-token ttl	openid	en	Access-Token TTL
+administration rights or regular user	openid	en	Administration rights or regular user
 allowed grants	openid	en	Allowed grants
 approve	openid	en	Approve
+basic details about you	openid	en	Basic details about you
 client	openid	en	Client
 client copied. please enter a new (unique) identifer and secret.	openid	en	Client copied. Please enter a new (unique) identifer and secret.
 client disabled.	openid	en	Client disabled.
 client not found!	openid	en	Client not found!
 client saved.	openid	en	Client saved.
+client status	openid	en	Client Status
 created	openid	en	Created
 deny	openid	en	Deny
 disable	openid	en	Disable
 disable this client	openid	en	Disable this client
+enable openid connect support	openid	en	Enable OpenID Connect support
 error saving client!	openid	en	Error saving client!
 exists without saving the changes	openid	en	exists without saving the changes
 general	openid	en	General
 grants	openid	en	Grants
 identifier	openid	en	Identifier
 identifier to enter at the client	openid	en	Identifier to enter at the client
+ip address	openid	en	IP Address
 limit scopes	openid	en	Limit scopes
 login to authorize %1	openid	en	Login to authorize %1
 name	openid	en	Name
@@ -23,9 +34,18 @@ name used inside egroupware	openid	en	Name used inside EGroupware
 openid	common	en	OpenID / OAuth2 Server
 openid / oauth2 server	openid	en	OpenID / OAuth2 Server
 redirect uri	openid	en	Redirect URI
+refresh-token	openid	en	Refresh-Token
+refresh-token ttl	openid	en	Refresh-Token TTL
 saves the changes made	openid	en	Saves the changes made
 scopes	openid	en	Scopes
 secret	openid	en	Secret
 secret/password to enter at the client	openid	en	Secret/password to enter at the client
 status	openid	en	Status
+token revoked	openid	en	Token Revoked
 updated	openid	en	Updated
+use default of	openid	en	Use default of
+user agent	openid	en	User Agent
+your address	openid	en	Your address
+your email address	openid	en	Your email address
+your full profile	openid	en	Your full profile
+your phone number	openid	en	Your phone number
