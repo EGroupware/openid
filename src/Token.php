@@ -51,9 +51,13 @@ class Token extends AbstractGrant
 	 * @param string $clientIdentifier client-identifier
 	 * @param string[] $scopeIdentifiers scope-identifiers
 	 * @param string $min_lifetime =null min. lifetime for existing token, null: create new token with default TTL
-	 * @return string access-token as (signed) JWT
+	 * @param boolean $require_refresh_token =true true: require a refresh token to exist (user authorized before), false: do no check refresh-token
+	 * @param string $lifetime =null lifetime of new token or null to use client default
+	 * @param boolean $return_jwt =true true: return JWT, false: return AccessTokenEntity
+	 * @return string|AccessTokenEntity access-token or (signed) JWT
 	 */
-	public function accessToken($clientIdentifier, array $scopeIdentifiers, $min_lifetime=null)
+	public function accessToken($clientIdentifier, array $scopeIdentifiers, $min_lifetime=null,
+		$require_refresh_token=true, $lifetime=null, $return_jwt=true)
 	{
 		$scopes = array_map(function($id)
 		{
@@ -69,13 +73,13 @@ class Token extends AbstractGrant
 		// if no valid token is found
 		if (!isset($token))
 		{
-			if (!$this->refreshTokenRepository->findToken($client, $this->user, $min_lifetime))
+			if ($require_refresh_token && !$this->refreshTokenRepository->findToken($client, $this->user, $min_lifetime))
 			{
 				return NULL;	// user has not yes authorized client
 			}
 			// ToDo: do a propper refresh using RefreshTokenGrant->respondToAccessTokenRequest()
 			// for now we just create a new access-token
-			if (empty($lifetime = $client->getAccessTokenTTL()))
+			if (empty($lifetime) && empty($lifetime = $client->getAccessTokenTTL()))
 			{
 				$lifetime = Repositories\ClientRepository::getDefaultAccessTokenTTL();
 			}
@@ -83,7 +87,7 @@ class Token extends AbstractGrant
 
 			$token = $this->issueAccessToken($ttl, $client, $this->user, $scopes);
 		}
-		return (string)$token->convertToJWT($this->privateKey);
+		return $return_jwt ? (string)$token->convertToJWT($this->privateKey) : $token;
 	}
 
 	/**

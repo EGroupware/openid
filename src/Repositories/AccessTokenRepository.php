@@ -156,19 +156,21 @@ class AccessTokenRepository extends Api\Storage\Base implements AccessTokenRepos
 	 * @param ClientEntity $clientEntity
 	 * @param UserEntity|int $userIdentifier
 	 * @param string $min_lifetime =null minimum lifetime to return existing token
+	 * @param string $identifier =null token-identifier
 	 * @return AccessTokenEntity|null null if no (matching) token found
 	 */
-	public function findToken(ClientEntity $clientEntity, $userIdentifier, $min_lifetime)
+	public function findToken(ClientEntity $clientEntity, $userIdentifier, $min_lifetime, $identifier=null)
 	{
 		$min_expiration = new \DateTime('now');
 		$min_expiration->add(new \DateInterval($min_lifetime));
 
 		$data = $this->db->select(self::TABLE, '*', [
 			'client_id' => $clientEntity->getID(),
-			'account_id' => is_a($userIdentifier, UserEntity::class) ? $userIdentifier->getID() : $userIdentifier,
 			'access_token_revoked' => false,
 			'access_token_expiration >= '.$this->db->quote($min_expiration, 'timestamp'),
-		], __LINE__, __FILE__, 0, 'ORDER BY access_token_expiration DESC', self::APP, 1)->fetch();
+		]+($identifier ? ['access_token_identifier' => $identifier] : [])+(isset($userIdentifier)?[
+			'account_id' => is_a($userIdentifier, UserEntity::class) ? $userIdentifier->getID() : $userIdentifier,
+		] : []), __LINE__, __FILE__, 0, 'ORDER BY access_token_expiration DESC', self::APP, 1)->fetch();
 
 		if ($data)
 		{

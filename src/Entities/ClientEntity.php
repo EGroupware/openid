@@ -29,10 +29,37 @@ class ClientEntity implements ClientEntityInterface
         $this->name = $name;
     }
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
     public function setRedirectUri($uri)
     {
         $this->redirectUri = $uri;
     }
+
+    public function getRedirectUri()
+    {
+        return $this->redirectUri;
+    }
+
+	protected $secretHash;
+
+	public function getSecretHash()
+	{
+		return $this->secretHash;
+	}
+
+	public function setSecretHash($hash)
+	{
+		$this->secretHash = $hash;
+	}
+
+	public function setSecret($secret)
+	{
+		$this->secretHash = password_hash($secret, PASSWORD_BCRYPT);
+	}
 
 	/**
 	 * @var array

@@ -119,6 +119,52 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
     }
 
 	/**
+	 * Persists a client to permanent storage
+	 *
+	 * @param ClientEntity $clientEntity
+	 *
+	 * @throws UniqueTokenIdentifierConstraintViolationException
+	 */
+	public function persistNewClient(ClientEntity $clientEntity)
+	{
+		//error_log(__METHOD__."(".array2string($clientEntity).")");
+
+		try {
+			$this->db->insert(self::TABLE, [
+				'client_identifier' => $clientEntity->getIdentifier(),
+				'client_secret' => $clientEntity->getSecretHash(),
+				'client_name' => $clientEntity->getName(),
+				'client_redirect_uri' => $clientEntity->getRedirectUri(),
+				'client_access_token_ttl' => $clientEntity->getAccessTokenTTL(),
+				'client_refresh_token_ttl' => $clientEntity->getRefreshTokenTTL(),
+				'client_created' => time(),
+			], false, __LINE__, __FILE__, self::APP);
+
+			$clientEntity->setID($this->db->get_last_insert_id(self::TABLE, 'client_id'));
+
+			foreach($clientEntity->getScopes() as $scope)
+			{
+				$this->db->insert(self::CLIENT_SCOPES_TABLE, [
+					'client_id' => $clientEntity->getID(),
+					'scope_id' => $scope->getID(),
+				], false, __LINE__, __FILE__, self::APP);
+			}
+
+			foreach($clientEntity->getGrants() as $grant)
+			{
+				$this->db->insert(self::CLIENT_GRANTS_TABLE, [
+					'client_id' => $clientEntity->getID(),
+					'scope_id' => $grant->getID(),
+				], false, __LINE__, __FILE__, self::APP);
+			}
+		}
+		catch(Api\Db\Exception\NotUnique $ex) {
+			unset($ex);
+			throw UniqueTokenIdentifierConstraintViolationException::create();
+		}
+	}
+
+	/**
 	 * Default refresh-token TTL
 	 *
 	 * @return string
