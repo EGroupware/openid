@@ -1,2 +1,9 @@
+%s would like to access	openid	de	%s möchte auf Folgendes zugreifen
+administration rights or regular user	openid	de	Administrationsrechte oder normaler Benutzer
+approve	openid	de	Zustimmen
+deny	openid	de	Ablehnen
+enable openid connect support	openid	de	OpenID Connect Unterstützung aktivieren
 openid	common	de	OpenID / OAuth2 Server
 openid / oauth2 server	openid	de	OpenID / OAuth2 Server
+your email address	openid	de	Ihre E-Mail-Adresse
+your full profile	openid	de	Ihr vollständiges Profil
