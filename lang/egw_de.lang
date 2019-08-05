@@ -1,9 +1,52 @@
+%1 days	openid	de	%1 Tage
+%1 hours	openid	de	%1 Stunden
+%1 month	openid	de	%1 Monate
+%1 weeks	openid	de	%1 Wochen
+%1 years	openid	de	%1 years
 %s would like to access	openid	de	%s möchte auf Folgendes zugreifen
+1 year	openid	de	1 Jahr
+access-token ttl	openid	de	Gültigkeit Zugangs-(Access-)Token
 administration rights or regular user	openid	de	Administrationsrechte oder normaler Benutzer
+allowed grants	openid	de	Erlaubte Verfahren (Grants)
 approve	openid	de	Zustimmen
+basic details about you	openid	de	Grundlegende Angaben über Sie
+client	openid	de	Client
+client copied. please enter a new (unique) identifer and secret.	openid	de	Client kopiert. Bitte geben Sie eine neue (eindeutige) Kennung und ein Geheimnis ein.
+client disabled.	openid	de	Client deaktiviert.
+client not found!	openid	de	Client nicht gefunden!
+client saved.	openid	de	Client gespeichert.
+client status	openid	de	Status des Client
+created	openid	de	Angelegt
 deny	openid	de	Ablehnen
+disable	openid	de	Deaktivieren
+disable this client	openid	de	Diesen Client deaktivieren
 enable openid connect support	openid	de	OpenID Connect Unterstützung aktivieren
+error saving client!	openid	de	Fehler beim Speichern des Client!
+exists without saving the changes	openid	de	Abbruch ohne Änderungen zu Speichern
+general	openid	de	Allgemein
+grants	openid	de	Verfahren (Grants)
+identifier	openid	de	Kennung (Identifier)
+identifier to enter at the client	openid	de	Kennung (Identifier) zur Eingabe bei dem Client
+ip address	openid	de	IP Adresse
+limit scopes	openid	de	Gültigkeit (Scope) einschränken
+login to authorize %1	openid	de	Bitte anmelden um %1 Zugriff zu gewähren
+name	openid	de	Name
+name used inside egroupware	openid	de	Name der innerhalb EGroupware angezeigt wird
 openid	common	de	OpenID / OAuth2 Server
 openid / oauth2 server	openid	de	OpenID / OAuth2 Server
+redirect uri	openid	de	Weiterleitungsaddresse
+refresh-token	openid	de	Erneuerungs-(Refresh-)Token
+refresh-token ttl	openid	de	Gültigkeit Erneuerungs-(Refresh-)Token
+saves the changes made	openid	de	Änderungen Speichern
+scopes	openid	de	Gültigkeit (Scope)
+secret	openid	de	Geheimnis
+secret/password to enter at the client	openid	de	Geheimnis/Passwort zur Eingabe bei dem Client
+status	openid	de	Status
+token revoked	openid	de	Token zurückgezogen
+updated	openid	de	Aktualisiert
+use default of	openid	de	Benutze Vorgabe von
+user agent	openid	de	Browser
+your address	openid	de	Ihre Adresse
 your email address	openid	de	Ihre E-Mail-Adresse
 your full profile	openid	de	Ihr vollständiges Profil
+your phone number	openid	de	Ihre Telefonnummer

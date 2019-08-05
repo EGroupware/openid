@@ -45,6 +45,8 @@ class Ui
 
 	function __construct()
 	{
+		Api\Translation::add_app(self::APP);	// load translations, as we run under Admin
+
 		if (empty($GLOBALS['egw_info']['user']['apps']['admin']))
 		{
 			throw new NoPermission('Admin rights required!');
