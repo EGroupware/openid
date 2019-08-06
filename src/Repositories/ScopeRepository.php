@@ -121,6 +121,10 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 			foreach($this->db->select(self::TABLE, 'scope_id,scope_identifier,scope_description', false,
 				__LINE__, __FILE__, false, '', self::APP) as $row)
 			{
+				if ($row['scope_identifier'] === 'openid')
+				{
+					$row['scope_identifier'] = 'OpenID ';	// hack to not translate to app-name
+				}
 				$scopes[$row['scope_id']] = [
 					'label' => $row['scope_identifier'],
 					'title' => $row['scope_description'],
@@ -131,7 +135,7 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 	}
 
 	/**
-	 * Check given grants are valid
+	 * Check given scopes are valid
 	 *
 	 * @param string|array $scopes multiple scope-ids or -identifiers
 	 * @return array with integer scope_id => scope_identifier

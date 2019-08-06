@@ -175,7 +175,7 @@ class Ui
 
 				// boolean does NOT work as key for select-box
 				$row['client_status'] = (string)(int)$row['client_status'];
-				$row['client_scopes'] = (string)$row['client_scopes'];
+				if (!$row['client_scopes']) $row['client_scopes'] = '';
 
 				if (!empty($row['client_access_token_ttl']))
 				{
