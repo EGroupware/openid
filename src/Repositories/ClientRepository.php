@@ -42,6 +42,7 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 	 */
 	protected $grants_sql;
 	protected $scopes_sql;
+	protected $scope_identifiers_sql;
 
 	/**
 	 * Constructor
@@ -54,7 +55,11 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 			' FROM '.self::CLIENT_GRANTS_TABLE.
 			' WHERE '.self::CLIENT_GRANTS_TABLE.'.client_id='.self::TABLE.'.client_id';
 
-		$this->scopes_sql = 'SELECT '.$this->db->group_concat('scope_identifier').
+		$this->scopes_sql = 'SELECT '.$this->db->group_concat('scope_id').
+			' FROM '.self::CLIENT_SCOPES_TABLE.
+			' WHERE '.self::CLIENT_SCOPES_TABLE.'.client_id='.self::TABLE.'.client_id';
+
+		$this->scope_identifiers_sql = 'SELECT '.$this->db->group_concat('scope_identifier').
 			' FROM '.self::CLIENT_SCOPES_TABLE.
 			' JOIN '.ScopeRepository::TABLE.' ON '.ScopeRepository::TABLE.'.scope_id='.self::CLIENT_SCOPES_TABLE.'.scope_id'.
 			' WHERE '.self::CLIENT_SCOPES_TABLE.'.client_id='.self::TABLE.'.client_id';
@@ -81,7 +86,7 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 			$join = 'JOIN '.self::CLIENT_GRANTS_TABLE.' ON '.self::CLIENT_GRANTS_TABLE.'.client_id='.self::TABLE.'.client_id';
 		}
 
-		if (!($data = $this->db->select(self::TABLE, "*,($this->grants_sql) AS grants,($this->scopes_sql) AS scopes",
+		if (!($data = $this->db->select(self::TABLE, "*,($this->grants_sql) AS grants,($this->scope_identifiers_sql) AS scopes",
 			$where, __LINE__, __FILE__, false, '', self::APP, null, $join)->fetch()))
 		{
 			throw OAuthServerException::invalidClient();

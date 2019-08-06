@@ -150,14 +150,15 @@ class Client extends admin_cmd
 		}
 		else
 		{
-			$this->old = Api\Db::strip_array_keys($this->old, 'client_')+['active' => $this->old['client_status']];
+			$this->old = Api\Db::strip_array_keys($this->old, 'client_');
 			$to_update = [];
 			foreach($this->data as $name => $value)
 			{
-				if (isset($this->$name) && $this->$name != $this->old[$name] &&
+				$db_name = $name == 'active' ? 'status' : $name;
+				if (isset($this->$name) && $this->$name != $this->old[$db_name] &&
 					!in_array($name, ['old', 'update', 'secret']))
 				{
-					$to_update['client_'.$name] = $value;
+					$to_update['client_'.$db_name] = $value;
 				}
 			}
 			// update password only if it's given
@@ -170,10 +171,6 @@ class Client extends admin_cmd
 
 			$to_update['client_updated'] = $this->repo->now;
 			$to_update['client_modifier'] = $GLOBALS['egw_info']['user']['account_id'];
-			if (isset($to_update['client_status']))
-			{
-				$to_update['client_status'] = $to_update['client_active'];
-			}
 			if ($this->repo->update($to_update))
 			{
 				throw new WrongParameter(lang("Error saving client!"));
