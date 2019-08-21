@@ -30,7 +30,9 @@ class Logger extends Monolog\Logger
      */
     public function __construct($name, array $handlers = array(), array $processors = array())
 	{
-		if (!$handlers)
+		$log = $GLOBALS['egw_info']['server']['files_dir'].'/openid/request.log';
+
+		if (!$handlers && file_exists($log))
 		{
 			$lineFormatter = new LineFormatter(
 				null, // Format of message in log, default [%datetime%] %channel%.%level_name%: %message% %context% %extra%\n
@@ -38,7 +40,7 @@ class Logger extends Monolog\Logger
 				true, // allowInlineLineBreaks option, default false
 				true  // ignoreEmptyContextAndExtra option, default false
 			);
-			$debugHandler = new StreamHandler($GLOBALS['egw_info']['server']['files_dir'].'/openid/request.log', self::DEBUG);
+			$debugHandler = new StreamHandler($log, self::DEBUG);
 			$debugHandler->setFormatter($lineFormatter);
 			$handlers[] = $debugHandler;
 		}

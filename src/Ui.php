@@ -27,6 +27,7 @@ class Ui
 	public $public_functions = [
 		'clients' => true,
 		'client'  => true,
+		'requestLog' => true,
 	];
 
 	/**
@@ -340,7 +341,12 @@ class Ui
 	{
 		$location = is_array($args) ? $args['location'] : $args;
 
-		$file['Clients'] = Api\Egw::link('/index.php','menuaction='.self::APP.'.'.__CLASS__.'.clients&ajax=true');
+		$file = [
+			'Clients' => Api\Egw::link('/index.php','menuaction='.self::APP.'.'.__CLASS__.'.clients&ajax=true'),
+			'Request log' => "javascript:egw.openPopup('" .
+				Api\Egw::link('/index.php', 'menuaction='.self::APP.'.'.__CLASS__.'.requestLog', false) .
+				"', 960, 600, 'openIDrequestLog')",
+		];
 
 		switch ($location)
 		{
@@ -352,5 +358,30 @@ class Ui
 				display_section(self::APP, $file);
 				break;
 		}
+	}
+
+	/**
+	 * Enable and view request log
+	 *
+	 * Admin rights are checked in constructor!
+	 *
+	 * @throws Api\Exception\WrongParameter
+	 */
+	public static function requestLog()
+	{
+		$GLOBALS['egw_info']['flags']['css'] = '
+body { background-color: #e0e0e0; overflow: hidden; }
+pre.tail { background-color: white; padding-left: 5px; margin-left: 5px; }
+';
+		// create empty file to enable logging
+		$debug_file = $GLOBALS['egw_info']['server']['files_dir'].'/'.self::APP.'/request.log';
+		if (!file_exists($debug_file))
+		{
+			touch($debug_file);
+		}
+		Api\Framework::message(lang('Request log enabled, delete file to disable it again.'), 'success');
+
+		$tail = new Api\Json\Tail(self::APP.'/request.log');
+		$GLOBALS['egw']->framework->render($tail->show(),false,false);
 	}
 }

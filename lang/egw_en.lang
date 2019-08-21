@@ -37,6 +37,8 @@ openid / oauth2 server	openid	en	OpenID / OAuth2 Server
 redirect uri	openid	en	Redirect URI
 refresh-token	openid	en	Refresh-Token
 refresh-token ttl	openid	en	Refresh-Token TTL
+request log	openid	en	Request log
+request log enabled, delete file to disable it again.	openid	en	Request log enabled, delete file to disable it again.
 saves the changes made	openid	en	Saves the changes made
 scopes	openid	en	Scopes
 secret	openid	en	Secret

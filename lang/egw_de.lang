@@ -37,6 +37,8 @@ openid / oauth2 server	openid	de	OpenID / OAuth2 Server
 redirect uri	openid	de	Weiterleitungsaddresse
 refresh-token	openid	de	Erneuerungs-(Refresh-)Token
 refresh-token ttl	openid	de	Gültigkeit Erneuerungs-(Refresh-)Token
+request log	openid	de	Anfragelog
+request log enabled, delete file to disable it again.	openid	de	Anfragelog eingeschaltet, Datei löschen um es wieder auszuschalten.
 saves the changes made	openid	de	Änderungen Speichern
 scopes	openid	de	Gültigkeit (Scope)
 secret	openid	de	Geheimnis
