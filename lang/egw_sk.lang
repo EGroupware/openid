@@ -1,0 +1,41 @@
+%1 days	openid	sk	%1 dní
+%1 hours	openid	sk	%1 hodín
+%1 month	openid	sk	%1 mesiacov
+%1 weeks	openid	sk	%1 týždňov
+%1 years	openid	sk	%1 rokov
+%s would like to access	openid	sk	%s by rád získal prístup
+1 year	openid	sk	1 rok
+administration rights or regular user	openid	sk	Administrátorské práva alebo bežný používateľ
+approve	openid	sk	Schváliť
+basic details about you	openid	sk	Vaše základné údaje
+client	openid	sk	Klient
+client copied. please enter a new (unique) identifer and secret.	openid	sk	Klient skopírovaný. Prosím zadajte nový (jedinečný) identifikátor a tajomstvo.
+client disabled.	openid	sk	Klient zablokovaný.
+client not found!	openid	sk	Klient sa nenašiel!
+client saved.	openid	sk	Klient uložený.
+client status	openid	sk	Stav klienta
+created	openid	sk	Vytvorené
+deny	openid	sk	Zakázať
+disable	openid	sk	Zablokovať
+disable this client	openid	sk	Zablokovať tohto klienta
+enable openid connect support	openid	sk	Povoliť podporu OpenID Connect
+error saving client!	openid	sk	Chyba pri ukladaní klienta!
+exists without saving the changes	openid	sk	ukončiť bez uloženia zmien
+general	openid	sk	Všeobecné
+identifier	openid	sk	Identifikátor
+identifier to enter at the client	openid	sk	Identifikátor ktorý treba klientovi zadať
+ip address	openid	sk	IP adresa
+login to authorize %1	openid	sk	Prihlásiť pre autorizáciu %1
+name	openid	sk	Meno
+name used inside egroupware	openid	sk	Meno použité v rámci EGroupware
+redirect uri	openid	sk	Presmerovať URI
+saves the changes made	openid	sk	Uložiť vykonané zmeny
+secret	openid	sk	Tajomstvo
+secret/password to enter at the client	openid	sk	Tajomstvo/heslo ktoré treba klientovi zadať
+status	openid	sk	Stav
+updated	openid	sk	Aktualizované
+use default of	openid	sk	Použiť predvolené
+your address	openid	sk	Vaša adresa
+your email address	openid	sk	Vaša e-mailové adresa
+your full profile	openid	sk	Váš úplný profil
+your phone number	openid	sk	Vaše telefónne číslo
