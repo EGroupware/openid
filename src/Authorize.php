@@ -61,6 +61,11 @@ class Authorize
 	protected $url;
 
 	/**
+	 * Enable or disable debug-messages to error_log
+	 */
+	const DEBUG = false;
+
+	/**
 	 * Constructor
 	 *
 	 * @param string $url =null
@@ -87,6 +92,7 @@ class Authorize
 	 */
 	public function validate(AuthorizationServer $server, ServerRequestInterface $request)
 	{
+		if (self::DEBUG) error_log(__METHOD__."(...) anon_session=".self::$anon_session.", user.account_lid={$GLOBALS['egw_info']['user']['account_lid']}");
 		// check if we have stored authRequest, restore it
 		if (self::$anon_session || !$this->authRequest || isset($_GET['client_id']))
 		{
@@ -98,8 +104,9 @@ class Authorize
 			Api\Cache::setSession('openid', 'authRequest', serialize($this->authRequest));
 
 			// if we have no user-session --> redirect to login
-			if (self::$anon_session)
+			if (self::$anon_session || $GLOBALS['egw_info']['user']['account_lid'] === 'anonymous')
 			{
+				if (self::DEBUG) error_log(__METHOD__."(...) no user session --> redirect to login");
 				// if we had a "last_loginid" cookie, before creating the anon session, restore it
 				if (self::$anon_session !== true)
 				{
@@ -114,6 +121,7 @@ class Authorize
 
 		if ($this->authRequest->isAuthorizationApproved() === false)
 		{
+			if (self::DEBUG) error_log(__METHOD__."(...) ask for user approval");
 			// Once the user has logged in set the user on the AuthorizationRequest
 			$this->authRequest->setUser(new Entities\UserEntity($GLOBALS['egw_info']['user']['account_id']));
 
@@ -123,6 +131,7 @@ class Authorize
 			// show user page with requested permissions, so he can approve or deny
 			$this->approve();	// does NOT return
 		}
+		if (self::DEBUG) error_log(__METHOD__."(...) user approval or denied --> return to openid flow");
 		// remove it for the next request
 		Api\Cache::unsetSession('openid', 'authRequest');
 
@@ -136,6 +145,7 @@ class Authorize
 	 */
 	protected function approve()
 	{
+		if (self::DEBUG) error_log(__METHOD__."() start");
 		$tpl = new Api\Etemplate('openid.authorize');
 		$content = [
 			'client_id' => $this->authRequest->getClient()->getIdentifier(),
@@ -155,8 +165,10 @@ class Authorize
 		$_GET['cd'] = 'no';	// hack to stop framework redirect
 		$GLOBALS['egw_info']['flags']['js_link_registry'] = true;	// as we have no regular framework
 
+		if (self::DEBUG) error_log(__METHOD__."() calling tpl->exec(..., ".json_encode($content).", ".json_encode($sel_options).")");
 		$tpl->exec('api.'.self::class.'.submit', $content, $sel_options,
 			null, null, 2);	// 2 = popup, not full UI
+		if (self::DEBUG) error_log(__METHOD__."() after tpl->exec --> exiting now to send approval form to user");
 		exit;
 	}
 
@@ -165,11 +177,13 @@ class Authorize
 	 */
 	public function submit(array $content)
 	{
+		if (self::DEBUG) error_log(__METHOD__."(".json_encode($content).")");
 		$this->authRequest->setAuthorizationApproved(!empty($content['button']['approve']) ? true : null);
 
 		// we need to explicit serialize $authRequest, as our autoloader is not yet loaded at session_start!
 		Api\Cache::setSession('openid', 'authRequest', serialize($this->authRequest));
 
+		if (self::DEBUG) error_log(__METHOD__."() approved=".json_encode(!empty($content['button']['approve']) ? true : null)." --> redirecting to $this->url?cd=no");
 		Api\Framework::redirect_link($this->url.'?cd=no');
 	}
 
@@ -186,7 +200,9 @@ class Authorize
 		$anon_account = null;
 
 		// we dont have a session, but want to continue
-		self::$anon_session = !empty($_COOKIE['last_loginid']) ? $_COOKIE['last_loginid'] : true;
+		self::$anon_session = !empty($_COOKIE['last_loginid']) &&
+			strpos($_COOKIE['last_loginid'], 'anonymous@') !== 0 ?
+			$_COOKIE['last_loginid'] : true;
 
 		// create session without checking auth: create(..., false, false)
 		return $GLOBALS['egw']->session->create('anonymous@'.$GLOBALS['egw_info']['user']['domain'],
