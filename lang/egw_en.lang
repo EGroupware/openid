@@ -5,6 +5,7 @@
 %1 years	openid	en	%1 years
 %s would like to access	openid	en	%s would like to access
 1 year	openid	en	1 year
+access token revoked.	openid	en	Access Token revoked.
 access-token ttl	openid	en	Access-Token TTL
 administration rights or regular user	openid	en	Administration rights or regular user
 allowed grants	openid	en	Allowed grants
@@ -39,6 +40,9 @@ refresh-token	openid	en	Refresh-Token
 refresh-token ttl	openid	en	Refresh-Token TTL
 request log	openid	en	Request log
 request log enabled, delete file to disable it again.	openid	en	Request log enabled, delete file to disable it again.
+revoke	openid	en	Revoke
+revoke this token	openid	en	Revoke this token
+revoked	openid	en	Revoked
 saves the changes made	openid	en	Saves the changes made
 scopes	openid	en	Scopes
 secret	openid	en	Secret
