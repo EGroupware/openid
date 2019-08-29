@@ -34,6 +34,7 @@ $setup_info['openid']['description'] = 'OpenID Connect and OAuth server for EGro
 // The hooks this app includes, needed for hooks registration
 $setup_info['openid']['hooks']['admin']   = OpenID\Ui::class.'::menu';
 $setup_info['openid']['hooks']['sidebox']   = OpenID\Ui::class.'::menu';
+$setup_info['openid']['hooks']['preferences_security'] = OpenID\User::class.'::security';
 
 $setup_info['openid']['depends'][] = [
 	'appname' => 'api',

@@ -5,6 +5,7 @@
 %1 years	openid	de	%1 years
 %s would like to access	openid	de	%s möchte auf Folgendes zugreifen
 1 year	openid	de	1 Jahr
+access token revoked.	openid	de	Zugangs-(Access-)Token zurückgezogen.
 access-token ttl	openid	de	Gültigkeit Zugangs-(Access-)Token
 administration rights or regular user	openid	de	Administrationsrechte oder normaler Benutzer
 allowed grants	openid	de	Erlaubte Verfahren (Grants)
@@ -39,6 +40,9 @@ refresh-token	openid	de	Erneuerungs-(Refresh-)Token
 refresh-token ttl	openid	de	Gültigkeit Erneuerungs-(Refresh-)Token
 request log	openid	de	Anfragelog
 request log enabled, delete file to disable it again.	openid	de	Anfragelog eingeschaltet, Datei löschen um es wieder auszuschalten.
+revoke	openid	de	Zurückziehen
+revoke this token	openid	de	Dieses Token zurückziehen
+revoked	openid	de	Zurückgezogen
 saves the changes made	openid	de	Änderungen Speichern
 scopes	openid	de	Gültigkeit (Scope)
 secret	openid	de	Geheimnis
