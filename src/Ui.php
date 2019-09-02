@@ -13,7 +13,11 @@ namespace EGroupware\OpenID;
 use EGroupware\Api;
 
 /**
- * Generate tokens (programaitic) for current user
+ * Ui for OpenID Connect / OAuth2 server:
+ * - create, update and display clients
+ * - enable and show request log
+ *
+ * This UI requires EGroupware Admin right.
  */
 class Ui
 {
