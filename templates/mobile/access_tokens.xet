@@ -4,8 +4,8 @@
 	<template id="openid.access_tokens.rows" template="" lang="" group="0" version="1.9.001">
 		<grid width="100%" height="100%">
 			<columns>
-				<column width="60"/>
-				<column width="80%"/>
+				<column width="25%"/>
+				<column width="65%"/>
 				<column width="60"/>
 			</columns>
 			<rows>
@@ -16,7 +16,7 @@
 					<description id="${row}[client_name]" no_lang="1"/>
 					<vbox>
 						<description id="${row}[user_agent]" statustext="$row_cont[user_agent_tooltip]" no_lang="1"/>
-						<date-time id="${row}[access_token_expiration]" readonly="true"/>
+						<date-time label="expiration date" id="${row}[access_token_expiration]" readonly="true"/>
 					</vbox>
 					<select id="${row}[client_status]" readonly="true"/>
 				</row>
