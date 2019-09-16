@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2//EN" "http://www.egroupware.org/etemplate2.dtd">
+<overlay>
+	<template id="openid.access_tokens.rows" template="" lang="" group="0" version="1.9.001">
+		<grid width="100%" height="100%">
+			<columns>
+				<column width="60"/>
+				<column width="80%"/>
+				<column width="60"/>
+			</columns>
+			<rows>
+				<row class="th">
+
+				</row>
+				<row class="$row_cont[status_class]">
+					<description id="${row}[client_name]" no_lang="1"/>
+					<vbox>
+						<description id="${row}[user_agent]" statustext="$row_cont[user_agent_tooltip]" no_lang="1"/>
+						<date-time id="${row}[access_token_expiration]" readonly="true"/>
+					</vbox>
+					<select id="${row}[client_status]" readonly="true"/>
+				</row>
+			</rows>
+		</grid>
+	</template>
+	<template id="openid.access_tokens" template="" lang="" group="0" version="1.9.001">
+		<nextmatch id="nm" template="openid.access_tokens.rows"/>
+	</template>
+</overlay>
