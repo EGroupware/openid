@@ -43,7 +43,7 @@ class AccessTokenRepository extends Api\Storage\Base implements AccessTokenRepos
 	 *
 	 * @var string
 	 */
-	protected $scopes_sql;
+	public $scopes_sql;
 
 	/**
 	 * Constructor
@@ -155,7 +155,7 @@ class AccessTokenRepository extends Api\Storage\Base implements AccessTokenRepos
 	 *
 	 * @param ClientEntity $clientEntity
 	 * @param UserEntity|int $userIdentifier
-	 * @param string $min_lifetime =null minimum lifetime to return existing token
+	 * @param string $min_lifetime minimum lifetime to return existing token
 	 * @param string $identifier =null token-identifier
 	 * @return AccessTokenEntity|null null if no (matching) token found
 	 */
