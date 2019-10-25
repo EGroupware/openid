@@ -125,11 +125,19 @@ class Authorize
 			// Once the user has logged in set the user on the AuthorizationRequest
 			$this->authRequest->setUser(new Entities\UserEntity($GLOBALS['egw_info']['user']['account_id']));
 
-			// we need to explicit serialize $authRequest, as our autoloader is not yet loaded at session_start!
-			Api\Cache::setSession('openid', 'authRequest', serialize($this->authRequest));
+			// check if we need (a new) approval by the user
+			if ($this->requireApproval())
+			{
+				// we need to explicit serialize $authRequest, as our autoloader is not yet loaded at session_start!
+				Api\Cache::setSession('openid', 'authRequest', serialize($this->authRequest));
 
-			// show user page with requested permissions, so he can approve or deny
-			$this->approve();	// does NOT return
+				// show user page with requested permissions, so he can approve or deny
+				$this->approve();	// does NOT return
+			}
+			else
+			{
+				$this->authRequest->setAuthorizationApproved(true);
+			}
 		}
 		if (self::DEBUG) error_log(__METHOD__."(...) user approval or denied --> return to openid flow");
 		// remove it for the next request
@@ -185,6 +193,39 @@ class Authorize
 
 		if (self::DEBUG) error_log(__METHOD__."() approved=".json_encode(!empty($content['button']['approve']) ? true : null)." --> redirecting to $this->url?cd=no");
 		Api\Framework::redirect_link($this->url.'?cd=no');
+	}
+
+	/**
+	 * Check if the request requires (a new) approval
+	 *
+	 * We check if the user still have a valid refresh token for the client.
+	 * If that is the case, the client could have just used that, but not all clients do :(
+	 *
+	 * @return boolean
+	 */
+	protected function requireApproval()
+	{
+		$refreshtoken_repo = new Repositories\RefreshTokenRepository();
+
+		$refresh_token = $refreshtoken_repo->findToken($this->authRequest->getClient(),
+			$this->authRequest->getUser());
+
+		if (self::DEBUG) error_log(__METHOD__."() client=".$this->authRequest->getClient()->getIdentifier().", user=".$this->authRequest->getUser()->getIdentifier().", refreshToken=".array2string($refresh_token));
+
+		if ($refresh_token)
+		{
+			// check if refresh token contains the requested scopes
+			$scopes = $refresh_token->getAccessToken()->getScopes();
+			foreach($this->authRequest->getScopes() as $required)
+			{
+				if (!in_array($required, $scopes))
+				{
+					if (self::DEBUG) error_log(__METHOD__."() return true (missing scope ".$required->getIdentifier().')');
+					return true;
+				}
+			}
+		}
+		return !$refresh_token;
 	}
 
 	/**

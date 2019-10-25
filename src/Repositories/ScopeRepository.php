@@ -68,6 +68,29 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 		return $scope;
 	}
 
+	/**
+	 * Return scopes specified by their id
+	 *
+	 * @param array|string $ids array or comma-separated string of scope id's
+	 *
+	 * @return ScopeEntityInterface[]
+	 */
+	public function getScopeEntitiesById($ids)
+	{
+		$scopes = [];
+		foreach($this->db->select(self::TABLE, '*', [
+			'scope_id' => is_array($ids) ? $ids : explode(',', $ids)
+			], __LINE__, __FILE__, false, '', self::APP) as $data)
+		{
+			$scope = new ScopeEntity();
+			$scope->setID($data['scope_id']);
+			$scope->setIdentifier($data['scope_identifier']);
+			$scope->setDescription($data['scope_description']);
+			$scopes[] = $scope;
+		}
+		return $scopes;
+	}
+
     /**
      * Given a client, grant type and optional user identifier validate the set of scopes requested are valid and optionally
      * append additional scopes or remove requested scopes.

@@ -22,6 +22,7 @@ use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationExcep
 use EGroupware\OpenID\Entities\RefreshTokenEntity;
 use EGroupware\OpenID\Entities\AccessTokenEntity;
 use EGroupware\OpenID\Entities\ClientEntity;
+use EGroupware\OpenID\Entities\UserEntity;
 
 /**
  * Refresh token storage interface.
@@ -112,8 +113,9 @@ class RefreshTokenRepository extends Base implements RefreshTokenRepositoryInter
 	{
 		$min_expiration = new \DateTime('now');
 		$min_expiration->add(new \DateInterval($min_lifetime));
+		$access_token_repo = new AccessTokenRepository();
 
-		$data = $this->db->select(self::TABLE, '*', [
+		$data = $this->db->select(self::TABLE, "*,($access_token_repo->scopes_sql) AS access_token_scopes", [
 			'refresh_token_revoked' => false,
 			'refresh_token_expiration >= '.$this->db->quote($min_expiration, 'timestamp'),
 			$this->db->expression(AccessTokenRepository::TABLE, [
@@ -137,6 +139,20 @@ class RefreshTokenRepository extends Base implements RefreshTokenRepositoryInter
 			$access_token->setIdentifier($data['access_token_identifier']);
 			$access_token->setExpiryDateTime(new \DateTime($data['access_token_expiration']));
 			$access_token->setUserIdentifier((int)$data['account_id']);
+			if (!empty($data['access_token_scopes']))
+			{
+				try {
+					$scopeRepo = new ScopeRepository();
+					foreach($scopeRepo->getScopeEntitiesById($data['access_token_scopes']) as $scope)
+					{
+						$access_token->addScope($scope);
+					}
+				}
+				catch (Api\Exception\WrongParameter $ex) {
+					// access-token contains an invalid (eg. deleted) scope --> return no scopes
+					_egw_log_exception($ex);
+				}
+			}
 			$token->setAccessToken($access_token);
 		}
 		return $token;
