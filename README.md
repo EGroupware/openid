@@ -1,7 +1,5 @@
 # OpenID Connect and OAuth2 server for EGroupware
 
-This is work in progress, do NOT install on a production server!
-
 ## Open tasks:
 - [ ] allow to create clients, which behave like an EGroupware App:
 * added to egw_applications
