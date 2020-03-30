@@ -164,4 +164,41 @@ class ClientEntity implements ClientEntityInterface
 	{
 		return $this->refresh_token_ttl;
 	}
+
+	/**
+	 * @var string|null
+	 */
+	protected $app_name;
+
+	/**
+	 * Get application name, if managed as EGroupware app
+	 *
+	 * @return string|null
+	 */
+	function getApplicationName()
+	{
+		return $this->app_name;
+	}
+
+	/**
+	 * Set application name, if managed as EGroupware app
+	 *
+	 * @param string|null $name
+	 */
+	function setApplicationName($name)
+	{
+		$this->app_name = $name;
+	}
+
+	/**
+	 * Check if current user is allowed for this client
+	 *
+	 * If client is not managed as EGroupware App, all EGroupware users are allowed
+	 *
+	 * @return boolean
+	 */
+	function currentUserAllowed()
+	{
+		return !isset($this->app_name) || isset($GLOBALS['egw_info']['user']['apps'][$this->app_name]);
+	}
 }

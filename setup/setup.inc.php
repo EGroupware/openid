@@ -16,7 +16,7 @@ use EGroupware\OpenID;
 
 $setup_info['openid']['name']    = 'openid';
 $setup_info['openid']['title']   = 'OpenID';
-$setup_info['openid']['version'] = '19.1.004';
+$setup_info['openid']['version'] = '19.1.005';
 $setup_info['openid']['app_order'] = 1;
 $setup_info['openid']['tables']  = array('egw_openid_scopes','egw_openid_clients','egw_openid_client_scopes','egw_openid_client_grants','egw_openid_user_grants','egw_openid_user_scopes','egw_openid_user_clients','egw_openid_access_tokens','egw_openid_access_token_scopes','egw_openid_refresh_tokens','egw_openid_auth_codes','egw_openid_auth_code_scopes');
 $setup_info['openid']['enable']  = 2;
@@ -40,4 +40,5 @@ $setup_info['openid']['depends'][] = [
 	'appname' => 'api',
 	'versions' => ['19.1'],
 ];
+
 

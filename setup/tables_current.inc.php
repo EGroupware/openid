@@ -36,10 +36,11 @@ $phpgw_baseline = array(
 			'client_creator' => array('type' => 'int','meta' => 'user','precision' => '4'),
 			'client_modifier' => array('type' => 'int','meta' => 'user','precision' => '4'),
 			'client_access_token_ttl' => array('type' => 'varchar','precision' => '16'),
-			'client_refresh_token_ttl' => array('type' => 'varchar','precision' => '16')
+			'client_refresh_token_ttl' => array('type' => 'varchar','precision' => '16'),
+			'app_name' => array('type' => 'ascii','precision' => '16','comment' => 'app-name to manage as app or NULL')
 		),
 		'pk' => array('client_id'),
-		'fk' => array(),
+		'fk' => array('app_name' => 'egw_applications.app_name'),
 		'ix' => array('client_identifier','client_status'),
 		'uc' => array()
 	),

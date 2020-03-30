@@ -45,6 +45,50 @@
 			</rows>
 		</grid>
 	</template>
+	<template id="openid.client.app" template="" lang="" group="0" version="1.9.001">
+		<grid width="100%">
+			<columns>
+				<column width="120"/>
+				<column width="480"/>
+			</columns>
+			<rows>
+				<row>
+					<groupbox span="all">
+						<caption label="If an OAuth client is managed as EGroupware app"/>
+						<vbox>
+							<label value="- authentication only succeeds if user has run-rights for the application"/>
+							<label value="- no explicit user consent required for OAuth login"/>
+							<label value="- client application is displayed inside EGroupware (iframe)"/>
+						</vbox>
+					</groupbox>
+				</row>
+				<row>
+					<label value="Application name" for="app_name"/>
+					<hbox width="100%">
+						<textbox id="app_name" statustext="EGroupware internal application name"
+								 size="16" maxlength="16" class="et2_required"/>
+						<integer label="Order" id="app_order" min="1" max="100" align="right"/>
+					</hbox>
+				</row>
+				<row>
+					<label value="Start URL" for="app_index"/>
+					<url id="app_index" statustext="URL to show when the user opens the app"
+							 maxlength="128" class="et2_fullWidth et2_required"/>
+				</row>
+				<row>
+					<label value="Allowed for" for="run_rights"/>
+					<taglist-account id="run_rights" account_type="both" class="et2_full_width et2_required"/>
+				</row>
+				<row valign="top">
+					<label value="Icon" for="app_icon"/>
+					<vbox>
+						<taglist-thumbnail id="app_icon" allowFreeEntries="true" maxSelection="1" class="et2_full_width"/>
+						<file label="Upload" width="100%" onchange="egw.json('admin.admin_config.ajax_upload_anon_images',[widget.get_value(), []], function(_data){widget._parent._children[0].set_value(_data)}).sendRequest()"/>
+					</vbox>
+				</row>
+			</rows>
+		</grid>
+	</template>
 	<template id="openid.client" template="" lang="" group="0" version="1.9.001">
 		<grid width="100%">
 			<columns>
@@ -60,9 +104,11 @@
 				<tabbox id="tabs" class="et2_nowrap" span="all" width="100%" tab_height="270px">
 					<tabs>
 						<tab id="general" label="General"/>
+						<tab id="app" label="Manage as EGroupware application"/>
 					</tabs>
 					<tabpanels>
 						<template id="openid.client.edit"/>
+						<template id="openid.client.app"/>
 					</tabpanels>
 				</tabbox>
 				<row disabled="!@client_created">
