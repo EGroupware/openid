@@ -4,11 +4,16 @@
 %1 weeks	openid	de	%1 Wochen
 %1 years	openid	de	%1 years
 %s would like to access	openid	de	%s möchte auf Folgendes zugreifen
+- authentication only succeeds if user has run-rights for the application	openid	de	- ist die Anmeldung nur möglich wenn der Benutzer Ausführungsrechte für diese hat
+- client application is displayed inside egroupware (iframe)	openid	de	- wird die OAuth Anwendung innerhalb der EGroupware angezeigt (iframe)
+- no explicit user consent required for oauth login	openid	de	- beim OAuth Login ist keine explizite Zustimmung des Benutzers erforderlich
 1 year	openid	de	1 Jahr
 access token revoked.	openid	de	Zugangs-(Access-)Token zurückgezogen.
 access-token ttl	openid	de	Gültigkeit Zugangs-(Access-)Token
 administration rights or regular user	openid	de	Administrationsrechte oder normaler Benutzer
+allowed for	openid	de	Erlaubt für
 allowed grants	openid	de	Erlaubte Verfahren (Grants)
+application name	openid	de	Anwendungsname
 approve	openid	de	Zustimmen
 basic details about you	openid	de	Grundlegende Angaben über Sie
 client	openid	de	Client
@@ -21,20 +26,25 @@ created	openid	de	Angelegt
 deny	openid	de	Ablehnen
 disable	openid	de	Deaktivieren
 disable this client	openid	de	Diesen Client deaktivieren
+egroupware internal application name	openid	de	EGroupware interner Anwendungsname
 enable openid connect support	openid	de	OpenID Connect Unterstützung aktivieren
 error saving client!	openid	de	Fehler beim Speichern des Client!
 exists without saving the changes	openid	de	Abbruch ohne Änderungen zu Speichern
 general	openid	de	Allgemein
 grants	openid	de	Verfahren (Grants)
+icon	openid	de	Icon
 identifier	openid	de	Kennung (Identifier)
 identifier to enter at the client	openid	de	Kennung (Identifier) zur Eingabe bei dem Client
+if an oauth client is managed as egroupware app	openid	de	Wenn der OAuth Client als EGroupware Anwendung gemanagt wird
 ip address	openid	de	IP Adresse
 limit scopes	openid	de	Gültigkeit (Scope) einschränken
 login to authorize %1	openid	de	Bitte anmelden um %1 Zugriff zu gewähren
+manage as egroupware application	openid	de	Gemanagt als EGroupware Anwendung
 name	openid	de	Name
 name used inside egroupware	openid	de	Name der innerhalb EGroupware angezeigt wird
 openid	common	de	OpenID / OAuth2 Server
 openid / oauth2 server	openid	de	OpenID / OAuth2 Server
+order	openid	de	Reihenfolge
 redirect uri	openid	de	Weiterleitungsaddresse
 refresh-token	openid	de	Erneuerungs-(Refresh-)Token
 refresh-token ttl	openid	de	Gültigkeit Erneuerungs-(Refresh-)Token
@@ -47,9 +57,12 @@ saves the changes made	openid	de	Änderungen Speichern
 scopes	openid	de	Gültigkeit (Scope)
 secret	openid	de	Geheimnis
 secret/password to enter at the client	openid	de	Geheimnis/Passwort zur Eingabe bei dem Client
+start url	openid	de	Start Adresse (URL)
 status	openid	de	Status
+this name is already been taken by an installed egroupware application!	openid	de	Dieser Name wird bereits von einer installieren EGroupware Anwendung benutzt!
 token revoked	openid	de	Token zurückgezogen
 updated	openid	de	Aktualisiert
+url to show when the user opens the app	openid	de	Startseite die angezeigt wird, wenn der Benutzer die Anwendung öffnet
 use default of	openid	de	Benutze Vorgabe von
 user agent	openid	de	Browser
 your address	openid	de	Ihre Adresse

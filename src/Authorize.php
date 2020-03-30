@@ -125,8 +125,13 @@ class Authorize
 			// Once the user has logged in set the user on the AuthorizationRequest
 			$this->authRequest->setUser(new Entities\UserEntity($GLOBALS['egw_info']['user']['account_id']));
 
+			// if client is managed as EGroupware app, check if user has run-rights for the app
+			if (!$this->authRequest->getClient()->currentUserAllowed())
+			{
+				$this->authRequest->setAuthorizationApproved(false);
+			}
 			// check if we need (a new) approval by the user
-			if ($this->requireApproval())
+			elseif ($this->requireApproval())
 			{
 				// we need to explicit serialize $authRequest, as our autoloader is not yet loaded at session_start!
 				Api\Cache::setSession('openid', 'authRequest', serialize($this->authRequest));
@@ -205,6 +210,11 @@ class Authorize
 	 */
 	protected function requireApproval()
 	{
+		// if OAuth client is managed as EGroupware we do NOT require (explicit) user consent
+		if ($this->authRequest->getClient()->getApplicationName() && $this->authRequest->getClient()->currentUserAllowed())
+		{
+			return false;
+		}
 		$refreshtoken_repo = new Repositories\RefreshTokenRepository();
 
 		$refresh_token = $refreshtoken_repo->findToken($this->authRequest->getClient(),

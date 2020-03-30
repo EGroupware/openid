@@ -31,6 +31,11 @@ use EGroupware\OpenID\Repositories\ScopeRepository;
  * @property array $scopes =null to limit scopes, default all allowed
  * @property string $update =null to allow renaming client-identifiers
  * @property boolean $active =null false to deactive client (name can NOT be "status"!)
+ * @property string $app_name =null application name, if managed as EGroupware app
+ * @property string $app_index =null index page, --------- " -----------
+ * @property string $app_icon =null icon url, --------- " -----------
+ * @property string $app_order =2 application order, --------- " -----------
+ * @property array $run_rights =null array of account_id with run-rights, ---- " ----
  * @property-read int $client_id numerical id after save
  */
 class Client extends admin_cmd
@@ -86,7 +91,7 @@ class Client extends admin_cmd
 	 *
 	 * @return string
 	 */
-	public function __tostring()
+	public function __toString()
 	{
 		return self::name().(!empty($this->name) ? ': '.$this->name : '');
 	}
@@ -110,7 +115,14 @@ class Client extends admin_cmd
 
 		if (!$this->old)
 		{
-			foreach(['identifier', 'secret', 'grants', 'redirect_uri'] as $required)
+			$required_data = ['identifier', 'secret', 'grants', 'redirect_uri'];
+			// if managed as app, both name and index are required
+			if (!empty($this->data['app_name']) || !empty($this->data['app_index']))
+			{
+				$required_data[] = 'app_name';
+				$required_data[] = 'app_index';
+			}
+			foreach($required_data as $required)
 			{
 				if (empty($this->data[$required]))
 				{
@@ -119,6 +131,11 @@ class Client extends admin_cmd
 			}
 			if (empty($this->name)) $this->name = $this->identifier;
 			unset($this->old);
+
+			if (isset($GLOBALS['egw_info']['apps'][$this->app_name]))
+			{
+				throw new Api\Exception\WrongUserinput(lang('This name is already been taken by an installed EGroupware application!'));
+			}
 		}
 		if (isset($this->grants))
 		{
@@ -142,6 +159,7 @@ class Client extends admin_cmd
 				'client_created' => $this->repo->now,
 				'client_creator' => $GLOBALS['egw_info']['user']['account_id'],
 				'client_modifier' => $GLOBALS['egw_info']['user']['account_id'],
+				'app_name' => $this->app_name,
 			]);
 			if ($this->repo->save())
 			{
@@ -156,9 +174,9 @@ class Client extends admin_cmd
 			{
 				$db_name = $name == 'active' ? 'status' : $name;
 				if (isset($this->$name) && $this->$name != $this->old[$db_name] &&
-					!in_array($name, ['old', 'update', 'secret']))
+					!in_array($name, ['old', 'update', 'secret', 'app_index', 'app_icon', 'app_order', 'run_rights']))
 				{
-					$to_update['client_'.$db_name] = $value;
+					$to_update[$name === 'app_name' ? $name : 'client_'.$db_name] = $value;
 				}
 			}
 			// update password only if it's given
@@ -176,6 +194,10 @@ class Client extends admin_cmd
 				throw new WrongParameter(lang("Error saving client!"));
 			}
 		}
+		if (!empty($this->app_name))
+		{
+			$this->save_application();
+		}
 		$this->client_id = $this->repo->data['client_id'];
 
 		// saving allowd grants and scopes in their tables
@@ -183,6 +205,47 @@ class Client extends admin_cmd
 		if (isset($this->scopes)) $this->repo->saveScopes($this->client_id, $this->scopes);
 
 		return isset($this->active) && !$this->active ? lang('Client disabled.') : lang('Client saved.');
+	}
+
+	/**
+	 * Save data to egw_application table, if client is managed as EGroupware application
+	 */
+	protected function save_application()
+	{
+		$setup = new \setup();
+		$setup->db = $GLOBALS['egw']->db;	// setup does not set it automatic and loaddb only works for setup
+
+		$setup_info = [
+			$this->app_name => [
+				'name'  => $this->app_name,
+				'index' => $this->app_index,
+				'icon'  => $this->app_icon,
+				'app_order' => $this->app_order,
+				'enable' => 1,	// regular app shown in navbar
+				'version' => '0.1',	// a version is required!
+			],
+		];
+
+		if ($setup->app_registered($this->app_name))
+		{
+			$setup->update_app($this->app_name, $setup_info);
+		}
+		else
+		{
+			$setup->register_app($this->app_name, 1, $setup_info);
+		}
+
+		$acl = new Api\Acl();
+		$existing = $acl->get_ids_for_location('run', 1, $this->app_name) ?: [];
+		foreach(array_diff($this->run_rights, $existing) as $account_id)
+		{
+			$acl->add_repository($this->app_name, 'run', $account_id, 1);
+		}
+		foreach(array_diff($existing, $this->run_rights) as $account_id)
+		{
+			$acl->delete_repository($this->app_name, 'run', $account_id);
+		}
+		$GLOBALS['egw']->invalidate_session_cache();
 	}
 
 	/**

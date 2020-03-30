@@ -119,6 +119,7 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 		$client->setGrants($data['grants']);
 		$client->setAccessTokenTTL($data['access_token_ttl']);
 		$client->setRefreshTokenTTL($data['refresh_token_ttl']);
+		$client->setApplicationName($data['app_name']);
 
         return $client;
     }
@@ -143,6 +144,7 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 				'client_access_token_ttl' => $clientEntity->getAccessTokenTTL(),
 				'client_refresh_token_ttl' => $clientEntity->getRefreshTokenTTL(),
 				'client_created' => time(),
+				'app_name' => $clientEntity->getApplicationName(),
 			], false, __LINE__, __FILE__, self::APP);
 
 			$clientEntity->setID($this->db->get_last_insert_id(self::TABLE, 'client_id'));

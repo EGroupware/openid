@@ -75,3 +75,14 @@ function openid_upgrade19_1_003()
 
 	return $GLOBALS['setup_info']['openid']['currentver'] = '19.1.004';
 }
+
+function openid_upgrade19_1_004()
+{
+	$GLOBALS['egw_setup']->oProc->AddColumn('egw_openid_clients','app_name',array(
+		'type' => 'ascii',
+		'precision' => '16',
+		'comment' => 'app-name to manage as app or NULL'
+	));
+	return $GLOBALS['setup_info']['openid']['currentver'] = '19.1.005';
+}
+

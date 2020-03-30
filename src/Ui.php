@@ -68,6 +68,7 @@ class Ui
 	 */
 	public function client(array $content=null)
 	{
+		$tpl = new Api\Etemplate('openid.client');
 		if (!is_array($content))
 		{
 			if (!empty($_GET['client_id']))
@@ -91,10 +92,25 @@ class Ui
 				$content = [
 					'client_grants' => Repositories\GrantRepository::AUTHORIZATION_CODE.','.Repositories\GrantRepository::REFRESH_TOKEN,
 					'client_status' => true,
+					'app_order'     => 2,
 				];
 			}
 			$content['client_status'] = (string)$content['client_status'];	// eT2 selectbox has trouble with boolean values
 			unset($content['client_secret']);
+
+			// add data for clients managed as EGroupware apps
+			if (!empty($content['app_name']) && isset($GLOBALS['egw_info']['apps'][$content['app_name']]))
+			{
+				$content += [
+					'app_index' => $GLOBALS['egw_info']['apps'][$content['app_name']]['index'],
+					'app_icon'  => $GLOBALS['egw_info']['apps'][$content['app_name']]['icon'],
+					'app_order' => $GLOBALS['egw_info']['apps'][$content['app_name']]['order'],
+				];
+				$acl = new Api\Acl();
+				$content['run_rights'] = $acl->get_ids_for_location('run', 1, $content['app_name']);
+				// do not allow to change name of managed app
+				$tpl->setElementAttribute('app_name', 'readonly', true);
+			}
 		}
 		else
 		{
@@ -110,6 +126,7 @@ class Ui
 							'update' => $content['client_id'],
 						]+(array)$content['admin_cmd']+($button === 'delete' ? [
 							'active' => false,
+							'app_name' => $content['app_name'],	// to delete/uninstall app
 						] : [
 							'identifier' => $content['client_identifier'],
 							'name'   => $content['client_name'],
@@ -120,6 +137,11 @@ class Ui
 							'redirect_uri' => $content['client_redirect_uri'],
 							'access_token_ttl' => $content['client_access_token_ttl'],
 							'refresh_token_ttl' => $content['client_refresh_token_ttl'],
+							'app_name'  => $content['app_name'],
+							'app_index' => $content['app_index'],
+							'app_icon'  => $content['app_icon'],
+							'app_order' => $content['app_order'],
+							'run_rights' => $content['run_rights'],
 						]));
 
 						$content['msg'] = $cmd->run();
@@ -144,7 +166,6 @@ class Ui
 			'client_access_token_ttl'  => self::tokenTTLoptions($content['client_access_token_ttl']),
 			'client_refresh_token_ttl' => self::tokenTTLoptions($content['client_refresh_token_ttl']),
 		];
-		$tpl = new Api\Etemplate('openid.client');
 		$tpl->setElementAttribute('client_access_token_ttl', 'empty_label',
 			lang('Use default of').': '.$sel_options['client_access_token_ttl'][Repositories\ClientRepository::getDefaultAccessTokenTTL()]);
 		$tpl->setElementAttribute('client_refresh_token_ttl', 'empty_label',
@@ -157,6 +178,7 @@ class Ui
 		}
 		$tpl->exec(self::APP.'.'.__CLASS__.'.'.__FUNCTION__, $content, $sel_options, [], [
 			'client_id' => $content['client_id'],
+			'app_name'  => $content['app_name'],	// it's readonly in the template
 		], 2);
 	}
 
