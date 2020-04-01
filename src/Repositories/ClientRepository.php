@@ -99,7 +99,7 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 		}
 		if (!empty($data['scopes']))
 		{
-			$data['grants'] = explode(',', $data['scopes']);
+			$data['scopes'] = explode(',', $data['scopes']);
 		}
 
         if (
