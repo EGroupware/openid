@@ -1,16 +1,16 @@
 # OpenID Connect and OAuth2 server for EGroupware
 
 ## Open tasks:
-- [ ] allow to create clients, which behave like an EGroupware App:
-* added to egw_applications
-* authentication for them works only if user has run-rights for that application
-* an extra defined index-url get's opened as iframe inside EGroupware framework
 - [ ] password grant: record and check failed login attempts like login page (see [user.authentication.failed](https://oauth2.thephpleague.com/authorization-server/events/))
 - [ ] wrong password on login looses oath request in session and therefore fails after correct password was entered
 - [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
 - [ ] implement [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
 - [ ] fix League OAuth2 server to support hybrid flow (currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant
 - [ ] allow users to create personal clients
+- [x] allow to create clients, which behave like an EGroupware App:
+    * added to egw_applications
+    * authentication for them works only if user has run-rights for that application
+    * an extra defined index-url get's opened as iframe inside EGroupware framework
 - [x] UI to view and revoke access- and refresh-tokens
 - [x] UI to add clients as admin for all users
 - [x] move to a single endpoint.php instead (implicit|auth_code|client_credentials|password).php
