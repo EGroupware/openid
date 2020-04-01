@@ -10,6 +10,11 @@ This is work in progress, do NOT install on a production server!
 - [ ] implement [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
 - [ ] fix League OAuth2 server to support hybrid flow (currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant
 - [ ] allow users to create personal clients
+- [x] allow to create clients, which behave like an EGroupware App:
+    * added to egw_applications
+    * authentication for them works only if user has run-rights for that application
+    * an extra defined index-url get's opened as iframe inside EGroupware framework
+- [x] UI to view and revoke access- and refresh-tokens
 - [x] UI to add clients as admin for all users
 - [x] move to a single endpoint.php instead (implicit|auth_code|client_credentials|password).php
 - [x] add additional [OpenID Connect standard scopes](https://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims): profile, address, phone
