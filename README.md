@@ -5,7 +5,9 @@
 - [ ] wrong password on login looses oath request in session and therefore fails after correct password was entered
 - [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
 - [ ] implement [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
-- [ ] fix League OAuth2 server to support hybrid flow (currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant
+- [ ] fix League OAuth2 server to support multiple response_type(s), currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant, [see response in this ticket](https://github.com/thephpleague/oauth2-server/issues/903#issuecomment-423891504)
+- [ ] support response_type "id_token" or "token id_token" containing just an id_token (JWT) or additional to access_token an id_token
+- [ ] support hyprid flow / response_type contains additional "code" to also return an auth_code
 - [ ] allow users to create personal clients
 - [x] allow to create clients, which behave like an EGroupware App:
     * added to egw_applications
@@ -201,3 +203,9 @@ Content-Type: application/json; charset=UTF-8
 
 {"active":true,"token_type":"access_token","scope":["openid","profile"],"client_id":"oidcdebugger.com","exp":1554629779,"iat":1554626179,"sub":"2","jti":"2ab5f9fe5f4cfe0eeb49491e4cc9a313b2fb11f74969d52b8bd60ba8ec9894ae7f1c9eee697e74f2"}
 ```
+
+## More useful resources
+* [The PHP League OAuth 2.0 Server](https://github.com/thephpleague/oauth2-server)
+* [OpenID Connect Server plugin for The PHP League's OAuth2 Server](https://github.com/steverhoades/oauth2-openid-connect-server)
+* [Diagrams of All The OpenID Connect Flows](https://medium.com/@darutk/diagrams-of-all-the-openid-connect-flows-6968e3990660)
+* [Identity, Claims, & Tokens – An OpenID Connect Primer](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1) in 3 parts
