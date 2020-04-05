@@ -27,7 +27,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 use Zend\Diactoros\Stream;
-use OpenIDConnectServer\IdTokenResponse;
+use EGroupware\OpenID\ResponseTypes\IdTokenResponse;
 use Bnf\Slim3Psr15\CallableResolver;
 use EGroupware\OpenID\Repositories\AccessTokenRepository;
 use EGroupware\OpenID\Repositories\AuthCodeRepository;
@@ -85,7 +85,13 @@ $app = new App([
 		);
 
 		// Enable the implicit grant on the server with a token TTL of 1 hour
-		$server->enableGrantType(new ImplicitGrant(new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())));
+		$server->enableGrantType(
+			new ImplicitGrant(
+				$authCodeRepository,
+				new \DateInterval(ClientRepository::getDefaultAuthCodeTTL()),
+				new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
+			)
+		);
 
 		// Enable the authentication code grant on the server
 		$server->enableGrantType(
@@ -226,6 +232,27 @@ $app->get('/userinfo', function (ServerRequestInterface $request, ResponseInterf
 		return $response->withStatus(500)->withBody($body);
 	}
 })->add(new ResourceServerMiddleware($app->getContainer()->get(ResourceServer::class)));
+
+$app->get('/jwks', function (ServerRequestInterface $request, ResponseInterface $response)
+{
+	try
+	{
+		$keys = new Keys();
+
+		$response->getBody()->write(json_encode(['keys' => [$keys->getJWK()]]));
+
+		return $response
+			->withStatus(200)
+			->withHeader('content-type', 'application/json; charset=UTF-8');
+	}
+	catch (\Exception $exception) {
+		_egw_log_exception($exception);
+		$body = new Stream('php://temp', 'r+');
+		$body->write($exception->getMessage());
+
+		return $response->withStatus(500)->withBody($body);
+	}
+});
 
 // Slim does NOT detect Authorization header with Apache not writing it to $_SERVER['HTTP_AUTHORIZATION']
 if (function_exists('apache_request_headers') && !isset($_SERVER['HTTP_AUTHORIZATION']) &&

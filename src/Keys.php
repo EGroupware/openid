@@ -90,6 +90,26 @@ class Keys
 	}
 
 	/**
+	 * Get JSON Web Key from our public key
+	 *
+	 * @return array
+	 */
+	public function getJWK()
+	{
+		$pub_key = file_get_contents($this->getPublicKey());
+		$keyInfo = openssl_pkey_get_details(openssl_pkey_get_public($pub_key));
+
+		return [
+			'alg' => 'RS256',
+			'kty' => 'RSA',
+			'kid' => md5($pub_key),
+			'use' => 'sig',
+			'n' => rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($keyInfo['rsa']['n'])), '='),
+			'e' => rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($keyInfo['rsa']['e'])), '='),
+		];
+	}
+
+	/**
 	 * Get encryption key
 	 *
 	 * @return string with base64 encoded random_bytes(32)

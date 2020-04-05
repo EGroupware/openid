@@ -197,6 +197,10 @@ class AuthorizationServer implements EmitterAwareInterface
      */
     public function completeAuthorizationRequest(AuthorizationRequest $authRequest, ResponseInterface $response)
     {
+        if ($authRequest instanceof \EGroupware\OpenID\RequestTypes\AuthorizationRequest)
+        {
+            $authRequest->setResponse($this->getResponseType());
+        }
         return $this->enabledGrantTypes[$authRequest->getGrantTypeId()]
             ->completeAuthorizationRequest($authRequest)
             ->generateHttpResponse($response);
