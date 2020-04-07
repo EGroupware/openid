@@ -141,7 +141,7 @@ class User
 			'delete' => array(
 				'caption' => 'Revoke',
 				'allowOnMultiple' => true,
-				'confirm' => 'Revoke this token',
+				'confirm' => lang('Revoke this token'),
 			),
 		];
 	}
