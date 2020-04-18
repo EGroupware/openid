@@ -25,9 +25,33 @@ use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use OpenIDConnectServer\Entities\ClaimSetInterface;
 use OpenIDConnectServer\IdTokenResponse as BaseIdTokenResponse;
+use EGroupware\Api\Header\Http;
 
 class IdTokenResponse extends BaseIdTokenResponse
 {
+	/**
+	 * Reimplement to:
+	 * - use X-Forwarded-Host header, if available, instead of Host
+	 *
+	 * Fixes JWT don't validate for client in certain proxying situations because of wrong issuer (eg. internal IP).
+	 *
+	 * @param AccessTokenEntityInterface $accessToken
+	 * @param UserEntityInterface $userEntity
+	 * @return Builder
+	 */
+	protected function getBuilder(AccessTokenEntityInterface $accessToken, UserEntityInterface $userEntity)
+	{
+		// Add required id_token claims
+		$builder = (new Builder())
+			->setAudience($accessToken->getClient()->getIdentifier())
+			->setIssuer('https://' . Http::host())
+			->setIssuedAt(time())
+			->setExpiration($accessToken->getExpiryDateTime()->getTimestamp())
+			->setSubject($userEntity->getIdentifier());
+
+		return $builder;
+	}
+
 	/**
 	 * Reimplemented to:
 	 * - make it public, to add id_token responses for implicit grant
