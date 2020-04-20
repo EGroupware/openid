@@ -44,7 +44,7 @@ class IdTokenResponse extends BaseIdTokenResponse
 		// Add required id_token claims
 		$builder = (new Builder())
 			->setAudience($accessToken->getClient()->getIdentifier())
-			->setIssuer('https://' . Http::host())
+			->setIssuer(Http::schema().'://' . Http::host())
 			->setIssuedAt(time())
 			->setExpiration($accessToken->getExpiryDateTime()->getTimestamp())
 			->setSubject($userEntity->getIdentifier());
