@@ -1,0 +1,36 @@
+%1 days	openid	es-es	%1 días
+%1 hours	openid	es-es	%1 horas
+%1 month	openid	es-es	%1 meses
+%1 weeks	openid	es-es	%1 semanas
+%1 years	openid	es-es	% años
+%s would like to access	openid	es-es	%s desea acceder
+- authentication only succeeds if user has run-rights for the application	openid	es-es	- la autenticación solo tiene éxito si el usuario tiene derechos de ejecución para la aplicación
+- client application is displayed inside egroupware (iframe)	openid	es-es	- la aplicación cliente se muestra dentro de EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	es-es	- no se requiere consentimiento explícito del usuario para iniciar sesión en OAuth
+1 year	openid	es-es	1 año
+client	openid	es-es	Cliente
+client disabled.	openid	es-es	Cliente inhabilitado.
+client not found!	openid	es-es	¡Cliente no  encontrado!
+client saved.	openid	es-es	Cliente grabado.
+client status	openid	es-es	Estado del cliente
+created	openid	es-es	Creado
+deny	openid	es-es	Denegar
+disable	openid	es-es	Inhabilitar
+disable this client	openid	es-es	Inhabilitar este cliente
+general	openid	es-es	General
+icon	openid	es-es	Ícono
+ip address	openid	es-es	Dirección IP
+name	openid	es-es	Nombre
+openid	common	es-es	Servidor OpenID / OAuth2
+openid / oauth2 server	openid	es-es	Servidor OpenID / OAuth2
+status	openid	es-es	Estado
+this name is already been taken by an installed egroupware application!	openid	es-es	¡Este nombre ya ha sido tomado por una aplicación EGroupware instalada!
+token revoked	openid	es-es	Token revocado
+updated	openid	es-es	Actualizado
+url to show when the user opens the app	openid	es-es	URL a mostrar cuando el usuario abre la aplicación
+use default of	openid	es-es	Usar predeterminado de
+user agent	openid	es-es	Agente de usuario
+your address	openid	es-es	Su dirección
+your email address	openid	es-es	Su correo-e
+your full profile	openid	es-es	Su perfil completo
+your phone number	openid	es-es	Su número de teléfono
