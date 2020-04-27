@@ -110,6 +110,11 @@ class Ui
 				$content['run_rights'] = $acl->get_ids_for_location('run', 1, $content['app_name']);
 				// do not allow to change name of managed app
 				$tpl->setElementAttribute('app_name', 'readonly', true);
+				// only allow to edit http(s) urls
+				if (substr($content['app_index'], 'http') !== 0)
+				{
+					$tpl->setElementAttribute('app_index', 'readonly', true);
+				}
 			}
 		}
 		else
@@ -179,6 +184,7 @@ class Ui
 		$tpl->exec(self::APP.'.'.__CLASS__.'.'.__FUNCTION__, $content, $sel_options, [], [
 			'client_id' => $content['client_id'],
 			'app_name'  => $content['app_name'],	// it's readonly in the template
+			'app_index' => $content['app_index'],
 		], 2);
 	}
 
