@@ -80,6 +80,22 @@ class Keys
 	}
 
 	/**
+	 * Get private key as string without passphrase
+	 *
+	 * @return string
+	 * @throws \Exception
+	 */
+	public function getPrivateKeyString()
+	{
+		if (!($key = openssl_pkey_get_private('file://'.self::getAppDir().'/'.self::PRIVATE_KEY, $this->passphrase)) ||
+			!openssl_pkey_export ($key, $out))
+		{
+			throw new \Exception("Cound not get private key, maybe passphrase is wrong!");
+		}
+		return $out;
+	}
+
+	/**
 	 * Get the public key
 	 *
 	 * @return string path to file
