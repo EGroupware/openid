@@ -151,7 +151,8 @@ $phpgw_baseline = array(
 			'auth_code_created' => array('type' => 'timestamp','nullable' => False),
 			'auth_code_updated' => array('type' => 'timestamp','nullable' => False,'default' => 'current_timestamp'),
 			'auth_code_ip' => array('type' => 'ascii','precision' => '48','comment' => 'ip address'),
-			'auth_code_user_agent' => array('type' => 'ascii','precision' => '255','comment' => 'user agent')
+			'auth_code_user_agent' => array('type' => 'ascii','precision' => '255','comment' => 'user agent'),
+			'auth_code_nonce' => array('type' => 'ascii','precision' => '255','comment' => 'nonce from auth request')
 		),
 		'pk' => array('auth_code_id'),
 		'fk' => array(),

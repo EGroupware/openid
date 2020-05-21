@@ -24,4 +24,27 @@ use League\OAuth2\Server\Entities\Traits\TokenEntityTrait;
 class AuthCodeEntity implements AuthCodeEntityInterface
 {
     use EntityTrait, TokenEntityTrait, AuthCodeTrait, Traits\UserAgentTrait, Traits\IdTrait;
+
+	/**
+	 * Nonce from authorization request
+	 *
+	 * @var string
+	 */
+	protected $nonce;
+
+	/**
+	 * @param string $nonce
+	 */
+	function setNonce($nonce)
+	{
+		$this->nonce = $nonce;
+	}
+
+	/**
+	 * @return string
+	 */
+	function getNonce()
+	{
+		return $this->nonce;
+	}
 }

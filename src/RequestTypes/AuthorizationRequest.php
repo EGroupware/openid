@@ -34,6 +34,26 @@ use OpenIDConnectServer\IdTokenResponse;
 class AuthorizationRequest extends RequestTypes\AuthorizationRequest
 {
 	/**
+	 * Extend parent object
+	 *
+	 * @param RequestTypes\AuthorizationRequest $parent
+	 * @return AuthorizationRequest
+	 */
+	static function extend(RequestTypes\AuthorizationRequest $parent)
+	{
+		$me = new self();
+		$me->setGrantTypeId($parent->getGrantTypeId());
+		$me->setClient($parent->getClient());
+		$me->setRedirectUri($parent->getRedirectUri());
+		$me->setState($parent->getState());
+		$me->setScopes($parent->getScopes());
+		$me->setCodeChallenge($parent->getCodeChallenge());
+		$me->setCodeChallengeMethod($parent->getCodeChallengeMethod());
+
+		return $me;
+	}
+
+	/**
 	 * @var array
 	 */
 	protected $response_types;
