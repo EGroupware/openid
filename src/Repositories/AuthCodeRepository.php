@@ -55,6 +55,8 @@ class AuthCodeRepository extends Base implements AuthCodeRepositoryInterface
 				'auth_code_created' => time(),
 				'auth_code_user_agent' => $authCodeEntity->getUserAgent(),
 				'auth_code_ip' => $authCodeEntity->getIP(),
+				'auth_code_nonce' => $authCodeEntity instanceof AuthCodeEntity ?
+					$authCodeEntity->getNonce() : null,
 			], false, __LINE__, __FILE__, self::APP);
 
 			$authCodeEntity->setID($this->db->get_last_insert_id(self::TABLE, 'auth_code_id'));
@@ -116,4 +118,33 @@ class AuthCodeRepository extends Base implements AuthCodeRepositoryInterface
 
 		return $auth_code;
     }
+
+	/**
+	 * Set nonce for an auth-code
+	 *
+	 * @param string|AuthCodeEntity $codeId
+	 * @param string $nonce
+	 */
+	public function setNonce($codeId, $nonce)
+	{
+		return $this->db->update(self::TABLE, [
+			'auth_code_nonce' => $nonce,
+		], [
+			'auth_code_identifier' => $codeId instanceof AuthCodeEntity ? $codeId->getIdentifier() : $codeId,
+		], __LINE__, __FILE__, self::APP);
+	}
+
+	/**
+	 * Get nonce of an auth-code
+	 *
+	 * @param string $codeId
+	 *
+	 * @return string|null nonce of authorization request
+	 */
+	public function getNonce($codeId)
+	{
+		return $this->db->select(self::TABLE, 'auth_code_nonce', [
+			'auth_code_identifier' => $codeId,
+		], __LINE__, __FILE__, false, '', self::APP)->fetchColumn();
+	}
 }

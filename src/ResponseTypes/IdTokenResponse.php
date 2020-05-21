@@ -52,6 +52,18 @@ class IdTokenResponse extends BaseIdTokenResponse
 		return $builder;
 	}
 
+	protected $nonce;
+
+	/**
+	 * Set nonce for id_token response, as it's required by OpenID Connect spec
+	 *
+	 * @param string $nonce
+	 */
+	public function setNonce($nonce)
+	{
+		$this->nonce = $nonce;
+	}
+
 	/**
 	 * Reimplemented to:
 	 * - make it public, to add id_token responses for implicit grant
@@ -85,6 +97,10 @@ class IdTokenResponse extends BaseIdTokenResponse
 		if ($authorizationRequest && ($nonce = $authorizationRequest->getNonce()))
 		{
 			$claims['nonce'] = $nonce;
+		}
+		elseif (!empty($this->nonce))
+		{
+			$claims['nonce'] = $this->nonce;
 		}
 
 		foreach ($claims as $claimName => $claimValue) {

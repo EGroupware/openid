@@ -86,3 +86,15 @@ function openid_upgrade19_1_004()
 	return $GLOBALS['setup_info']['openid']['currentver'] = '19.1.005';
 }
 
+
+function openid_upgrade19_1_005()
+{
+	$GLOBALS['egw_setup']->oProc->AddColumn('egw_openid_auth_codes','auth_code_nonce',array(
+		'type' => 'ascii',
+		'precision' => '255',
+		'comment' => 'nonce from auth request'
+	));
+
+	return $GLOBALS['setup_info']['openid']['currentver'] = '19.1.006';
+}
+
