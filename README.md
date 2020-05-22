@@ -13,7 +13,7 @@
 * Refresh Token: token to refresh access-token after it's expired
 * Client Credentials: server requests access-token without further authorization
 * Implicit: user authorized access and get access-token and auth-code, server requests own access-token via backchannel
-* Password: other server checks username/password of EGroupware user (not recommended any more, as other server gets the password!)
+* Password Credential: other server checks username/password of EGroupware user (not recommended any more, as other server gets the password!)
 
 ## Client configuration in EGroupware
 > Go to: Admin > Applications > OpenID / OAuth2 server > Clients
