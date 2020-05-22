@@ -6,8 +6,27 @@
 * Token Introspection: https://example.org/egroupware/openid/endpoint.php/introspect
 * User information: https://example.org/egroupware/openid/endpoint.php/userinfo
 * Public key: https://example.org/egroupware/openid/endpoint.php/jwks
-
 > Replace example.org with the full qualified domain-name your EGroupware server uses.
+
+## Supported Grants:
+* Authorization Code: user authorized access and get auth-code, server requests access-token via backchannel
+* Refresh Token: token to refresh access-token after it's expired
+* Client Credentials: server requests access-token without further authorization
+* Implicit: user authorized access and get access-token and auth-code, server requests own access-token via backchannel
+* Password: other server checks username/password of EGroupware user (not recommended any more, as other server gets the password!)
+
+## Client configuration in EGroupware
+> Go to: Admin > Applications > OpenID / OAuth2 server > Clients
+
+## More useful resources
+* [Integration with various clients](https://github.com/EGroupware/egroupware/wiki/OpenID-Connect----OAuth2)
+* [OpenID Connect Core 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-core-1_0.html)
+* [OpenID Connect Discovery 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-discovery-1_0.html)
+* [OpenID Connect Dynamic Client Registration 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-registration-1_0.html)
+* [The PHP League OAuth 2.0 Server](https://github.com/thephpleague/oauth2-server)
+* [OpenID Connect Server plugin for The PHP League's OAuth2 Server](https://github.com/steverhoades/oauth2-openid-connect-server)
+* [Diagrams of All The OpenID Connect Flows](https://medium.com/@darutk/diagrams-of-all-the-openid-connect-flows-6968e3990660)
+* [Identity, Claims, & Tokens – An OpenID Connect Primer](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1) in 3 parts
 
 ## Open tasks:
 - [ ] password grant: record and check failed login attempts like login page (see [user.authentication.failed](https://oauth2.thephpleague.com/authorization-server/events/))
@@ -174,13 +193,3 @@ Content-Type: application/json; charset=UTF-8
 
 {"active":true,"token_type":"access_token","scope":["openid","profile"],"client_id":"oidcdebugger.com","exp":1554629779,"iat":1554626179,"sub":"2","jti":"2ab5f9fe5f4cfe0eeb49491e4cc9a313b2fb11f74969d52b8bd60ba8ec9894ae7f1c9eee697e74f2"}
 ```
-
-## More useful resources
-* [Integration with various clients](https://github.com/EGroupware/egroupware/wiki/OpenID-Connect----OAuth2)
-* [OpenID Connect Core 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-core-1_0.html)
-* [OpenID Connect Discovery 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-discovery-1_0.html)
-* [OpenID Connect Dynamic Client Registration 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-registration-1_0.html)
-* [The PHP League OAuth 2.0 Server](https://github.com/thephpleague/oauth2-server)
-* [OpenID Connect Server plugin for The PHP League's OAuth2 Server](https://github.com/steverhoades/oauth2-openid-connect-server)
-* [Diagrams of All The OpenID Connect Flows](https://medium.com/@darutk/diagrams-of-all-the-openid-connect-flows-6968e3990660)
-* [Identity, Claims, & Tokens – An OpenID Connect Primer](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1) in 3 parts
