@@ -1,10 +1,35 @@
 # OpenID Connect and OAuth2 server for EGroupware
 
-This is work in progress, do NOT install on a production server!
+## Supported endpoints
+* Authorization: https://example.org/egroupware/openid/endpoint.php/authorize
+* Token: https://example.org/egroupware/openid/endpoint.php/access_token
+* Token Introspection: https://example.org/egroupware/openid/endpoint.php/introspect
+* User information: https://example.org/egroupware/openid/endpoint.php/userinfo
+* Public key: https://example.org/egroupware/openid/endpoint.php/jwks
+> Replace example.org with the full qualified domain-name your EGroupware server uses.
+
+## Supported Grants:
+* Authorization Code: user authorized access and get auth-code, server requests access-token via backchannel
+* Refresh Token: token to refresh access-token after it's expired
+* Client Credentials: server requests access-token without further authorization
+* Implicit: user authorized access and get access-token and auth-code, server requests own access-token via backchannel
+* Password Credential: other server checks username/password of EGroupware user (not recommended any more, as other server gets the password!)
+
+## Client configuration in EGroupware
+> Go to: Admin > Applications > OpenID / OAuth2 server > Clients
+
+## More useful resources
+* [Integration with various clients](https://github.com/EGroupware/egroupware/wiki/OpenID-Connect----OAuth2)
+* [OpenID Connect Core 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-core-1_0.html)
+* [OpenID Connect Discovery 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-discovery-1_0.html)
+* [OpenID Connect Dynamic Client Registration 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-registration-1_0.html)
+* [The PHP League OAuth 2.0 Server](https://github.com/thephpleague/oauth2-server)
+* [OpenID Connect Server plugin for The PHP League's OAuth2 Server](https://github.com/steverhoades/oauth2-openid-connect-server)
+* [Diagrams of All The OpenID Connect Flows](https://medium.com/@darutk/diagrams-of-all-the-openid-connect-flows-6968e3990660)
+* [Identity, Claims, & Tokens – An OpenID Connect Primer](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1) in 3 parts
 
 ## Open tasks:
 - [ ] password grant: record and check failed login attempts like login page (see [user.authentication.failed](https://oauth2.thephpleague.com/authorization-server/events/))
-- [ ] UI to view and revoke access- and refresh-tokens
 - [ ] wrong password on login looses oath request in session and therefore fails after correct password was entered
 - [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
 - [ ] implement [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
@@ -32,46 +57,6 @@ This is work in progress, do NOT install on a production server!
 
 1. EGroupware master and 19.1 install this app by default: composer install or install-cli.php
 2. Install openid app via EGroupware setup
-
-## Rocket.Chat custom OAuth configuration
-
-Install Rocket.Chat eg. via [docker-compose](https://rocket.chat/docs/installation/docker-containers/docker-compose/).
-
-You need to create a Client-Identifier and -Secret via Admin >> OpenID / OAuth2 server >> Clients with the followin grants:
-* Authorization Code
-* Refresh Token
-* Implicit
-
-Then head in the Rocket.Chat Administration down to OAuth and click [Add custom oauth], give it a name eg. "EGroupware" and add the following values:
-```
-Enable:	        True
-URL:	        https://example.org/egroupware/openid/endpoint.php
-Token Path:     /access_token
-Token Send Via: Payload
-Identity Token Send Via:  Header
-Identity Path:  /userinfo
-Authorize Path: /authorize
-Scope:          openid email profile roles
-Param Name for access token: access_token
-Id:             <client-id-from-egroupware>
-Secret:         <client-secret-from-egroupware>
-Login Style:    Redirect
-Button Text:    EGroupware users click here
-Username field: id
-Name field:     name
-Avatar field:   picture
-Roles/Groups field name:  roles
-Merge roles from SSO:     True (currently role got lost when rocketchat/status app login to RC api!)
-Merge Users:    True
-```
-Then click on [Save changes] to activate login and user creation through EGroupware.
-
-(If Rocket.Chat runs in Docker on a Mac and EGroupware directly on the Mac, use "docker.for.mac.localhost" as hostname, as it is different from localhost!)
-
-If you only want users from EGroupware and no free registration with local passwords, go to Adminstration >> Accounts and set:
-```
-Show Default Login Form: False
-```
 
 ## Testing available grants
 A grant is a method of acquiring an access token. Deciding which grants to use depends on the type of client the end user will be using, and the experience you want for your users.
@@ -208,12 +193,3 @@ Content-Type: application/json; charset=UTF-8
 
 {"active":true,"token_type":"access_token","scope":["openid","profile"],"client_id":"oidcdebugger.com","exp":1554629779,"iat":1554626179,"sub":"2","jti":"2ab5f9fe5f4cfe0eeb49491e4cc9a313b2fb11f74969d52b8bd60ba8ec9894ae7f1c9eee697e74f2"}
 ```
-
-## More useful resources
-* [OpenID Connect Core 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-core-1_0.html)
-* [OpenID Connect Discovery 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-discovery-1_0.html)
-* [OpenID Connect Dynamic Client Registration 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-registration-1_0.html)
-* [The PHP League OAuth 2.0 Server](https://github.com/thephpleague/oauth2-server)
-* [OpenID Connect Server plugin for The PHP League's OAuth2 Server](https://github.com/steverhoades/oauth2-openid-connect-server)
-* [Diagrams of All The OpenID Connect Flows](https://medium.com/@darutk/diagrams-of-all-the-openid-connect-flows-6968e3990660)
-* [Identity, Claims, & Tokens – An OpenID Connect Primer](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1) in 3 parts
