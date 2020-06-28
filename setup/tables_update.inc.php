@@ -98,3 +98,12 @@ function openid_upgrade19_1_005()
 	return $GLOBALS['setup_info']['openid']['currentver'] = '19.1.006';
 }
 
+/**
+ * Bump version to 20.1
+ *
+ * @return string
+ */
+function openid_upgrade19_1_006()
+{
+	return $GLOBALS['setup_info']['openid']['currentver'] = '20.1';
+}
