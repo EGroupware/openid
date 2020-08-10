@@ -119,7 +119,9 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 		$client->setGrants($data['grants']);
 		$client->setAccessTokenTTL($data['access_token_ttl']);
 		$client->setRefreshTokenTTL($data['refresh_token_ttl']);
-		$client->setApplicationName($data['app_name']);
+		$client->setApplicationName($data['app_name'] ?:
+			// always consider rocketchat implicit as app managed by egroupware (to not require explicit user consent!)
+			strpos($data['redirect_uri'], '/rocketchat/') !== false ? 'rocketchat' : null);
 
         return $client;
     }
