@@ -15,6 +15,10 @@
 namespace EGroupware\OpenID;
 
 use DateInterval;
+use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Signer\Keychain;
+use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Lcobucci\JWT\ValidationData;
 use League\OAuth2\Server\Grant\AbstractGrant;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -90,6 +94,59 @@ class Token extends AbstractGrant
 		}
 		return $return_jwt === false ? $token :
 			(string)$token->convertToJWT($this->privateKey, is_array($return_jwt) ? $return_jwt : []);
+	}
+
+	/**
+	 * Parse and validate a JWT eg. issued by accessToken method
+	 *
+	 * We only validate expiration date and signature, not that the token is a (stored and not revoked) access-token.
+	 *
+	 * @param string $jwt
+	 * @return ?Token null if token is expired or signature not valid, otherwise the token to e.g. retrive a claim
+	 */
+	public function validateJWT($jwt)
+	{
+		$token = (new Parser())->parse($jwt);
+
+		if ($this->isTokenExpired($token) || $this->isTokenUnverified($token))
+		{
+			return null;
+		}
+		return $token;
+	}
+
+	/**
+	 * Checks whether the token is unverified.
+	 *
+	 * @param Token $token
+	 *
+	 * @return bool
+	 */
+	private function isTokenUnverified(Token $token)
+	{
+		$keychain = new Keychain();
+
+		$privateKey = new Keys();
+		$key = $keychain->getPrivateKey(
+			$privateKey->getKeyPath(),
+			$privateKey->getPassPhrase()
+		);
+
+		return $token->verify(new Sha256(), $key->getContent()) === false;
+	}
+
+	/**
+	 * Ensure access token hasn't expired.
+	 *
+	 * @param Token $token
+	 *
+	 * @return bool
+	 */
+	private function isTokenExpired(Token $token)
+	{
+		$data = new ValidationData(time());
+
+		return !$token->validate($data);
 	}
 
 	/**
