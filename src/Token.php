@@ -53,7 +53,8 @@ class Token extends AbstractGrant
 	 * @param string $min_lifetime =null min. lifetime for existing token, null: create new token with default TTL
 	 * @param boolean $require_refresh_token =true true: require a refresh token to exist (user authorized before), false: do no check refresh-token
 	 * @param string $lifetime =null lifetime of new token or null to use client default
-	 * @param boolean $return_jwt =true true: return JWT, false: return AccessTokenEntity
+	 * @param boolean|array $return_jwt =true true: return JWT, false: return AccessTokenEntity
+	 * 	or array with name => value pairs with extra claims added to the JWT
 	 * @return string|AccessTokenEntity access-token or (signed) JWT
 	 */
 	public function accessToken($clientIdentifier, array $scopeIdentifiers, $min_lifetime=null,
@@ -87,7 +88,8 @@ class Token extends AbstractGrant
 
 			$token = $this->issueAccessToken($ttl, $client, $this->user, $scopes);
 		}
-		return $return_jwt ? (string)$token->convertToJWT($this->privateKey) : $token;
+		return $return_jwt === false ? $token :
+			(string)$token->convertToJWT($this->privateKey, is_array($return_jwt) ? $return_jwt : []);
 	}
 
 	/**
