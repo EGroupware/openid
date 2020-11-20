@@ -122,14 +122,14 @@ class Token extends AbstractGrant
 	 *
 	 * @return bool
 	 */
-	private function isTokenUnverified(Token $token)
+	private function isTokenUnverified(\Lcobucci\JWT\Token $token)
 	{
 		$keychain = new Keychain();
 
 		$privateKey = new Keys();
 		$key = $keychain->getPrivateKey(
-			$privateKey->getKeyPath(),
-			$privateKey->getPassPhrase()
+			$privateKey->getPrivateKey()->getKeyPath(),
+			$privateKey->getPrivateKey()->getPassPhrase()
 		);
 
 		return $token->verify(new Sha256(), $key->getContent()) === false;
@@ -142,7 +142,7 @@ class Token extends AbstractGrant
 	 *
 	 * @return bool
 	 */
-	private function isTokenExpired(Token $token)
+	private function isTokenExpired(\Lcobucci\JWT\Token $token)
 	{
 		$data = new ValidationData(time());
 
