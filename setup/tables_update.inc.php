@@ -107,3 +107,23 @@ function openid_upgrade19_1_006()
 {
 	return $GLOBALS['setup_info']['openid']['currentver'] = '20.1';
 }
+
+/**
+ * Add videoconference scope
+ *
+ * @return string
+ */
+function openid_upgrade20_1()
+{
+	foreach([
+		'videoconference' => 'Videoconference scope',
+	] as $identifier => $description)
+	{
+		$GLOBALS['egw_setup']->db->insert('egw_openid_scopes', [
+			'scope_identifier' => $identifier,
+			'scope_description' => $description,
+			'scope_created'    => time(),
+		], false, __LINE__, __FILE__, 'openid');
+	}
+	return $GLOBALS['setup_info']['openid']['currentver'] = '20.1.001';
+}

@@ -16,6 +16,11 @@
 
 namespace EGroupware\OpenID\Entities;
 
+use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Signer\Key;
+use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Lcobucci\JWT\Token;
+use League\OAuth2\Server\CryptKey;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\Traits\AccessTokenTrait;
 use League\OAuth2\Server\Entities\Traits\EntityTrait;
@@ -24,4 +29,31 @@ use League\OAuth2\Server\Entities\Traits\TokenEntityTrait;
 class AccessTokenEntity implements AccessTokenEntityInterface
 {
 	use AccessTokenTrait, TokenEntityTrait, EntityTrait, Traits\UserAgentTrait, Traits\IdTrait;
+
+	/**
+	 * Generate a JWT from the access token
+	 *
+	 * @param CryptKey $privateKey
+	 * @param array $extra_claims $name => $value pairs with exra claims
+	 *
+	 * @return Token
+	 */
+	public function convertToJWT(CryptKey $privateKey, array $extra_claims=null)
+	{
+		$builder = new Builder();
+		$builder->setAudience($this->getClient()->getIdentifier())
+			->setId($this->getIdentifier(), true)
+			->setIssuedAt(time())
+			->setNotBefore(time())
+			->setExpiration($this->getExpiryDateTime()->getTimestamp())
+			->setSubject($this->getUserIdentifier())
+			->set('scopes', $this->getScopes());
+
+		foreach($extra_claims as $name => $value)
+		{
+			$builder->set($name, $value);
+		}
+		return $builder->sign(new Sha256(), new Key($privateKey->getKeyPath(), $privateKey->getPassPhrase()))
+			->getToken();
+	}
 }
