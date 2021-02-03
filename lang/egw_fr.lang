@@ -1,0 +1,76 @@
+%1 days	openid	fr	%1 jours
+%1 days, ...	openid	fr	%1 jours, ...
+%1 hours	openid	fr	%1 heures
+%1 hours, ...	openid	fr	%1 heures, ...
+%1 month	openid	fr	%1 mois
+%1 month, ...	openid	fr	%1 mois, ...
+%1 weeks	openid	fr	%1 semaines
+%1 weeks, ...	openid	fr	%1 semaines, ...
+%1 years	openid	fr	%1 années
+%s would like to access	openid	fr	%s voudrait accéder
+- authentication only succeeds if user has run-rights for the application	openid	fr	- l'authentification réussit seulement si l'utilisateur a les droits d'exécution pour l'application
+- client application is displayed inside egroupware (iframe)	openid	fr	- application client affichée à l'intérieur d'egroupware (iframe)
+- no explicit user consent required for oauth login	openid	fr	- aucun contentement explicite de l'utilisateur nécessaire pour le login OAuth
+1 year	openid	fr	1 an
+access token revoked.	openid	fr	Jeton d'accès révoqué
+access-token ttl	openid	fr	TTL du jeton d'accès
+administration rights or regular user	openid	fr	Droits d'administration ou utilisateur normal
+allowed for	openid	fr	Autorisé à
+allowed grants	openid	fr	Droits accordés
+application name	openid	fr	Nom de l'application
+approve	openid	fr	Approuver
+basic details about you	openid	fr	Détails basiques sur vous
+client	openid	fr	Client
+client copied. please enter a new (unique) identifer and secret.	openid	fr	Client copié. Veuillez entrer un nouvel identifiant (unique) et secret
+client disabled.	openid	fr	Client désactivé.
+client not found!	openid	fr	Client non trouvé !
+client saved.	openid	fr	Client enregistré.
+client status	openid	fr	Statut du client
+created	openid	fr	Créé
+deny	openid	fr	Refuser
+disable	openid	fr	Désactiver
+disable this client	openid	fr	Désactiver ce client
+egroupware internal application name	openid	fr	Nom d'application interne pour EGroupware
+enable openid connect support	openid	fr	Permettre la connexion OpenID
+error saving client!	openid	fr	Erreur à l'enregistrement du client
+exists without saving the changes	openid	fr	existe sans enregistrer les changements
+expiration date	openid	fr	Date d'expiration
+general	openid	fr	Général
+grants	openid	fr	Droits
+icon	openid	fr	Icône
+identifier	openid	fr	Identifiant
+identifier to enter at the client	openid	fr	Identifiant à entrer sur le client
+if an oauth client is managed as egroupware app	openid	fr	Si un client OAuth est géré comme application EGroupware
+ip address	openid	fr	Adresse IP
+limit scopes	openid	fr	Limiter les étendues
+login to authorize %1	openid	fr	Login pour autoriser  %1
+manage as egroupware application	openid	fr	Gérer comme application EGroupware
+name	openid	fr	Nom
+name used inside egroupware	openid	fr	Nom utilisé dans EGroupware
+openid	common	fr	Serveur OpenID / OAuth2
+openid / oauth2 server	openid	fr	Serveur OpenID / OAuth2
+order	openid	fr	Ordre
+redirect uri	openid	fr	URI de redirection
+refresh-token	openid	fr	Jeton de rafraîchissement
+refresh-token ttl	openid	fr	TTL Jeton de rafraîchissement
+request log	openid	fr	Journal des requêtes
+request log enabled, delete file to disable it again.	openid	fr	Journal des requêtes activé, supprimer le fichier pour le désactiver à nouveau
+revoke	openid	fr	Revoquer
+revoke this token	openid	fr	Revoquer ce jeton
+revoked	openid	fr	Revoqué
+saves the changes made	openid	fr	Sauvegarder les changements effectués
+scopes	openid	fr	Etendues
+secret	openid	fr	Secret
+secret/password to enter at the client	openid	fr	Secret/mot de passe à entrer sur le client
+start url	openid	fr	URL de début
+status	openid	fr	Statut
+this name is already been taken by an installed egroupware application!	openid	fr	Ce nom est déjà utilisé par une application EGroupware installée !
+token revoked	openid	fr	Jeton révoqué
+updated	openid	fr	Mis à jour
+url to show when the user opens the app	openid	fr	URL à afficher lorsque l'utilisateur ouvre l'application
+use default of	openid	fr	Utiliser par défaut
+user agent	openid	fr	Agent utilisateur
+your address	openid	fr	Votre adresse
+your email address	openid	fr	Votre adresse email
+your full profile	openid	fr	Votre profile
+your phone number	openid	fr	Votre numéro de téléphone
