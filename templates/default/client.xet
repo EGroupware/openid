@@ -15,8 +15,8 @@
 				</row>
 				<row>
 					<label value="Secret" for="client_secret"/>
-					<textbox id="client_secret" statustext="Secret/password to enter at the client"
-						type="passwd" maxlength="128" class="et2_fullWidth"/>
+					<passwd id="client_secret" statustext="Secret/password to enter at the client"
+						maxlength="128" class="et2_fullWidth" suggest="32"/>
 				</row>
 				<row>
 					<label value="Redirect URI" for="client_redirect_uri"/>
