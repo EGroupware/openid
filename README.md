@@ -29,6 +29,10 @@
 * [Identity, Claims, & Tokens – An OpenID Connect Primer](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1) in 3 parts
 
 ## Open tasks:
+- [ ] PHP 8.0 compatibility:
+  * https://github.com/steverhoades/oauth2-openid-connect-server/pull/33 Support for lcobucci/jwt:4.0
+  * https://github.com/thephpleague/oauth2-server/pull/1146/files
+  * https://github.com/lcobucci/jwt/blob/4.0.x/composer.json#L20 lcobucci/jwt:4.0 support PHP 8 [PHP 8 for 3.4](https://github.com/lcobucci/jwt/pull/592/files)
 - [ ] password grant: record and check failed login attempts like login page (see [user.authentication.failed](https://oauth2.thephpleague.com/authorization-server/events/))
 - [ ] wrong password on login looses oath request in session and therefore fails after correct password was entered
 - [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
