@@ -17,6 +17,9 @@ namespace EGroupware\OpenID;
 use League\OAuth2\Server\CryptKey;
 use EGroupware\Api;
 
+// require PHP 8 fixed class before Lcobucci/JWT loads it
+require_once __DIR__.'/OpenSSL.php';
+
 /**
  * Class to create, store and retrieve our key
  *

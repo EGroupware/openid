@@ -51,7 +51,7 @@ class HttpFormatter implements ServerRequestFormatter, ResponseFormatter
 	protected static function formatBody($body)
 	{
 		// do NOT log cleartext passwords / client_secret
-		return preg_replace('/&(client_secret|password)=[^&]*(&|$)/', '&$1=...$2', $body).
+		return preg_replace('/&(client_secret|password)=[^&]*(&|$)/', '&$1=...$2', (string)$body).
 			"\n";	// not part of HTTP response, but for better readability in logs
 	}
 
