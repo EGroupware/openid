@@ -127,3 +127,13 @@ function openid_upgrade20_1()
 	}
 	return $GLOBALS['setup_info']['openid']['currentver'] = '20.1.001';
 }
+
+/**
+ * Bump version to 21.1
+ *
+ * @return string
+ */
+function openid_upgrade20_1_001()
+{
+	return $GLOBALS['setup_info']['openid']['currentver'] = '21.1';
+}
