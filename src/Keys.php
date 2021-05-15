@@ -109,19 +109,31 @@ class Keys
 	}
 
 	/**
+	 * Get kid used in JWK for our public key
+	 *
+	 * @return string
+	 */
+	public function getKid(string &$pub_key=null)
+	{
+		$pub_key = file_get_contents($this->getPublicKey());
+
+		return md5($pub_key);
+	}
+
+	/**
 	 * Get JSON Web Key from our public key
 	 *
 	 * @return array
 	 */
 	public function getJWK()
 	{
-		$pub_key = file_get_contents($this->getPublicKey());
+		$kid = $this->getKID($pub_key);
 		$keyInfo = openssl_pkey_get_details(openssl_pkey_get_public($pub_key));
 
 		return [
 			'alg' => 'RS256',
 			'kty' => 'RSA',
-			'kid' => md5($pub_key),
+			'kid' => $kid,
 			'use' => 'sig',
 			'n' => rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($keyInfo['rsa']['n'])), '='),
 			'e' => rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($keyInfo['rsa']['e'])), '='),
