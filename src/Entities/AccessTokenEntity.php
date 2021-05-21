@@ -38,7 +38,7 @@ class AccessTokenEntity implements AccessTokenEntityInterface
 	 *
 	 * @return Token
 	 */
-	public function convertToJWT(CryptKey $privateKey, array $extra_claims=null)
+	public function convertToJWT(CryptKey $privateKey, array $extra_claims=array())
 	{
 		$builder = new Builder();
 		$builder->setAudience($this->getClient()->getIdentifier())
