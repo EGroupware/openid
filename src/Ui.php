@@ -107,7 +107,7 @@ class Ui
 				// do not allow to change name of managed app
 				$tpl->setElementAttribute('app_name', 'readonly', true);
 				// only allow to edit http(s) urls
-				if (substr($content['app_index'], 'http') !== 0)
+				if (substr($content['app_index'], 0, 4) !== 'http')
 				{
 					$tpl->setElementAttribute('app_index', 'readonly', true);
 				}
