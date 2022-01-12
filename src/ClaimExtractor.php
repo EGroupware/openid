@@ -23,16 +23,18 @@ class ClaimExtractor extends \OpenIDConnectServer\ClaimExtractor
     /**
      * ClaimExtractor constructor
 	 *
-	 * Reimplemented to add scope and claim "roles" (array with value "user" and,
-	 * if user is an EGroupware admin, also "admin").
-	 *
+	 * Reimplemented to add scope and claim:
+     * - "roles" (array with value "user" and, if user is an EGroupware admin, also "admin").
+	 * - "groups" (array with group-names of memberships)
+     *
      * @param ClaimSetEntity[] $claimSets
      */
     public function __construct($claimSets = [])
     {
 		parent::__construct($claimSets);
 
-		$this->addClaimSet(new ClaimSetEntity('roles', ['roles']));
+	    $this->addClaimSet(new ClaimSetEntity('roles', ['roles']));
+	    $this->addClaimSet(new ClaimSetEntity('groups', ['groups']));
 	}
 
 	/**
