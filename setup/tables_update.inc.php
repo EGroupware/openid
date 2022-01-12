@@ -116,7 +116,7 @@ function openid_upgrade19_1_006()
 function openid_upgrade20_1()
 {
 	foreach([
-		'videoconference' => 'Videoconference scope',
+		'videoconference' => 'Videoconference',
 	] as $identifier => $description)
 	{
 		$GLOBALS['egw_setup']->db->insert('egw_openid_scopes', [
@@ -136,4 +136,32 @@ function openid_upgrade20_1()
 function openid_upgrade20_1_001()
 {
 	return $GLOBALS['setup_info']['openid']['currentver'] = '21.1';
+}
+
+/**
+ * Add groups scope
+ *
+ * @return string
+ */
+function openid_upgrade21_1()
+{
+	foreach([
+		'groups' => 'Groups',
+    ] as $identifier => $description)
+	{
+		$GLOBALS['egw_setup']->db->insert('egw_openid_scopes', [
+			'scope_identifier' => $identifier,
+			'scope_description' => $description,
+			'scope_created'    => time(),
+		], false, __LINE__, __FILE__, 'openid');
+	}
+
+	// remove "scope" in name, as not used or translated otherwise
+	$GLOBALS['egw_setup']->db->update('egw_openid_scopes', [
+		'scope_description' => 'Videoconference',
+	], [
+		'scope_identifier' => 'videoconference',
+	], __LINE__, __FILE__, 'openid');
+
+	return $GLOBALS['setup_info']['openid']['currentver'] = '21.1.001';
 }
