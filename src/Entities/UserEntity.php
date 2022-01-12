@@ -165,6 +165,8 @@ class UserEntity implements UserEntityInterface, ClaimSetInterface
 			],
 			// user roles: "user", "admin"
 			'roles' => array_merge(['user'], array_intersect(array_keys($GLOBALS['egw']->acl->get_user_applications($this->id)), ['admin'])),
+			// group memberships: "Admin", "Default", ...
+			'groups' => array_values(Api\Accounts::getInstance()->memberships($this->id)),
 		];
 	}
 }
