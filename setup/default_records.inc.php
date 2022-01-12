@@ -27,7 +27,8 @@ foreach([
 	'address' => 'Your address',
 	'profile' => 'Your full profile',
 	'roles'   => 'Administration rights or regular user',
-	'videoconference' => 'Videoconference scope',
+	'videoconference' => 'Videoconference',
+	'groups' => 'Groups',
 ] as $identifier => $description)
 {
 	$GLOBALS['egw_setup']->db->insert('egw_openid_scopes', [
