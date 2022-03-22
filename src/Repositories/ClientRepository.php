@@ -16,6 +16,7 @@
 
 namespace EGroupware\OpenID\Repositories;
 
+use EGroupware\OpenID\Entities\ScopeEntity;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use EGroupware\OpenID\Entities\ClientEntity;
@@ -155,7 +156,7 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 			{
 				$this->db->insert(self::CLIENT_SCOPES_TABLE, [
 					'client_id' => $clientEntity->getID(),
-					'scope_id' => $scope,
+					'scope_id' => is_a($scope, ScopeEntity::class) ? $scope->getID() : $scope,
 				], false, __LINE__, __FILE__, self::APP);
 			}
 
@@ -163,7 +164,7 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 			{
 				$this->db->insert(self::CLIENT_GRANTS_TABLE, [
 					'client_id' => $clientEntity->getID(),
-					'scope_id' => $grant->getID(),
+					'grant_id' => $grant > 0 ? $grant : GrantRepository::getGrantId($grant),
 				], false, __LINE__, __FILE__, self::APP);
 			}
 		}
