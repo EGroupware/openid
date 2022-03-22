@@ -155,7 +155,7 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 			{
 				$this->db->insert(self::CLIENT_SCOPES_TABLE, [
 					'client_id' => $clientEntity->getID(),
-					'scope_id' => $scope->getID(),
+					'scope_id' => $scope,
 				], false, __LINE__, __FILE__, self::APP);
 			}
 
