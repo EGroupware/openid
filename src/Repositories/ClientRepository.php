@@ -133,6 +133,7 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 	 * @param ClientEntity $clientEntity
 	 *
 	 * @throws UniqueTokenIdentifierConstraintViolationException
+	 * @throws OAuthServerException for non-existing scope identifier
 	 */
 	public function persistNewClient(ClientEntity $clientEntity)
 	{
@@ -156,7 +157,8 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 			{
 				$this->db->insert(self::CLIENT_SCOPES_TABLE, [
 					'client_id' => $clientEntity->getID(),
-					'scope_id' => is_a($scope, ScopeEntity::class) ? $scope->getID() : $scope,
+					'scope_id' => is_a($scope, ScopeEntity::class) ? $scope->getID() :
+						(is_numeric($scope) ? $scope : (new ScopeRepository())->getScopeEntityByIdentifier($scope)),
 				], false, __LINE__, __FILE__, self::APP);
 			}
 
