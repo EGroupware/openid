@@ -51,6 +51,7 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 	 * @param string $identifier The scope identifier
 	 *
 	 * @return ScopeEntityInterface
+	 * @throws OAuthServerException
 	 */
 	public function getScopeEntityByIdentifier($identifier)
 	{
