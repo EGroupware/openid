@@ -1,11 +1,12 @@
 # OpenID Connect and OAuth2 server for EGroupware
 
-## Supported endpoints
+## Supported endpoints and token issuer
 * Authorization: https://example.org/egroupware/openid/endpoint.php/authorize
 * Token: https://example.org/egroupware/openid/endpoint.php/access_token
 * Token Introspection: https://example.org/egroupware/openid/endpoint.php/introspect
 * User information: https://example.org/egroupware/openid/endpoint.php/userinfo
 * Public key: https://example.org/egroupware/openid/endpoint.php/jwks
+* Issuer: https://example.org
 > Replace example.org with the full qualified domain-name your EGroupware server uses.
 
 ## Supported Grants:
