@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2//EN" "http://www.egroupware.org/etemplate2.dtd">
+<!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2.0//EN" "https://www.egroupware.org/etemplate2.0.dtd">
 <overlay>
 	<template id="openid.access_tokens.rows" template="" lang="" group="0" version="1.9.001">
 		<grid width="100%" height="100%">
@@ -16,44 +16,44 @@
 				<row>
 					<nextmatch-sortheader label="ID" id="client_id"/>
 					<nextmatch-sortheader label="Client" id="client_name"/>
-					<vbox>
-						<nextmatch-filterheader empty_label="Client Status" id="client_status"/>
-						<nextmatch-filterheader empty_label="Token Revoked" id="access_token_revoked"/>
-					</vbox>
-					<nextmatch-filterheader empty_label="Scopes" id="access_token_scopes"/>
-					<vbox>
+					<et2-vbox>
+						<et2-nextmatch-header-filter  id="client_status" emptyLabel="Client Status"/>
+						<et2-nextmatch-header-filter  id="access_token_revoked" emptyLabel="Token Revoked"/>
+					</et2-vbox>
+					<et2-nextmatch-header-filter  id="access_token_scopes" emptyLabel="Scopes"/>
+					<et2-vbox>
 						<nextmatch-sortheader label="Expiration" id="access_token_expiration"/>
 						<nextmatch-sortheader label="Refresh-Token" id="refresh_token_expiration"/>
-					</vbox>
-					<vbox>
+					</et2-vbox>
+					<et2-vbox>
 						<nextmatch-header label="User Agent" id="user_agent"/>
 						<nextmatch-header label="IP Address" id="user_ip"/>
-					</vbox>
-					<vbox>
+					</et2-vbox>
+					<et2-vbox>
 						<nextmatch-sortheader label="Created" id="access_token_created"/>
 						<nextmatch-sortheader label="Last modified" id="access_token_updated"/>
-					</vbox>
+					</et2-vbox>
 				</row>
 				<row class="$row_cont[status_class]">
-					<description id="${row}[client_id]" no_lang="1"/>
-					<description id="${row}[client_name]" no_lang="1"/>
-					<vbox>
-						<select id="${row}[client_status]" readonly="true"/>
-						<select id="${row}[access_token_revoked]" readonly="true"/>
-					</vbox>
-					<select id="${row}[access_token_scopes]" readonly="true"/>
-					<vbox>
-						<date-time id="${row}[access_token_expiration]" readonly="true"/>
-						<date-time id="${row}[refresh_token_expiration]" readonly="true"/>
-					</vbox>
-					<vbox>
-						<description id="${row}[user_agent]" statustext="$row_cont[user_agent_tooltip]" no_lang="1"/>
-						<description id="${row}[user_ip]" statustext="$row_cont[user_ip_tooltip]" no_lang="1"/>
-					</vbox>
-					<vbox>
-						<date-time id="${row}[access_token_created]" readonly="true"/>
-						<date-time id="${row}[access_token_updated]" readonly="true"/>
-					</vbox>
+					<et2-description  id="${row}[client_id]" noLang="1"></et2-description>
+					<et2-description  id="${row}[client_name]" noLang="1"></et2-description>
+					<et2-vbox>
+						<et2-select  id="${row}[client_status]" readonly="true"></et2-select>
+						<et2-select  id="${row}[access_token_revoked]" readonly="true"></et2-select>
+					</et2-vbox>
+					<et2-select  id="${row}[access_token_scopes]" readonly="true"></et2-select>
+					<et2-vbox>
+						<et2-date-time  id="${row}[access_token_expiration]" readonly="true"></et2-date-time>
+						<et2-date-time  id="${row}[refresh_token_expiration]" readonly="true"></et2-date-time>
+					</et2-vbox>
+					<et2-vbox>
+						<et2-description  id="${row}[user_agent]" statustext="$row_cont[user_agent_tooltip]" noLang="1"></et2-description>
+						<et2-description  id="${row}[user_ip]" statustext="$row_cont[user_ip_tooltip]" noLang="1"></et2-description>
+					</et2-vbox>
+					<et2-vbox>
+						<et2-date-time  id="${row}[access_token_created]" readonly="true"></et2-date-time>
+						<et2-date-time  id="${row}[access_token_updated]" readonly="true"></et2-date-time>
+					</et2-vbox>
 				</row>
 			</rows>
 		</grid>

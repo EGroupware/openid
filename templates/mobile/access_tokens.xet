@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2//EN" "http://www.egroupware.org/etemplate2.dtd">
+<!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2.0//EN" "https://www.egroupware.org/etemplate2.0.dtd">
 <overlay>
 	<template id="openid.access_tokens.rows" template="" lang="" group="0" version="1.9.001">
 		<grid width="100%" height="100%">
@@ -13,12 +13,12 @@
 
 				</row>
 				<row class="$row_cont[status_class]">
-					<description id="${row}[client_name]" no_lang="1"/>
-					<vbox>
-						<description id="${row}[user_agent]" statustext="$row_cont[user_agent_tooltip]" no_lang="1"/>
-						<date-time label="expiration date" id="${row}[access_token_expiration]" readonly="true"/>
-					</vbox>
-					<select id="${row}[client_status]" readonly="true"/>
+					<et2-description  id="${row}[client_name]" noLang="1"></et2-description>
+					<et2-vbox>
+						<et2-description  id="${row}[user_agent]" statustext="$row_cont[user_agent_tooltip]" noLang="1"></et2-description>
+						<et2-date-time  label="expiration date" id="${row}[access_token_expiration]" readonly="true"></et2-date-time>
+					</et2-vbox>
+					<et2-select  id="${row}[client_status]" readonly="true"></et2-select>
 				</row>
 			</rows>
 		</grid>

@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2//EN" "http://www.egroupware.org/etemplate2.dtd">
+<!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2.0//EN" "https://www.egroupware.org/etemplate2.0.dtd">
 <overlay>
 	<template id="openid.authorize" template="" lang="" group="0" version="1.9.003">
 		<groupbox>
-			<description id="client" label="%s would like to access"/>
+			<et2-description  id="client" label="%s would like to access"></et2-description>
 			<hrule/>
-			<select id="scopes" multiple="true" readonly="true"/>
+			<et2-select  id="scopes" multiple="true" readonly="true"></et2-select>
 			<hrule/>
-			<hbox>
-				<button id="button[approve]" label="Approve" image="check" background_image="true"
-					onclick="widget.getInstanceManager().postSubmit()"/>
-				<button id="button[deny]" label="Deny" image="cancelled" background_image="true"
-					onclick="widget.getInstanceManager().postSubmit()"/>
-			</hbox>
+			<et2-hbox>
+				<et2-button  id="button[approve]" label="Approve" image="check" onclick="widget.getInstanceManager().postSubmit()"></et2-button>
+				<et2-button  id="button[deny]" label="Deny" image="cancelled" onclick="widget.getInstanceManager().postSubmit()"></et2-button>
+			</et2-hbox>
 		</groupbox>
 		<styles>
 			body {

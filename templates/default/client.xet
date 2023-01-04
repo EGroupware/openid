@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2//EN" "http://www.egroupware.org/etemplate2.dtd">
+<!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2.0//EN" "https://www.egroupware.org/etemplate2.0.dtd">
 <overlay>
 	<template id="openid.client.edit" template="" lang="" group="0" version="1.9.001">
 		<grid width="100%">
@@ -9,38 +9,36 @@
 			</columns>
 			<rows>
 				<row>
-					<label value="Identifier" for="client_identifier"/>
-					<textbox id="client_identifier" statustext="Identifier to enter at the client"
-						maxlength="128" needed="true" class="et2_fullWidth"/>
+					<et2-label  value="Identifier" for="client_identifier"></et2-label>
+					<et2-textbox  id="client_identifier" statustext="Identifier to enter at the client" maxlength="128" required="true"></et2-textbox>
 				</row>
 				<row>
-					<label value="Secret" for="client_secret"/>
-					<passwd id="client_secret" statustext="Secret/password to enter at the client"
-						maxlength="128" class="et2_fullWidth" suggest="32"/>
+					<et2-label  value="Secret" for="client_secret"></et2-label>
+					<et2-password  id="client_secret" statustext="Secret/password to enter at the client" maxlength="128" suggest="32"></et2-password>
 				</row>
 				<row>
-					<label value="Redirect URI" for="client_redirect_uri"/>
-					<url id="client_redirect_uri" maxlength="255" needed="true" class="et2_fullWidth"/>
+					<et2-label  value="Redirect URI" for="client_redirect_uri"></et2-label>
+					<et2-url  id="client_redirect_uri" maxlength="255" required="true"></et2-url>
 				</row>
 				<row>
-					<label value="Allowed grants" for="client_grants" class="et2_nowrap"/>
-					<select id="client_grants" multiple="true" tags="true" needed="true" class="et2_fullWidth"/>
+					<et2-label  value="Allowed grants" for="client_grants" class="et2_nowrap"></et2-label>
+					<et2-select  id="client_grants" multiple="true" required="true"></et2-select>
 				</row>
 				<row>
-					<label value="Limit scopes" for="client_scopes"/>
-					<select id="client_scopes" multiple="true" tags="true" class="et2_fullWidth"/>
+					<et2-label  value="Limit scopes" for="client_scopes"></et2-label>
+					<et2-select  id="client_scopes" multiple="true"></et2-select>
 				</row>
 				<row>
-					<label value="Status" for="client_status"/>
-					<select id="client_status"/>
+					<et2-label  value="Status" for="client_status"></et2-label>
+					<et2-select  id="client_status"></et2-select>
 				</row>
 				<row>
-					<label value="Access-Token TTL" for="client_access_token_ttl"/>
-					<select id="client_access_token_ttl" empty_label="{Use default of} $cont[default_access_token_ttl]"/>
+					<et2-label  value="Access-Token TTL" for="client_access_token_ttl"></et2-label>
+					<et2-select  id="client_access_token_ttl" emptyLabel="{Use default of} $cont[default_access_token_ttl]"></et2-select>
 				</row>
 				<row>
-					<label value="Refresh-Token TTL" for="client_refresh_token_ttl"/>
-					<select id="client_refresh_token_ttl" empty_label="{Use default of} $cont[default_refresh_token_ttl]"/>
+					<et2-label  value="Refresh-Token TTL" for="client_refresh_token_ttl"></et2-label>
+					<et2-select  id="client_refresh_token_ttl" emptyLabel="{Use default of} $cont[default_refresh_token_ttl]"></et2-select>
 				</row>
 			</rows>
 		</grid>
@@ -55,36 +53,34 @@
 				<row>
 					<groupbox span="all">
 						<caption label="If an OAuth client is managed as EGroupware app"/>
-						<vbox>
-							<label value="- authentication only succeeds if user has run-rights for the application"/>
-							<label value="- no explicit user consent required for OAuth login"/>
-							<label value="- client application is displayed inside EGroupware (iframe)"/>
-						</vbox>
+						<et2-vbox>
+							<et2-label  value="- authentication only succeeds if user has run-rights for the application"></et2-label>
+							<et2-label  value="- no explicit user consent required for OAuth login"></et2-label>
+							<et2-label  value="- client application is displayed inside EGroupware (iframe)"></et2-label>
+						</et2-vbox>
 					</groupbox>
 				</row>
 				<row>
-					<label value="Application name" for="app_name"/>
-					<hbox width="100%">
-						<textbox id="app_name" statustext="EGroupware internal application name"
-								 size="16" maxlength="16" class="et2_required"/>
-						<integer label="Order" id="app_order" min="1" max="100" align="right"/>
-					</hbox>
+					<et2-label  value="Application name" for="app_name"></et2-label>
+					<et2-hbox  width="100%">
+						<et2-textbox  id="app_name" statustext="EGroupware internal application name" maxlength="16" class="et2_required"></et2-textbox>
+						<et2-number  label="Order" id="app_order" min="1" max="100" align="right" precision="0"></et2-number>
+					</et2-hbox>
 				</row>
 				<row>
-					<label value="Start URL" for="app_index"/>
-					<url id="app_index" statustext="URL to show when the user opens the app"
-							 maxlength="128" class="et2_fullWidth et2_required"/>
+					<et2-label  value="Start URL" for="app_index"></et2-label>
+					<et2-url  id="app_index" statustext="URL to show when the user opens the app" maxlength="128" class="et2_required"></et2-url>
 				</row>
 				<row>
-					<label value="Allowed for" for="run_rights"/>
-					<taglist-account id="run_rights" account_type="both" class="et2_full_width et2_required"/>
+					<et2-label  value="Allowed for" for="run_rights"></et2-label>
+					<et2-select-account  id="run_rights" class="et2_full_width et2_required" multiple="true" accountType="both"></et2-select-account>
 				</row>
 				<row valign="top">
-					<label value="Icon" for="app_icon"/>
-					<vbox>
-						<taglist-thumbnail id="app_icon" allowFreeEntries="true" maxSelection="1" class="et2_full_width"/>
+					<et2-label  value="Icon" for="app_icon"></et2-label>
+					<et2-vbox>
+						<et2-select-thumbnail  id="app_icon" allowFreeEntries="true" class="et2_full_width"></et2-select-thumbnail>
 						<file label="Upload" width="100%" onchange="egw.json('admin.admin_config.ajax_upload_anon_images',[widget.get_value(), []], function(_data){widget._parent._children[0].set_value(_data)}).sendRequest()"/>
-					</vbox>
+					</et2-vbox>
 				</row>
 			</rows>
 		</grid>
@@ -97,11 +93,10 @@
 			</columns>
 			<rows>
 				<row>
-					<label value="Name" for="client_name"/>
-					<textbox id="client_name" statustext="Name used inside EGroupware"
-						maxlength="128" needed="true" class="et2_fullWidth"/>
+					<et2-label  value="Name" for="client_name"></et2-label>
+					<et2-textbox  id="client_name" statustext="Name used inside EGroupware" maxlength="128" required="true"></et2-textbox>
 				</row>
-				<tabbox id="tabs" class="et2_nowrap" span="all" width="100%" tab_height="270px">
+				<et2-tabbox  id="tabs" class="et2_nowrap" span="all" width="100%" tabHeight="270px">
 					<tabs>
 						<tab id="general" label="General"/>
 						<tab id="app" label="Manage as EGroupware application"/>
@@ -110,29 +105,28 @@
 						<template id="openid.client.edit"/>
 						<template id="openid.client.app"/>
 					</tabpanels>
-				</tabbox>
+				</et2-tabbox>
 				<row disabled="!@client_created">
-					<label value="Created"/>
-					<hbox>
-						<select-account id="client_creator" readonly="true"/>
-						<date-time id="client_created" readonly="true" align="right"/>
-					</hbox>"
+					<et2-label  value="Created"></et2-label>
+					<et2-hbox>
+						<et2-select-account  id="client_creator" readonly="true"></et2-select-account>
+						<et2-date-time  id="client_created" readonly="true" align="right"></et2-date-time>
+					</et2-hbox>"
 				</row>
 				<row disabled="!@client_updated">
-					<label value="Last modified"/>
-					<hbox>
-						<select-account id="client_modifier" readonly="true"/>
-						<date-time id="client_updated" readonly="true" align="right"/>
-					</hbox>
+					<et2-label  value="Last modified"></et2-label>
+					<et2-hbox>
+						<et2-select-account  id="client_modifier" readonly="true"></et2-select-account>
+						<et2-date-time  id="client_updated" readonly="true" align="right"></et2-date-time>
+					</et2-hbox>
 				</row>
 				<row class="dialogFooterToolbar">
-					<hbox span="all">
-						<button statustext="Saves the changes made" label="Save" id="button[save]"/>
-						<button statustext="Applies the changes made" label="Apply" id="button[apply]"/>
-						<button statustext="exists without saving the changes" label="Cancel" id="button[cancel]" onclick="window.close();"/>
-						<button align="right" statustext="Disable this client" label="Disable" id="button[delete]"
-							onclick="et2_dialog.confirm(widget,'Disable this client','Disable');"/>
-					</hbox>
+					<et2-hbox  span="all">
+						<et2-button  statustext="Saves the changes made" label="Save" id="button[save]"></et2-button>
+						<et2-button  statustext="Applies the changes made" label="Apply" id="button[apply]"></et2-button>
+						<et2-button  statustext="exists without saving the changes" label="Cancel" id="button[cancel]" onclick="window.close();"></et2-button>
+						<et2-button  align="right" statustext="Disable this client" label="Disable" id="button[delete]" onclick="et2_dialog.confirm(widget,'Disable this client','Disable');"></et2-button>
+					</et2-hbox>
 				</row>
 			</rows>
 		</grid>

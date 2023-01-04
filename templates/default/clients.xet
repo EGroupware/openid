@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2//EN" "http://www.egroupware.org/etemplate2.dtd">
+<!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2.0//EN" "https://www.egroupware.org/etemplate2.0.dtd">
 <overlay>
 	<template id="openid.clients.add" template="" lang="" group="0" version="1.9.001">
-		<buttononly label="Add" id="add" onclick="egw.open_link('openid.EGroupware\\openid\\Ui.client',false,'600x450');"/>
+		<et2-button  label="Add" id="add" onclick="egw.open_link('openid.EGroupware\\openid\\Ui.client',false,'600x450');" noSubmit="true"></et2-button>
 	</template>
 	<template id="openid.clients.rows" template="" lang="" group="0" version="1.9.001">
 		<grid width="100%">
@@ -25,32 +25,32 @@
 					<nextmatch-sortheader label="Name" id="client_name"/>
 					<nextmatch-sortheader label="Identifier" id="client_identifier"/>
 					<nextmatch-header label="Redirect URI" id="client_redirect_uri"/>
-					<nextmatch-filterheader empty_label="Grants" id="client_grants"/>
-					<nextmatch-filterheader empty_label="Scopes" id="client_scopes"/>
-					<nextmatch-filterheader empty_label="Status" id="client_status"/>
+					<et2-nextmatch-header-filter  id="client_grants" emptyLabel="Grants"/>
+					<et2-nextmatch-header-filter  id="client_scopes" emptyLabel="Scopes"/>
+					<et2-nextmatch-header-filter  id="client_status" emptyLabel="Status"/>
 					<nextmatch-header label="Access-Token TTL" id="client_access_token_ttl"/>
 					<nextmatch-header label="Refresh-Token TTL" id="client_refresh_token_ttl"/>
 					<nextmatch-sortheader label="Created" id="client_created"/>
 					<nextmatch-sortheader label="Last modified" id="client_updated"/>
 				</row>
 				<row class="$row_cont[status_class]">
-					<description id="${row}[client_id]" no_lang="1"/>
-					<description id="${row}[client_name]" no_lang="1"/>
-					<description id="${row}[client_identifier]" no_lang="1"/>
-					<description id="${row}[client_redirect_uri]" no_lang="1"/>
-					<select id="${row}[client_grants]" readonly="true" class="openidGrantTags"/>
-					<select id="${row}[client_scopes]" readonly="true"/>
-					<select id="${row}[client_status]" readonly="true"/>
-					<select id="${row}[client_access_token_ttl]" readonly="true"/>
-					<select id="${row}[client_refresh_token_ttl]" readonly="true"/>
-					<vbox>
-						<select-account id="${row}[client_creator]" readonly="true"/>
-						<date-time id="${row}[client_created]" readonly="true"/>
-					</vbox>
-					<vbox>
-						<select-account id="${row}[client_modifier]" readonly="true"/>
-						<date-time id="${row}[client_updated]" readonly="true"/>
-					</vbox>
+					<et2-description  id="${row}[client_id]" noLang="1"></et2-description>
+					<et2-description  id="${row}[client_name]" noLang="1"></et2-description>
+					<et2-description  id="${row}[client_identifier]" noLang="1"></et2-description>
+					<et2-description  id="${row}[client_redirect_uri]" noLang="1"></et2-description>
+					<et2-select  id="${row}[client_grants]" readonly="true" class="openidGrantTags"></et2-select>
+					<et2-select  id="${row}[client_scopes]" readonly="true"></et2-select>
+					<et2-select  id="${row}[client_status]" readonly="true"></et2-select>
+					<et2-select  id="${row}[client_access_token_ttl]" readonly="true"></et2-select>
+					<et2-select  id="${row}[client_refresh_token_ttl]" readonly="true"></et2-select>
+					<et2-vbox>
+						<et2-select-account  id="${row}[client_creator]" readonly="true"></et2-select-account>
+						<et2-date-time  id="${row}[client_created]" readonly="true"></et2-date-time>
+					</et2-vbox>
+					<et2-vbox>
+						<et2-select-account  id="${row}[client_modifier]" readonly="true"></et2-select-account>
+						<et2-date-time  id="${row}[client_updated]" readonly="true"></et2-date-time>
+					</et2-vbox>
 				</row>
 			</rows>
 		</grid>
