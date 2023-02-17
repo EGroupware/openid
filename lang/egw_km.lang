@@ -1,0 +1,71 @@
+%1 days	openid	km	%1 ថ្ងៃ
+%1 hours	openid	km	%1 ម៉ោង
+%1 month	openid	km	%1 ខែ
+%1 weeks	openid	km	%1 សប្តាហ៍
+%1 years	openid	km	%1 ឆ្នាំ
+%s would like to access	openid	km	%s ចង់ចូលប្រើ
+- authentication only succeeds if user has run-rights for the application	openid	km	- ការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវអាចជោគជ័យបានលុះត្រាតែអ្នកប្រើប្រាស់មានសិទ្ធិដំណើរការសម្រាប់កម្មវិធី
+- client application is displayed inside egroupware (iframe)	openid	km	- កម្មវិធីអតិថិជនត្រូវបានបង្ហាញនៅខាងក្នុង EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	km	- មិនចាំបាច់មានការយល់ព្រមពីអ្នកប្រើប្រាស់ច្បាស់លាស់សម្រាប់ការចូល OAuth ទេ។
+1 year	openid	km	1 ឆ្នាំ
+access token revoked.	openid	km	ការចូលប្រើ Token ត្រូវបានដកហូត។
+access-token ttl	openid	km	Access-Token TTL
+administration rights or regular user	openid	km	សិទ្ធិគ្រប់គ្រង ឬអ្នកប្រើប្រាស់ធម្មតា។
+allowed for	openid	km	អនុញ្ញាតសម្រាប់
+allowed grants	openid	km	ជំនួយដែលបានអនុញ្ញាត
+application name	openid	km	ឈ្មោះកម្មវិធី
+approve	openid	km	យល់ព្រម
+basic details about you	openid	km	ព័ត៌មានលម្អិតជាមូលដ្ឋានអំពីអ្នក។
+client	openid	km	អតិថិជន
+client copied. please enter a new (unique) identifer and secret.	openid	km	អតិថិជនបានចម្លង។ សូមបញ្ចូលអត្តសញ្ញាណ និងសម្ងាត់ថ្មី (ប្លែក)។
+client disabled.	openid	km	អតិថិជនត្រូវបានបិទ។
+client not found!	openid	km	រកមិនឃើញអតិថិជន!
+client saved.	openid	km	បានរក្សាទុកអតិថិជន។
+client status	openid	km	ស្ថានភាពអតិថិជន
+created	openid	km	បានបង្កើត
+deny	openid	km	បដិសេធ
+disable	openid	km	បិទ
+disable this client	openid	km	បិទម៉ាស៊ីនភ្ញៀវនេះ។
+egroupware internal application name	openid	km	ឈ្មោះកម្មវិធីខាងក្នុង EGroupware
+enable openid connect support	openid	km	បើកដំណើរការជំនួយ OpenID Connect
+error saving client!	openid	km	កំហុសក្នុងការរក្សាទុកអតិថិជន!
+exists without saving the changes	openid	km	មានដោយមិនចាំបាច់រក្សាទុកការផ្លាស់ប្តូរ
+general	openid	km	ទូទៅ
+grants	openid	km	ជំនួយ
+icon	openid	km	រូបតំណាង
+identifier	openid	km	អ្នកកំណត់អត្តសញ្ញាណ
+identifier to enter at the client	openid	km	លេខសម្គាល់ដែលត្រូវបញ្ចូលទៅកាន់អតិថិជន
+if an oauth client is managed as egroupware app	openid	km	ប្រសិនបើអតិថិជន OAuth ត្រូវបានគ្រប់គ្រងជាកម្មវិធី EGroupware
+ip address	openid	km	អាសយដ្ឋាន IP
+limit scopes	openid	km	កម្រិតវិសាលភាព
+login to authorize %1	openid	km	ចូល​ដើម្បី​ផ្តល់​សិទ្ធិ%1
+manage as egroupware application	openid	km	គ្រប់គ្រងជាកម្មវិធី EGroupware
+name	openid	km	ឈ្មោះ
+name used inside egroupware	openid	km	ឈ្មោះដែលប្រើនៅក្នុង EGroupware
+openid	common	km	ម៉ាស៊ីនមេ OpenID / OAuth2
+openid / oauth2 server	openid	km	ម៉ាស៊ីនមេ OpenID / OAuth2
+order	openid	km	បញ្ជាទិញ
+redirect uri	openid	km	ប្តូរទិស URI
+refresh-token	openid	km	ធ្វើឱ្យស្រស់-ថូខឹន
+refresh-token ttl	openid	km	ធ្វើឱ្យស្រស់-ថូខឹន TTL
+request log	openid	km	ស្នើសុំកំណត់ហេតុ
+request log enabled, delete file to disable it again.	openid	km	បានបើកដំណើរការកំណត់ហេតុ លុបឯកសារ ដើម្បីបិទវាម្តងទៀត។
+revoke	openid	km	ដកហូត
+revoke this token	openid	km	ដកហូតសញ្ញាសម្ងាត់នេះ។
+revoked	openid	km	បានដកហូត
+saves the changes made	openid	km	រក្សាទុកការផ្លាស់ប្តូរដែលបានធ្វើ
+scopes	openid	km	វិសាលភាព
+secret	openid	km	សម្ងាត់
+secret/password to enter at the client	openid	km	សម្ងាត់ / ពាក្យសម្ងាត់ដើម្បីបញ្ចូលនៅម៉ាស៊ីនភ្ញៀវ
+start url	openid	km	ចាប់ផ្តើម URL
+status	openid	km	ស្ថានភាព
+this name is already been taken by an installed egroupware application!	openid	km	ឈ្មោះនេះត្រូវបានយកដោយកម្មវិធី EGroupware ដែលបានដំឡើងរួចហើយ!
+token revoked	openid	km	និមិត្តសញ្ញាត្រូវបានដកហូត
+updated	openid	km	បានធ្វើបច្ចុប្បន្នភាព
+url to show when the user opens the app	openid	km	URL ដើម្បីបង្ហាញនៅពេលដែលអ្នកប្រើបើកកម្មវិធី
+use default of	openid	km	ប្រើលំនាំដើមនៃ
+user agent	openid	km	ភ្នាក់ងារ​អ្នក​ប្រើ
+your address	openid	km	អាសយដ្ឋានរបស់អ្នក។
+your email address	openid	km	អាសយដ្ឋានអ៊ីមែលរបស់អ្នក។
+your full profile	openid	km	ប្រវត្តិរូបពេញរបស់អ្នក។
+your phone number	openid	km	លេខទូរស័ព្ទ​របស់​អ្នក
