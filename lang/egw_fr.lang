@@ -74,3 +74,4 @@ your address	openid	fr	Votre adresse
 your email address	openid	fr	Votre adresse email
 your full profile	openid	fr	Votre profile
 your phone number	openid	fr	Votre numéro de téléphone
+revoke access tokens	preferences	fr	Révoquer les jetons d'accès
