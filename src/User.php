@@ -34,7 +34,7 @@ class User
 		Api\Translation::add_app(self::APP);
 
 		return [
-			'label' =>	'Revoke Acccess Tokens',
+			'label' =>	'Revoke Access Tokens',
 			'name' => 'openid.access_tokens',
 			'prepend' => false,
 			'data' => [
@@ -141,7 +141,7 @@ class User
 			'delete' => array(
 				'caption' => 'Revoke',
 				'allowOnMultiple' => true,
-				'confirm' => lang('Revoke this token'),
+				'confirm' => 'Revoke this token',
 			),
 		];
 	}

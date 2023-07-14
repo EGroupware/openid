@@ -39,3 +39,4 @@ your address	openid	sk	Vaša adresa
 your email address	openid	sk	Vaša e-mailové adresa
 your full profile	openid	sk	Váš úplný profil
 your phone number	openid	sk	Vaše telefónne číslo
+revoke access tokens	preferences	sk	Odvolať prístupový token

@@ -69,3 +69,4 @@ your address	openid	de	Ihre Adresse
 your email address	openid	de	Ihre E-Mail-Adresse
 your full profile	openid	de	Ihr vollständiges Profil
 your phone number	openid	de	Ihre Telefonnummer
+revoke access tokens	preferences	de	Tokens zurückziehen

@@ -69,3 +69,4 @@ your address	openid	en	Your address
 your email address	openid	en	Your email address
 your full profile	openid	en	Your full profile
 your phone number	openid	en	Your phone number
+revoke access tokens	preferences	en	Revoke Acccess Tokens
