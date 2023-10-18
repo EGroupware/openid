@@ -6,7 +6,7 @@
 %s would like to access	openid	de	%s möchte auf Folgendes zugreifen
 - authentication only succeeds if user has run-rights for the application	openid	de	- ist die Anmeldung nur möglich wenn der Benutzer Ausführungsrechte für diese hat
 - client application is displayed inside egroupware (iframe)	openid	de	- wird die OAuth Anwendung innerhalb der EGroupware angezeigt (iframe)
-- no explicit user consent required for oauth login	openid	de	- beim OAuth Login ist keine explizite Zustimmung des Benutzers erforderlich
+- no explicit user consent required for oauth login	openid	de	- beim OAuth Login ist keine explizite Zustimmung des Benutzers erforderlich (SSO)
 1 year	openid	de	1 Jahr
 access token revoked.	openid	de	Zugangs-(Access-)Token zurückgezogen.
 access-token ttl	openid	de	Gültigkeit Zugangs-(Access-)Token
@@ -51,6 +51,7 @@ refresh-token ttl	openid	de	Gültigkeit Erneuerungs-(Refresh-)Token
 request log	openid	de	Anfragelog
 request log enabled, delete file to disable it again.	openid	de	Anfragelog eingeschaltet, Datei löschen um es wieder auszuschalten.
 revoke	openid	de	Zurückziehen
+revoke access tokens	preferences	de	Tokens zurückziehen
 revoke this token	openid	de	Dieses Token zurückziehen
 revoked	openid	de	Zurückgezogen
 saves the changes made	openid	de	Änderungen Speichern
@@ -69,4 +70,3 @@ your address	openid	de	Ihre Adresse
 your email address	openid	de	Ihre E-Mail-Adresse
 your full profile	openid	de	Ihr vollständiges Profil
 your phone number	openid	de	Ihre Telefonnummer
-revoke access tokens	preferences	de	Tokens zurückziehen
