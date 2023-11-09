@@ -27,7 +27,7 @@ $GLOBALS['egw_info'] = array(
 	));
 include('../header.inc.php');
 
-$endpoint = Api\Framework::getUrl('/openid/endpoint.php');
+$endpoint = Api\Framework::getUrl(Api\Framework::link('/openid/endpoint.php'));
 $issuer = preg_replace('#^(https?://[^/]+)/.*$#', '$1', $endpoint);
 $scope_repo = new OpenID\Repositories\ScopeRepository();
 
