@@ -81,7 +81,7 @@ $content = json_encode([
 	//"op_tos_uri" =>
 	// https://openid.net/specs/openid-connect-session-1_0.html#OPMetadata
 	//"check_session_iframe" => "https://server.example.com/connect/check_session",
-	//"end_session_endpoint" => "https://server.example.com/connect/end_session",
+	"end_session_endpoint" => Api\Framework::getUrl(Api\Framework::link('/logout.php')),
 ], JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES);
 $etag = '"'.md5($content).'"';
 
