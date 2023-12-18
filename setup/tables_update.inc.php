@@ -175,3 +175,18 @@ function openid_upgrade21_1_001()
 {
 	return $GLOBALS['setup_info']['openid']['currentver'] = '23.1';
 }
+
+function openid_upgrade23_1()
+{
+	foreach([
+        'email_aliases' => 'EMail aliases',
+    ] as $identifier => $description)
+	{
+		$GLOBALS['egw_setup']->db->insert('egw_openid_scopes', [
+			'scope_identifier' => $identifier,
+			'scope_description' => $description,
+			'scope_created'    => time(),
+		], false, __LINE__, __FILE__, 'openid');
+	}
+	return $GLOBALS['setup_info']['openid']['currentver'] = '23.1.001';
+}

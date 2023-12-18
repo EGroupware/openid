@@ -130,6 +130,31 @@ class UserEntity implements UserEntityInterface, ClaimSetInterface
 		}
 		$locale = strtolower($lang).'_'.strtoupper($country);
 
+		// add all email aliases know to EGroupware Mail
+		$aliases = !empty($contact['email']) ? [$contact['email']] : [];
+		try {
+			// search all mail accounts valid for all
+			foreach(Api\Mail\Account::search(0, false, null, false, 0, false) as $account)
+			{
+				// ignore SMTP only accounts
+				if (empty($account->acc_imap_host) || empty($account->acc_imap_port))
+				{
+					continue;
+				}
+				if (($smtp = $account->smtpServer()) && ($account_lid = Api\Accounts::id2name($this->id)))
+				{
+					$aliases = array_map(static function(array $alias)
+					{
+						return $alias['address'];
+					}, $smtp->getAccountEmailAddress($account_lid));
+					break;
+				}
+			}
+		}
+		catch (\Throwable $e) {
+			_egw_log_exception();
+		}
+
 		return [
 			'id' => $this->getIdentifier(),
 			// profile
@@ -167,8 +192,7 @@ class UserEntity implements UserEntityInterface, ClaimSetInterface
 			'roles' => array_merge(['user'], array_intersect(array_keys($GLOBALS['egw']->acl->get_user_applications($this->id)), ['admin'])),
 			// group memberships: "Admin", "Default", ...
 			'groups' => array_values(Api\Accounts::getInstance()->memberships($this->id)),
-			// ToDo: add all aliases know to EGroupware Mail
-			'email_aliases' => !empty($contact['email']) ? [$contact['email']] : [],
+			'email_aliases' => $aliases,
 		];
 	}
 }
