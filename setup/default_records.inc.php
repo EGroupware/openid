@@ -28,7 +28,8 @@ foreach([
 	'profile' => 'Your full profile',
 	'roles'   => 'Administration rights or regular user',
 	'videoconference' => 'Videoconference',
-	'groups' => 'Groups',
+    'groups' => 'Groups',
+    'email_aliases' => 'EMail aliases',
 ] as $identifier => $description)
 {
 	$GLOBALS['egw_setup']->db->insert('egw_openid_scopes', [
