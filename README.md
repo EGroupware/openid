@@ -6,6 +6,7 @@
 * Token Introspection: https://example.org/egroupware/openid/endpoint.php/introspect
 * User information: https://example.org/egroupware/openid/endpoint.php/userinfo
 * Public key: https://example.org/egroupware/openid/endpoint.php/jwks
+* Configuration: https://example.org/.well-known/openid-configuration
 * Issuer: https://example.org
 > Replace example.org with the full qualified domain-name your EGroupware server uses.
 
@@ -40,7 +41,7 @@
 - [ ] token endpoint must support response_type=code+id_token
 - [ ] allow users to create personal clients
 - [ ] implement full [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
-- [x] /.well-known/openid-configration is supported now
+- [x] /.well-known/openid-configuration is supported now
 - [x] token endpoint must return nonce of authorization request as claim in id_token
 - [x] fix League OAuth2 server to support multiple response_type(s), currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant, [see response in this ticket](https://github.com/thephpleague/oauth2-server/issues/903#issuecomment-423891504)
 - [x] support response_type "id_token" or "token id_token" containing just an id_token (JWT) or additional to access_token an id_token
