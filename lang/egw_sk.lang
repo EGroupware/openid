@@ -4,8 +4,16 @@
 %1 weeks	openid	sk	%1 týždňov
 %1 years	openid	sk	%1 rokov
 %s would like to access	openid	sk	%s by rád získal prístup
+- authentication only succeeds if user has run-rights for the application	openid	sk	- autentifikácia sa podarí iba ak používateľ má právo spustenia pre túto aplikáciu
+- client application is displayed inside egroupware (iframe)	openid	sk	- klientská aplikácia sa zobrazí vnútri EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	sk	- nevyžaduje sa výslovný súhlas používateľa pre prihlásenie OAuth (SSO)
 1 year	openid	sk	1 rok
+access token revoked.	openid	sk	Prístupový token bol odvolaný.
+access-token ttl	openid	sk	TTL pre prístupový token
 administration rights or regular user	openid	sk	Administrátorské práva alebo bežný používateľ
+allowed for	openid	sk	Povolené pre
+allowed grants	openid	sk	Povolené granty
+application name	openid	sk	Názov aplikácie
 approve	openid	sk	Schváliť
 basic details about you	openid	sk	Vaše základné údaje
 client	openid	sk	Klient
@@ -18,25 +26,47 @@ created	openid	sk	Vytvorené
 deny	openid	sk	Zakázať
 disable	openid	sk	Zablokovať
 disable this client	openid	sk	Zablokovať tohto klienta
+egroupware internal application name	openid	sk	Vnútorný názov aplikácie EGroupware
 enable openid connect support	openid	sk	Povoliť podporu OpenID Connect
 error saving client!	openid	sk	Chyba pri ukladaní klienta!
 exists without saving the changes	openid	sk	ukončiť bez uloženia zmien
 general	openid	sk	Všeobecné
+grants	openid	sk	Granty
+icon	openid	sk	Ikona
 identifier	openid	sk	Identifikátor
 identifier to enter at the client	openid	sk	Identifikátor ktorý treba klientovi zadať
+if an oauth client is managed as egroupware app	openid	sk	Ak je klient OAuth spravovaný ako aplikácia EGroupware
 ip address	openid	sk	IP adresa
+limit scopes	openid	sk	Obmedziť rozsah
 login to authorize %1	openid	sk	Prihlásiť pre autorizáciu %1
+manage as egroupware application	openid	sk	Spravovať ako aplikáciu EGroupware
 name	openid	sk	Meno
 name used inside egroupware	openid	sk	Meno použité v rámci EGroupware
+openid	common	sk	OpenID / OAuth2 Server
+openid / oauth2 server	openid	sk	OpenID / OAuth2 Server
+order	openid	sk	Poradie
 redirect uri	openid	sk	Presmerovať URI
+refresh-token	openid	sk	Refresh-Token
+refresh-token ttl	openid	sk	Refresh-Token TTL
+request log	openid	sk	Protokol o požiadavke
+request log enabled, delete file to disable it again.	openid	sk	Protokol požiadaviek povolený, odstránením súboru ho opäť zakážete.
+revoke	openid	sk	Odvolať
+revoke access tokens	preferences	sk	Odvolať prístupový token
+revoke this token	openid	sk	Odvolať tento token
+revoked	openid	sk	Odvolaný
 saves the changes made	openid	sk	Uložiť vykonané zmeny
+scopes	openid	sk	Rozsah
 secret	openid	sk	Tajomstvo
 secret/password to enter at the client	openid	sk	Tajomstvo/heslo ktoré treba klientovi zadať
+start url	openid	sk	Počiatočná adresa URL
 status	openid	sk	Stav
+this name is already been taken by an installed egroupware application!	openid	sk	Tento názov už bol použitý nainštalovanou aplikáciou EGroupware!
+token revoked	openid	sk	Token bol odvolaný
 updated	openid	sk	Aktualizované
+url to show when the user opens the app	openid	sk	URL, ktorá sa ukáže keď používateľ otvorí túto aplikáciu
 use default of	openid	sk	Použiť predvolené
+user agent	openid	sk	User Agent
 your address	openid	sk	Vaša adresa
 your email address	openid	sk	Vaša e-mailové adresa
 your full profile	openid	sk	Váš úplný profil
 your phone number	openid	sk	Vaše telefónne číslo
-revoke access tokens	preferences	sk	Odvolať prístupový token
