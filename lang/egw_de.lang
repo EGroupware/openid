@@ -4,9 +4,9 @@
 %1 weeks	openid	de	%1 Wochen
 %1 years	openid	de	%1 years
 %s would like to access	openid	de	%s möchte auf Folgendes zugreifen
-- authentication only succeeds if user has run-rights for the application	openid	de	- ist die Anmeldung nur möglich wenn der Benutzer Ausführungsrechte für diese hat
-- client application is displayed inside egroupware (iframe)	openid	de	- wird die OAuth Anwendung innerhalb der EGroupware angezeigt (iframe)
-- no explicit user consent required for oauth login	openid	de	- beim OAuth Login ist keine explizite Zustimmung des Benutzers erforderlich (SSO)
+- authentication only succeeds if user has run-rights for the application	openid	de	- ist die Anmeldung nur möglich, wenn der Benutzer Ausführungsrechte für diese hat
+- client application is displayed inside egroupware (iframe)	openid	de	- wird die OAuth-Anwendung innerhalb der EGroupware angezeigt (iframe)
+- no explicit user consent required for oauth login	openid	de	- beim OAuth-Login ist keine explizite Zustimmung des Benutzers erforderlich (SSO)
 1 year	openid	de	1 Jahr
 access token revoked.	openid	de	Zugangs-(Access-)Token zurückgezogen.
 access-token ttl	openid	de	Gültigkeit Zugangs-(Access-)Token
@@ -27,7 +27,7 @@ deny	openid	de	Ablehnen
 disable	openid	de	Deaktivieren
 disable this client	openid	de	Diesen Client deaktivieren
 egroupware internal application name	openid	de	EGroupware interner Anwendungsname
-enable openid connect support	openid	de	OpenID Connect Unterstützung aktivieren
+enable openid connect support	openid	de	OpenID Connect-Unterstützung aktivieren
 error saving client!	openid	de	Fehler beim Speichern des Client!
 exists without saving the changes	openid	de	Abbruch ohne Änderungen zu Speichern
 general	openid	de	Allgemein
@@ -35,11 +35,11 @@ grants	openid	de	Verfahren (Grants)
 icon	openid	de	Icon
 identifier	openid	de	Kennung (Identifier)
 identifier to enter at the client	openid	de	Kennung (Identifier) zur Eingabe bei dem Client
-if an oauth client is managed as egroupware app	openid	de	Wenn der OAuth Client als EGroupware Anwendung gemanagt wird
-ip address	openid	de	IP Adresse
+if an oauth client is managed as egroupware app	openid	de	Wenn der OAuth-Client als EGroupware-Anwendung gemanagt wird
+ip address	openid	de	IP-Adresse
 limit scopes	openid	de	Gültigkeit (Scope) einschränken
 login to authorize %1	openid	de	Bitte anmelden um %1 Zugriff zu gewähren
-manage as egroupware application	openid	de	Gemanagt als EGroupware Anwendung
+manage as egroupware application	openid	de	Gemanagt als EGroupware-Anwendung
 name	openid	de	Name
 name used inside egroupware	openid	de	Name der innerhalb EGroupware angezeigt wird
 openid	common	de	OpenID / OAuth2 Server

@@ -8,7 +8,16 @@
 - client application is displayed inside egroupware (iframe)	openid	es-es	- la aplicación cliente se muestra dentro de EGroupware (iframe)
 - no explicit user consent required for oauth login	openid	es-es	- no se requiere consentimiento explícito del usuario para iniciar sesión en OAuth
 1 year	openid	es-es	1 año
+access token revoked.	openid	es-es	Token de acceso revocado.
+access-token ttl	openid	es-es	TTL del token de acceso
+administration rights or regular user	openid	es-es	Derechos de administración o usuario normal
+allowed for	openid	es-es	Subvenciones permitidas
+allowed grants	openid	es-es	Subvenciones permitidas
+application name	openid	es-es	Nombre de la solicitud
+approve	openid	es-es	Aprobar
+basic details about you	openid	es-es	Datos básicos sobre usted
 client	openid	es-es	Cliente
+client copied. please enter a new (unique) identifer and secret.	openid	es-es	Cliente copiado. Por favor, introduzca una nueva identidad (única) y el secreto.
 client disabled.	openid	es-es	Cliente inhabilitado.
 client not found!	openid	es-es	¡Cliente no  encontrado!
 client saved.	openid	es-es	Cliente grabado.
@@ -17,12 +26,39 @@ created	openid	es-es	Creado
 deny	openid	es-es	Denegar
 disable	openid	es-es	Inhabilitar
 disable this client	openid	es-es	Inhabilitar este cliente
+egroupware internal application name	openid	es-es	Nombre de la aplicación interna EGroupware
+enable openid connect support	openid	es-es	Activar la compatibilidad con OpenID Connect
+error saving client!	openid	es-es	¡Error al guardar el cliente!
+exists without saving the changes	openid	es-es	existe sin guardar los cambios
 general	openid	es-es	General
+grants	openid	es-es	Concede
 icon	openid	es-es	Ícono
+identifier	openid	es-es	Identificador
+identifier to enter at the client	openid	es-es	Identificador a introducir en el cliente
+if an oauth client is managed as egroupware app	openid	es-es	Si se gestiona un cliente OAuth como aplicación EGroupware
 ip address	openid	es-es	Dirección IP
+limit scopes	openid	es-es	Limitar ámbitos
+login to authorize %1	openid	es-es	Iniciar sesión para autorizar %1
+manage as egroupware application	openid	es-es	Gestionar como aplicación EGroupware
 name	openid	es-es	Nombre
+name used inside egroupware	openid	es-es	Nombre utilizado dentro de EGroupware
 openid	common	es-es	Servidor OpenID / OAuth2
 openid / oauth2 server	openid	es-es	Servidor OpenID / OAuth2
+order	openid	es-es	Pedido
+redirect uri	openid	es-es	Redirigir URI
+refresh-token	openid	es-es	Refresh-Token
+refresh-token ttl	openid	es-es	TTL de Refresh-Token
+request log	openid	es-es	Registro de solicitudes
+request log enabled, delete file to disable it again.	openid	es-es	Registro de peticiones activado, borrar archivo para desactivarlo de nuevo.
+revoke	openid	es-es	Revocar
+revoke access tokens	preferences	es-es	Revocar tokens de acceso
+revoke this token	openid	es-es	Revocar este token
+revoked	openid	es-es	Revocar
+saves the changes made	openid	es-es	Guarda los cambios realizados
+scopes	openid	es-es	Ámbitos
+secret	openid	es-es	Secreto
+secret/password to enter at the client	openid	es-es	Secreto/contraseña a introducir en el cliente
+start url	openid	es-es	URL de inicio
 status	openid	es-es	Estado
 this name is already been taken by an installed egroupware application!	openid	es-es	¡Este nombre ya ha sido tomado por una aplicación EGroupware instalada!
 token revoked	openid	es-es	Token revocado
