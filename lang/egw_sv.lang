@@ -1,0 +1,72 @@
+%1 days	openid	sv	%1 dagar
+%1 hours	openid	sv	%1 timmar
+%1 month	openid	sv	%1 månad
+%1 weeks	openid	sv	%1 veckor
+%1 years	openid	sv	%1 år
+%s would like to access	openid	sv	%s skulle vilja ha tillgång till
+- authentication only succeeds if user has run-rights for the application	openid	sv	- autentiseringen lyckas endast om användaren har körrättigheter för applikationen
+- client application is displayed inside egroupware (iframe)	openid	sv	- klientapplikationen visas inuti EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	sv	- inget uttryckligt användarsamtycke krävs för OAuth-inloggning (SSO)
+1 year	openid	sv	1 år
+access token revoked.	openid	sv	Åtkomsttoken återkallad.
+access-token ttl	openid	sv	TTL för åtkomsttoken
+administration rights or regular user	openid	sv	Administrationsrättigheter eller vanlig användare
+allowed for	openid	sv	Tillåtet för
+allowed grants	openid	sv	Tillåtna beviljanden
+application name	openid	sv	Applikationens namn
+approve	openid	sv	Godkänna
+basic details about you	openid	sv	Grundläggande information om dig
+client	openid	sv	Klient
+client copied. please enter a new (unique) identifer and secret.	openid	sv	Klient kopierad. Ange en ny (unik) identifierare och hemlighet.
+client disabled.	openid	sv	Klienten är inaktiverad.
+client not found!	openid	sv	Klienten hittas inte!
+client saved.	openid	sv	Klienten sparad.
+client status	openid	sv	Status för klienten
+created	openid	sv	Skapad
+deny	openid	sv	Neka
+disable	openid	sv	Inaktivera
+disable this client	openid	sv	Inaktivera den här klienten
+egroupware internal application name	openid	sv	Namn på intern applikation för EGroupware
+enable openid connect support	openid	sv	Aktivera stöd för OpenID Connect
+error saving client!	openid	sv	Fel vid lagring av klient!
+exists without saving the changes	openid	sv	existerar utan att ändringarna sparas
+general	openid	sv	Allmänt
+grants	openid	sv	Bidrag
+icon	openid	sv	Ikon
+identifier	openid	sv	Identifierare
+identifier to enter at the client	openid	sv	Identifierare att ange på klienten
+if an oauth client is managed as egroupware app	openid	sv	Om en OAuth-klient hanteras som en EGroupware-app
+ip address	openid	sv	IP-adress
+limit scopes	openid	sv	Begränsa scope
+login to authorize %1	openid	sv	Logga in för att auktorisera %1
+manage as egroupware application	openid	sv	Hantera som EGroupware-applikation
+name	openid	sv	Namn
+name used inside egroupware	openid	sv	Namn som används inom EGroupware
+openid	common	sv	OpenID / OAuth2-server
+openid / oauth2 server	openid	sv	OpenID / OAuth2-server
+order	openid	sv	Ordning
+redirect uri	openid	sv	Omdirigera URI
+refresh-token	openid	sv	Uppdatera token
+refresh-token ttl	openid	sv	Uppdatera-Token TTL
+request log	openid	sv	Logg för begäran
+request log enabled, delete file to disable it again.	openid	sv	Förfrågningslogg aktiverad, radera filen för att inaktivera den igen.
+revoke	openid	sv	Återkalla
+revoke access tokens	preferences	sv	Återkalla åtkomsttoken
+revoke this token	openid	sv	Återkalla den här token
+revoked	openid	sv	Återkallad
+saves the changes made	openid	sv	Sparar de ändringar som gjorts
+scopes	openid	sv	Omfattning
+secret	openid	sv	Hemlighet
+secret/password to enter at the client	openid	sv	Hemlighet/lösenord att ange på klienten
+start url	openid	sv	Starta URL
+status	openid	sv	Status
+this name is already been taken by an installed egroupware application!	openid	sv	Detta namn har redan tagits av en installerad EGroupware-applikation!
+token revoked	openid	sv	Token återkallad
+updated	openid	sv	Uppdaterad
+url to show when the user opens the app	openid	sv	URL som ska visas när användaren öppnar appen
+use default of	openid	sv	Använd standard för
+user agent	openid	sv	Användaragent
+your address	openid	sv	Din adress
+your email address	openid	sv	Din e-postadress
+your full profile	openid	sv	Din fullständiga profil
+your phone number	openid	sv	Ditt telefonnummer

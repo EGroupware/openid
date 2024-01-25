@@ -1,0 +1,72 @@
+%1 days	openid	lv	%1 dienas
+%1 hours	openid	lv	%1 stundas
+%1 month	openid	lv	%1 mēnesis
+%1 weeks	openid	lv	%1 nedēļas
+%1 years	openid	lv	%1 gads
+%s would like to access	openid	lv	%s vēlas piekļūt
+- authentication only succeeds if user has run-rights for the application	openid	lv	- autentifikācija ir veiksmīga tikai tad, ja lietotājam ir lietojumprogrammas izpildes tiesības.
+- client application is displayed inside egroupware (iframe)	openid	lv	- klienta lietojumprogramma tiek parādīta EGroupware (iframe).
+- no explicit user consent required for oauth login	openid	lv	- OAuth pieteikšanās (SSO) nav nepieciešama skaidra lietotāja piekrišana.
+1 year	openid	lv	1 gads
+access token revoked.	openid	lv	Piekļuves žetons atsaukts.
+access-token ttl	openid	lv	Piekļuves žetona TTL
+administration rights or regular user	openid	lv	Administrēšanas tiesības vai parasts lietotājs
+allowed for	openid	lv	Atļauts
+allowed grants	openid	lv	Atļautie piešķīrumi
+application name	openid	lv	Pieteikuma nosaukums
+approve	openid	lv	Apstiprināt
+basic details about you	openid	lv	Pamatinformācija par jums
+client	openid	lv	Klients
+client copied. please enter a new (unique) identifer and secret.	openid	lv	Klients kopēts. Lūdzu, ievadiet jaunu (unikālu) identifikatoru un noslēpumu.
+client disabled.	openid	lv	Klients ir atspējots.
+client not found!	openid	lv	Klients nav atrasts!
+client saved.	openid	lv	Klients saglabāts.
+client status	openid	lv	Klienta statuss
+created	openid	lv	Izveidots
+deny	openid	lv	Atteikt
+disable	openid	lv	Atslēgt
+disable this client	openid	lv	Atslēgt šo klientu
+egroupware internal application name	openid	lv	EGroupware iekšējās lietojumprogrammas nosaukums
+enable openid connect support	openid	lv	Ieslēgt OpenID Connect atbalstu
+error saving client!	openid	lv	Kļūda, saglabājot klientu!
+exists without saving the changes	openid	lv	pastāv bez izmaiņu saglabāšanas
+general	openid	lv	Vispārīgi
+grants	openid	lv	Dotācijas
+icon	openid	lv	Ikona
+identifier	openid	lv	Identifikators
+identifier to enter at the client	openid	lv	Identifikators, kas jāievada pie klienta
+if an oauth client is managed as egroupware app	openid	lv	Ja OAuth klients tiek pārvaldīts kā EGroupware lietotne
+ip address	openid	lv	IP adrese
+limit scopes	openid	lv	Darbības jomu ierobežošana
+login to authorize %1	openid	lv	Autorizēt autorizāciju %1
+manage as egroupware application	openid	lv	Pārvaldīt kā EGroupware lietojumprogrammu
+name	openid	lv	Nosaukums
+name used inside egroupware	openid	lv	Nosaukums, ko izmanto EGroupware
+openid	common	lv	OpenID / OAuth2 Serveris
+openid / oauth2 server	openid	lv	OpenID / OAuth2 Serveris
+order	openid	lv	Pasūtījums
+redirect uri	openid	lv	Pārvirzīšanas URI
+refresh-token	openid	lv	Atjaunināšanas taloniņš
+refresh-token ttl	openid	lv	Atjaunināt-Token TTL
+request log	openid	lv	Pieprasījuma žurnāls
+request log enabled, delete file to disable it again.	openid	lv	Ieslēgts pieprasījuma žurnāls, dzēsiet failu, lai to atkal atspējotu.
+revoke	openid	lv	Atcelt
+revoke access tokens	preferences	lv	Atcelt piekļuves žetonus
+revoke this token	openid	lv	Atcelt šo žetonu
+revoked	openid	lv	Atsaukts
+saves the changes made	openid	lv	Saglabājiet veiktās izmaiņas
+scopes	openid	lv	Darbības jomas
+secret	openid	lv	Secret
+secret/password to enter at the client	openid	lv	Slepenais/parole, kas jāievada pie klienta
+start url	openid	lv	Sākuma URL
+status	openid	lv	Statuss
+this name is already been taken by an installed egroupware application!	openid	lv	Šo nosaukumu jau ir aizņēmusi instalētā EGroupware lietojumprogramma!
+token revoked	openid	lv	Žetons atsaukts
+updated	openid	lv	Atjaunināts
+url to show when the user opens the app	openid	lv	URL, kas tiks parādīts, kad lietotājs atvērs lietotni
+use default of	openid	lv	Izmantot noklusējuma iestatījumu
+user agent	openid	lv	Lietotāja aģents
+your address	openid	lv	Jūsu adrese
+your email address	openid	lv	Jūsu e-pasta adrese
+your full profile	openid	lv	Jūsu pilns profils
+your phone number	openid	lv	Jūsu tālruņa numurs

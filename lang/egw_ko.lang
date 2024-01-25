@@ -1,0 +1,72 @@
+%1 days	openid	ko	%1 일
+%1 hours	openid	ko	%1 시간
+%1 month	openid	ko	%1개월
+%1 weeks	openid	ko	%1주
+%1 years	openid	ko	%1 년
+%s would like to access	openid	ko	액세스하려는 %s
+- authentication only succeeds if user has run-rights for the application	openid	ko	- 사용자에게 애플리케이션에 대한 실행 권한이 있는 경우에만 인증이 성공합니다.
+- client application is displayed inside egroupware (iframe)	openid	ko	- 클라이언트 애플리케이션이 EGroupware 내부에 표시됨(iframe).
+- no explicit user consent required for oauth login	openid	ko	- OAuth 로그인(SSO)에 대한 명시적인 사용자 동의가 필요하지 않습니다.
+1 year	openid	ko	1 년
+access token revoked.	openid	ko	액세스 토큰이 해지되었습니다.
+access-token ttl	openid	ko	액세스 토큰 TTL
+administration rights or regular user	openid	ko	관리 권한 또는 일반 사용자
+allowed for	openid	ko	허용 대상
+allowed grants	openid	ko	허용된 권한
+application name	openid	ko	애플리케이션 이름
+approve	openid	ko	승인
+basic details about you	openid	ko	사용자에 대한 기본 정보
+client	openid	ko	클라이언트
+client copied. please enter a new (unique) identifer and secret.	openid	ko	클라이언트가 복사되었습니다. 새 (고유) 식별자와 비밀번호를 입력하세요.
+client disabled.	openid	ko	클라이언트가 비활성화되었습니다.
+client not found!	openid	ko	클라이언트를 찾을 수 없습니다!
+client saved.	openid	ko	클라이언트가 저장되었습니다.
+client status	openid	ko	클라이언트 상태
+created	openid	ko	생성됨
+deny	openid	ko	거부
+disable	openid	ko	비활성화
+disable this client	openid	ko	이 클라이언트 비활성화
+egroupware internal application name	openid	ko	EGroupware 내부 애플리케이션 이름
+enable openid connect support	openid	ko	OpenID Connect 지원 사용
+error saving client!	openid	ko	클라이언트 저장 오류!
+exists without saving the changes	openid	ko	변경 사항을 저장하지 않고 존재합니다.
+general	openid	ko	일반
+grants	openid	ko	그랜트
+icon	openid	ko	아이콘
+identifier	openid	ko	식별자
+identifier to enter at the client	openid	ko	클라이언트에 입력할 식별자
+if an oauth client is managed as egroupware app	openid	ko	OAuth 클라이언트가 이그룹웨어 앱으로 관리되는 경우
+ip address	openid	ko	IP 주소
+limit scopes	openid	ko	범위 제한
+login to authorize %1	openid	ko	로그인하여 %1에 권한 부여
+manage as egroupware application	openid	ko	E그룹웨어 애플리케이션으로 관리
+name	openid	ko	이름
+name used inside egroupware	openid	ko	EGroupware 내부에서 사용되는 이름
+openid	common	ko	OpenID/OAuth2 서버
+openid / oauth2 server	openid	ko	OpenID/OAuth2 서버
+order	openid	ko	주문
+redirect uri	openid	ko	리디렉션 URI
+refresh-token	openid	ko	토큰 새로 고침
+refresh-token ttl	openid	ko	토큰 새로고침 TTL
+request log	openid	ko	요청 로그
+request log enabled, delete file to disable it again.	openid	ko	요청 로그를 활성화하고 파일을 삭제하여 다시 비활성화합니다.
+revoke	openid	ko	해지
+revoke access tokens	preferences	ko	액세스 토큰 해지
+revoke this token	openid	ko	이 토큰 해지하기
+revoked	openid	ko	취소됨
+saves the changes made	openid	ko	변경 사항을 저장합니다.
+scopes	openid	ko	범위
+secret	openid	ko	비밀
+secret/password to enter at the client	openid	ko	클라이언트에서 입력할 비밀/비밀번호
+start url	openid	ko	시작 URL
+status	openid	ko	상태
+this name is already been taken by an installed egroupware application!	openid	ko	이 이름은 이미 설치된 이그룹웨어 애플리케이션에서 사용 중입니다!
+token revoked	openid	ko	토큰 취소됨
+updated	openid	ko	업데이트됨
+url to show when the user opens the app	openid	ko	사용자가 앱을 열 때 표시할 URL
+use default of	openid	ko	기본값 사용
+user agent	openid	ko	사용자 에이전트
+your address	openid	ko	사용자 주소
+your email address	openid	ko	이메일 주소
+your full profile	openid	ko	전체 프로필
+your phone number	openid	ko	휴대폰 번호

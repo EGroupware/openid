@@ -1,0 +1,72 @@
+%1 days	openid	pl	%1 dni
+%1 hours	openid	pl	%1 godziny
+%1 month	openid	pl	%1 miesiąc
+%1 weeks	openid	pl	%1 tydzień
+%1 years	openid	pl	%1 lat
+%s would like to access	openid	pl	%s chciałby uzyskać dostęp
+- authentication only succeeds if user has run-rights for the application	openid	pl	- uwierzytelnianie powiedzie się tylko wtedy, gdy użytkownik ma uprawnienia do uruchamiania aplikacji
+- client application is displayed inside egroupware (iframe)	openid	pl	- aplikacja kliencka jest wyświetlana wewnątrz EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	pl	- nie jest wymagana wyraźna zgoda użytkownika na logowanie OAuth (SSO)
+1 year	openid	pl	1 rok
+access token revoked.	openid	pl	Token dostępu został cofnięty.
+access-token ttl	openid	pl	TTL tokenu dostępu
+administration rights or regular user	openid	pl	Uprawnienia administracyjne lub zwykły użytkownik
+allowed for	openid	pl	Dozwolone dla
+allowed grants	openid	pl	Dozwolone dotacje
+application name	openid	pl	Nazwa aplikacji
+approve	openid	pl	Zatwierdź
+basic details about you	openid	pl	Podstawowe informacje o użytkowniku
+client	openid	pl	Klient
+client copied. please enter a new (unique) identifer and secret.	openid	pl	Klient skopiowany. Wprowadź nowy (unikalny) identyfikator i sekret.
+client disabled.	openid	pl	Klient wyłączony.
+client not found!	openid	pl	Nie znaleziono klienta!
+client saved.	openid	pl	Klient zapisany.
+client status	openid	pl	Status klienta
+created	openid	pl	Utworzony
+deny	openid	pl	Odmowa
+disable	openid	pl	Wyłącz
+disable this client	openid	pl	Wyłącz tego klienta
+egroupware internal application name	openid	pl	Wewnętrzna nazwa aplikacji EGroupware
+enable openid connect support	openid	pl	Włącz obsługę OpenID Connect
+error saving client!	openid	pl	Błąd zapisywania klienta!
+exists without saving the changes	openid	pl	istnieje bez zapisania zmian
+general	openid	pl	Ogólne
+grants	openid	pl	Dotacje
+icon	openid	pl	Ikona
+identifier	openid	pl	Identyfikator
+identifier to enter at the client	openid	pl	Identyfikator do wprowadzenia na kliencie
+if an oauth client is managed as egroupware app	openid	pl	Jeśli klient OAuth jest zarządzany jako aplikacja EGroupware
+ip address	openid	pl	Adres IP
+limit scopes	openid	pl	Ogranicz zakresy
+login to authorize %1	openid	pl	Zaloguj się, aby autoryzować %1
+manage as egroupware application	openid	pl	Zarządzaj jako aplikacja EGroupware
+name	openid	pl	Nazwa
+name used inside egroupware	openid	pl	Nazwa używana wewnątrz EGroupware
+openid	common	pl	Serwer OpenID / OAuth2
+openid / oauth2 server	openid	pl	Serwer OpenID / OAuth2
+order	openid	pl	Kolejność
+redirect uri	openid	pl	Przekierowanie URI
+refresh-token	openid	pl	Refresh-Token
+refresh-token ttl	openid	pl	Refresh-Token TTL
+request log	openid	pl	Dziennik żądań
+request log enabled, delete file to disable it again.	openid	pl	Dziennik żądań włączony, usuń plik, aby ponownie go wyłączyć.
+revoke	openid	pl	Cofnij
+revoke access tokens	preferences	pl	Odwoływanie tokenów dostępu
+revoke this token	openid	pl	Cofnij ten token
+revoked	openid	pl	Cofnięto
+saves the changes made	openid	pl	Zapisuje wprowadzone zmiany
+scopes	openid	pl	Zakresy
+secret	openid	pl	Sekret
+secret/password to enter at the client	openid	pl	Sekret/hasło do wprowadzenia na kliencie
+start url	openid	pl	Start URL
+status	openid	pl	Status
+this name is already been taken by an installed egroupware application!	openid	pl	Ta nazwa jest już zajęta przez zainstalowaną aplikację EGroupware!
+token revoked	openid	pl	Token cofnięty
+updated	openid	pl	Zaktualizowano
+url to show when the user opens the app	openid	pl	Adres URL do wyświetlenia, gdy użytkownik otworzy aplikację
+use default of	openid	pl	Użyj domyślnej wartości
+user agent	openid	pl	Agent użytkownika
+your address	openid	pl	Adres użytkownika
+your email address	openid	pl	Twój adres e-mail
+your full profile	openid	pl	Pełny profil użytkownika
+your phone number	openid	pl	Numer telefonu użytkownika

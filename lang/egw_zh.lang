@@ -1,0 +1,72 @@
+%1 days	openid	zh	%1 天
+%1 hours	openid	zh	%1 小时
+%1 month	openid	zh	%1 个月
+%1 weeks	openid	zh	%1 周
+%1 years	openid	zh	%1 年
+%s would like to access	openid	zh	%s 希望访问
+- authentication only succeeds if user has run-rights for the application	openid	zh	- 只有当用户拥有应用程序的运行权时，身份验证才会成功
+- client application is displayed inside egroupware (iframe)	openid	zh	- 客户端应用程序在 EGroupware（iframe）内显示
+- no explicit user consent required for oauth login	openid	zh	- OAuth 登录（SSO）无需用户明确同意
+1 year	openid	zh	1 年
+access token revoked.	openid	zh	访问令牌已撤销。
+access-token ttl	openid	zh	访问令牌 TTL
+administration rights or regular user	openid	zh	管理权限或普通用户
+allowed for	openid	zh	允许
+allowed grants	openid	zh	允许授予
+application name	openid	zh	应用程序名称
+approve	openid	zh	批准
+basic details about you	openid	zh	关于您的基本信息
+client	openid	zh	客户
+client copied. please enter a new (unique) identifer and secret.	openid	zh	客户已复制。请输入新的（唯一的）标识符和密文。
+client disabled.	openid	zh	客户端禁用。
+client not found!	openid	zh	未找到客户端！
+client saved.	openid	zh	客户端已保存。
+client status	openid	zh	客户状态
+created	openid	zh	已创建
+deny	openid	zh	拒绝
+disable	openid	zh	禁用
+disable this client	openid	zh	禁用此客户端
+egroupware internal application name	openid	zh	EGroupware 内部应用程序名称
+enable openid connect support	openid	zh	启用 OpenID Connect 支持
+error saving client!	openid	zh	保存客户端出错！
+exists without saving the changes	openid	zh	存在而未保存更改
+general	openid	zh	一般问题
+grants	openid	zh	补助金
+icon	openid	zh	图标
+identifier	openid	zh	标识符
+identifier to enter at the client	openid	zh	在客户端输入的标识符
+if an oauth client is managed as egroupware app	openid	zh	如果 OAuth 客户端作为 EGroupware 应用程序管理
+ip address	openid	zh	IP 地址
+limit scopes	openid	zh	限制范围
+login to authorize %1	openid	zh	登录授权 %1
+manage as egroupware application	openid	zh	作为 EGroupware 应用程序管理
+name	openid	zh	名称
+name used inside egroupware	openid	zh	在 EGroupware 内使用的名称
+openid	common	zh	OpenID / OAuth2 服务器
+openid / oauth2 server	openid	zh	OpenID / OAuth2 服务器
+order	openid	zh	顺序
+redirect uri	openid	zh	重定向 URI
+refresh-token	openid	zh	刷新令牌
+refresh-token ttl	openid	zh	刷新令牌 TTL
+request log	openid	zh	请求日志
+request log enabled, delete file to disable it again.	openid	zh	请求日志已启用，删除文件可再次禁用。
+revoke	openid	zh	撤销
+revoke access tokens	preferences	zh	撤销访问令牌
+revoke this token	openid	zh	撤销此令牌
+revoked	openid	zh	撤销
+saves the changes made	openid	zh	保存所作更改
+scopes	openid	zh	作用域
+secret	openid	zh	密文
+secret/password to enter at the client	openid	zh	在客户端输入的密文/密码
+start url	openid	zh	启动 URL
+status	openid	zh	状态
+this name is already been taken by an installed egroupware application!	openid	zh	该名称已被安装的 EGroupware 应用程序占用！
+token revoked	openid	zh	令牌已撤销
+updated	openid	zh	已更新
+url to show when the user opens the app	openid	zh	用户打开应用程序时显示的 URL
+use default of	openid	zh	使用默认的
+user agent	openid	zh	用户代理
+your address	openid	zh	您的地址
+your email address	openid	zh	您的电子邮件地址
+your full profile	openid	zh	您的完整个人资料
+your phone number	openid	zh	您的电话号码

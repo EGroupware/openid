@@ -1,0 +1,72 @@
+%1 days	openid	nl	%1 dagen
+%1 hours	openid	nl	%1 uur
+%1 month	openid	nl	%1 maand
+%1 weeks	openid	nl	%1 weken
+%1 years	openid	nl	%1 jaar
+%s would like to access	openid	nl	%s wil toegang tot
+- authentication only succeeds if user has run-rights for the application	openid	nl	- de authenticatie slaagt alleen als de gebruiker runrechten heeft voor de toepassing
+- client application is displayed inside egroupware (iframe)	openid	nl	- clienttoepassing wordt weergegeven binnen EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	nl	- geen expliciete toestemming van gebruiker vereist voor OAuth-aanmelding (SSO)
+1 year	openid	nl	1 jaar
+access token revoked.	openid	nl	Toegangstoken ingetrokken.
+access-token ttl	openid	nl	TTL toegangsmunt
+administration rights or regular user	openid	nl	Administratieve rechten of gewone gebruiker
+allowed for	openid	nl	Toegestaan voor
+allowed grants	openid	nl	Toegestaan voor
+application name	openid	nl	Naam toepassing
+approve	openid	nl	Goedkeuren
+basic details about you	openid	nl	Basisgegevens over jou
+client	openid	nl	Klant
+client copied. please enter a new (unique) identifer and secret.	openid	nl	Klant gekopieerd. Voer een nieuwe (unieke) identifier en geheim in.
+client disabled.	openid	nl	Client uitgeschakeld.
+client not found!	openid	nl	Client niet gevonden!
+client saved.	openid	nl	Client opgeslagen.
+client status	openid	nl	Status klant
+created	openid	nl	Aangemaakt
+deny	openid	nl	Weigeren
+disable	openid	nl	Uitschakelen
+disable this client	openid	nl	Deze client uitschakelen
+egroupware internal application name	openid	nl	EGroupware interne toepassingsnaam
+enable openid connect support	openid	nl	Ondersteuning voor OpenID Connect inschakelen
+error saving client!	openid	nl	Fout bij opslaan client!
+exists without saving the changes	openid	nl	bestaat zonder de wijzigingen op te slaan
+general	openid	nl	Algemeen
+grants	openid	nl	Geeft
+icon	openid	nl	Icoon
+identifier	openid	nl	Identificatiecode
+identifier to enter at the client	openid	nl	Identifier om in te voeren bij de client
+if an oauth client is managed as egroupware app	openid	nl	Als een OAuth client wordt beheerd als EGroupware app
+ip address	openid	nl	IP-adres
+limit scopes	openid	nl	Scopes beperken
+login to authorize %1	openid	nl	Inloggen om %1 te autoriseren
+manage as egroupware application	openid	nl	Beheren als EGroupware-toepassing
+name	openid	nl	Naam
+name used inside egroupware	openid	nl	Naam gebruikt binnen EGroupware
+openid	common	nl	OpenID/OAuth2-server
+openid / oauth2 server	openid	nl	OpenID / OAuth2-server
+order	openid	nl	Bestelling
+redirect uri	openid	nl	Omleiding URI
+refresh-token	openid	nl	Vernieuw-Token
+refresh-token ttl	openid	nl	TTL vernieuwen-token
+request log	openid	nl	Logboek verzoek
+request log enabled, delete file to disable it again.	openid	nl	Logboek aanvragen ingeschakeld, verwijder bestand om het weer uit te schakelen.
+revoke	openid	nl	Intrekken
+revoke access tokens	preferences	nl	Toegangstokens intrekken
+revoke this token	openid	nl	Trek dit token in
+revoked	openid	nl	Ingetrokken
+saves the changes made	openid	nl	Bewaart de gemaakte wijzigingen
+scopes	openid	nl	Scopes
+secret	openid	nl	Geheim
+secret/password to enter at the client	openid	nl	Geheim/wachtwoord om in te voeren bij de client
+start url	openid	nl	URL starten
+status	openid	nl	Status
+this name is already been taken by an installed egroupware application!	openid	nl	Deze naam is al ingenomen door een geïnstalleerde EGroupware-toepassing!
+token revoked	openid	nl	Token ingetrokken
+updated	openid	nl	Bijgewerkt
+url to show when the user opens the app	openid	nl	URL die moet worden weergegeven wanneer de gebruiker de app opent
+use default of	openid	nl	Gebruik standaard van
+user agent	openid	nl	Gebruiker Agent
+your address	openid	nl	Jouw adres
+your email address	openid	nl	Je e-mailadres
+your full profile	openid	nl	Je volledige profiel
+your phone number	openid	nl	Je telefoonnummer

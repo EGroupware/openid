@@ -1,0 +1,72 @@
+%1 days	openid	ru	%1 день
+%1 hours	openid	ru	%1 час
+%1 month	openid	ru	%1 месяц
+%1 weeks	openid	ru	%1 неделя
+%1 years	openid	ru	%1 год
+%s would like to access	openid	ru	%s хотели бы получить доступ
+- authentication only succeeds if user has run-rights for the application	openid	ru	- аутентификация проходит успешно, только если пользователь имеет права на выполнение приложения
+- client application is displayed inside egroupware (iframe)	openid	ru	- клиентское приложение отображается внутри EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	ru	- для входа по протоколу OAuth (SSO) не требуется явное согласие пользователя.
+1 year	openid	ru	1 год
+access token revoked.	openid	ru	Токен доступа отозван.
+access-token ttl	openid	ru	Access-Token TTL
+administration rights or regular user	openid	ru	Права администратора или обычного пользователя
+allowed for	openid	ru	Разрешено для
+allowed grants	openid	ru	Разрешенные гранты
+application name	openid	ru	Имя приложения
+approve	openid	ru	Одобрить
+basic details about you	openid	ru	Основные сведения о вас
+client	openid	ru	Клиент
+client copied. please enter a new (unique) identifer and secret.	openid	ru	Клиент скопирован. Пожалуйста, введите новый (уникальный) идентификатор и секрет.
+client disabled.	openid	ru	Клиент отключен.
+client not found!	openid	ru	Клиент не найден!
+client saved.	openid	ru	Клиент сохранен.
+client status	openid	ru	Статус клиента
+created	openid	ru	Создан
+deny	openid	ru	Запретить
+disable	openid	ru	Отключить
+disable this client	openid	ru	Отключить этот клиент
+egroupware internal application name	openid	ru	Имя внутреннего приложения EGroupware
+enable openid connect support	openid	ru	Включить поддержку OpenID Connect
+error saving client!	openid	ru	Ошибка сохранения клиента!
+exists without saving the changes	openid	ru	существует без сохранения изменений
+general	openid	ru	Общие сведения
+grants	openid	ru	Гранты
+icon	openid	ru	Значок
+identifier	openid	ru	Идентификатор
+identifier to enter at the client	openid	ru	Идентификатор для ввода на клиенте
+if an oauth client is managed as egroupware app	openid	ru	Если OAuth-клиент управляется как приложение EGroupware
+ip address	openid	ru	IP-адрес
+limit scopes	openid	ru	Ограничение диапазонов
+login to authorize %1	openid	ru	Вход для авторизации %1
+manage as egroupware application	openid	ru	Управление как приложением EGroupware
+name	openid	ru	Имя
+name used inside egroupware	openid	ru	Имя, используемое внутри EGroupware
+openid	common	ru	OpenID / OAuth2 Server
+openid / oauth2 server	openid	ru	OpenID / OAuth2 Server
+order	openid	ru	Заказ
+redirect uri	openid	ru	URI перенаправления
+refresh-token	openid	ru	Токен обновления
+refresh-token ttl	openid	ru	Обновить токен TTL
+request log	openid	ru	Журнал запросов
+request log enabled, delete file to disable it again.	openid	ru	Журнал запросов включен, удалите файл, чтобы снова отключить его.
+revoke	openid	ru	Отмена
+revoke access tokens	preferences	ru	Отмена доступа к токенам
+revoke this token	openid	ru	Отменить этот токен
+revoked	openid	ru	Отозванный
+saves the changes made	openid	ru	Сохраняет сделанные изменения
+scopes	openid	ru	Области
+secret	openid	ru	Секрет
+secret/password to enter at the client	openid	ru	Секрет/пароль для ввода на клиенте
+start url	openid	ru	Стартовый URL
+status	openid	ru	Статус
+this name is already been taken by an installed egroupware application!	openid	ru	Это имя уже занято установленным приложением EGroupware!
+token revoked	openid	ru	Токен отозван
+updated	openid	ru	Обновленный
+url to show when the user opens the app	openid	ru	URL-адрес, который будет отображаться при открытии приложения
+use default of	openid	ru	Используйте значение по умолчанию
+user agent	openid	ru	Агент пользователя
+your address	openid	ru	Ваш адрес
+your email address	openid	ru	Ваш адрес электронной почты
+your full profile	openid	ru	Ваш полный профиль
+your phone number	openid	ru	Ваш номер телефона

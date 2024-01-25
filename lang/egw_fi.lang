@@ -1,0 +1,72 @@
+%1 days	openid	fi	%1 päivää
+%1 hours	openid	fi	%1 tuntia
+%1 month	openid	fi	%1 kuukausi
+%1 weeks	openid	fi	%1 viikkoa
+%1 years	openid	fi	%1 vuotta
+%s would like to access	openid	fi	%s haluaisi käyttää
+- authentication only succeeds if user has run-rights for the application	openid	fi	- todennus onnistuu vain, jos käyttäjällä on sovelluksen suoritusoikeudet.
+- client application is displayed inside egroupware (iframe)	openid	fi	- asiakassovellus näytetään EGroupwaren sisällä (iframe).
+- no explicit user consent required for oauth login	openid	fi	- OAuth-kirjautumiseen (SSO) ei tarvita käyttäjän nimenomaista suostumusta.
+1 year	openid	fi	1 vuosi
+access token revoked.	openid	fi	Access Token peruutettu.
+access-token ttl	openid	fi	Access-Token TTL
+administration rights or regular user	openid	fi	Hallintaoikeudet tai tavallinen käyttäjä
+allowed for	openid	fi	Sallittu
+allowed grants	openid	fi	Sallitut avustukset
+application name	openid	fi	Sovelluksen nimi
+approve	openid	fi	Hyväksy
+basic details about you	openid	fi	Perustiedot sinusta
+client	openid	fi	Asiakas
+client copied. please enter a new (unique) identifer and secret.	openid	fi	Asiakas kopioitu. Anna uusi (yksilöllinen) tunnus ja salaisuus.
+client disabled.	openid	fi	Asiakas poistettu käytöstä.
+client not found!	openid	fi	Asiakasta ei löydy!
+client saved.	openid	fi	Asiakas tallennettu.
+client status	openid	fi	Asiakkaan tila
+created	openid	fi	Created
+deny	openid	fi	Deny
+disable	openid	fi	Disable
+disable this client	openid	fi	Poista tämä asiakas käytöstä
+egroupware internal application name	openid	fi	EGroupwaren sisäisen sovelluksen nimi
+enable openid connect support	openid	fi	Ota OpenID Connect -tuki käyttöön
+error saving client!	openid	fi	Virhe asiakkaan tallentamisessa!
+exists without saving the changes	openid	fi	on olemassa tallentamatta muutoksia
+general	openid	fi	Yleinen
+grants	openid	fi	Avustukset
+icon	openid	fi	Kuvake
+identifier	openid	fi	Tunnus
+identifier to enter at the client	openid	fi	Asiakkaan syöttämä tunniste
+if an oauth client is managed as egroupware app	openid	fi	Jos OAuth-asiakasta hallinnoidaan EGroupware-sovelluksena.
+ip address	openid	fi	IP-osoite
+limit scopes	openid	fi	Rajoita soveltamisaloja
+login to authorize %1	openid	fi	Kirjaudu sisään valtuuttaaksesi %1
+manage as egroupware application	openid	fi	Hallitse EGroupware-sovelluksena
+name	openid	fi	Nimi
+name used inside egroupware	openid	fi	EGroupwaren sisällä käytettävä nimi
+openid	common	fi	OpenID / OAuth2-palvelin
+openid / oauth2 server	openid	fi	OpenID / OAuth2-palvelin
+order	openid	fi	Tilaus
+redirect uri	openid	fi	Uudelleenohjaus URI
+refresh-token	openid	fi	Refresh-Token
+refresh-token ttl	openid	fi	Refresh-Token TTL
+request log	openid	fi	Pyyntöloki
+request log enabled, delete file to disable it again.	openid	fi	Pyyntöloki käytössä, poista tiedosto poistaaksesi sen käytöstä uudelleen.
+revoke	openid	fi	Peruuta
+revoke access tokens	preferences	fi	Peruuta käyttöoikeuskoodit
+revoke this token	openid	fi	Peruuta tämä token
+revoked	openid	fi	Peruutettu
+saves the changes made	openid	fi	Tallentaa tehdyt muutokset
+scopes	openid	fi	Laajuusalueet
+secret	openid	fi	Secret
+secret/password to enter at the client	openid	fi	Salaisuus/salasana, joka on annettava asiakkaalle
+start url	openid	fi	Aloitus-URL
+status	openid	fi	Tila
+this name is already been taken by an installed egroupware application!	openid	fi	Tämän nimen on jo ottanut asennettu EGroupware-sovellus!
+token revoked	openid	fi	Token peruutettu
+updated	openid	fi	Päivitetty
+url to show when the user opens the app	openid	fi	URL-osoite, joka näytetään, kun käyttäjä avaa sovelluksen
+use default of	openid	fi	Käytä oletusarvoa
+user agent	openid	fi	Käyttäjäagentti
+your address	openid	fi	Osoitteesi
+your email address	openid	fi	Sähköpostiosoitteesi
+your full profile	openid	fi	Koko profiilisi
+your phone number	openid	fi	Puhelinnumerosi

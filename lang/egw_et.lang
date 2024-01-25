@@ -1,0 +1,72 @@
+%1 days	openid	et	%1 päeva
+%1 hours	openid	et	%1 tundi
+%1 month	openid	et	%1 kuu
+%1 weeks	openid	et	%1 nädalat
+%1 years	openid	et	%1 aasta
+%s would like to access	openid	et	%s soovib juurdepääsu
+- authentication only succeeds if user has run-rights for the application	openid	et	- autentimine õnnestub ainult siis, kui kasutajal on rakenduse käivitamisõigused.
+- client application is displayed inside egroupware (iframe)	openid	et	- kliendirakendus kuvatakse EGroupware'i sees (iframe).
+- no explicit user consent required for oauth login	openid	et	- OAuth-sisselogimiseks ei ole vaja kasutaja selgesõnalist nõusolekut (SSO).
+1 year	openid	et	1 aasta
+access token revoked.	openid	et	Juurdepääsutunnus tühistati.
+access-token ttl	openid	et	Juurdepääsutunnuse TTL
+administration rights or regular user	openid	et	Administreerimisõigused või tavakasutaja
+allowed for	openid	et	Lubatud
+allowed grants	openid	et	Lubatud toetused
+application name	openid	et	Rakenduse nimi
+approve	openid	et	Heakskiita
+basic details about you	openid	et	Põhilised andmed teie kohta
+client	openid	et	Klient
+client copied. please enter a new (unique) identifer and secret.	openid	et	Klient kopeeritud. Palun sisestage uus (unikaalne) identifikaator ja saladus.
+client disabled.	openid	et	Klient on välja lülitatud.
+client not found!	openid	et	Klienti ei leitud!
+client saved.	openid	et	Klient salvestatud.
+client status	openid	et	Kliendi staatus
+created	openid	et	Loodud
+deny	openid	et	Keelata
+disable	openid	et	Keelata
+disable this client	openid	et	Selle kliendi keelamine
+egroupware internal application name	openid	et	EGroupware siserakenduse nimi
+enable openid connect support	openid	et	Lubage OpenID Connecti tugi
+error saving client!	openid	et	Viga kliendi salvestamisel!
+exists without saving the changes	openid	et	eksisteerib ilma muudatusi salvestamata
+general	openid	et	Üldine
+grants	openid	et	Toetused
+icon	openid	et	Ikoon
+identifier	openid	et	Identifikaator
+identifier to enter at the client	openid	et	Kliendis sisestatav identifikaator
+if an oauth client is managed as egroupware app	openid	et	Kui OAuth-klienti hallatakse EGroupware'i rakendusena
+ip address	openid	et	IP-aadress
+limit scopes	openid	et	Piirangud
+login to authorize %1	openid	et	Logi sisse, et lubada %1
+manage as egroupware application	openid	et	Halda EGroupware'i rakendusena
+name	openid	et	Nimi
+name used inside egroupware	openid	et	EGroupware'is kasutatav nimi
+openid	common	et	OpenID / OAuth2 server
+openid / oauth2 server	openid	et	OpenID / OAuth2 server
+order	openid	et	Telli
+redirect uri	openid	et	Ümbersuunamise URI
+refresh-token	openid	et	Refresh-Token
+refresh-token ttl	openid	et	Refresh-Token TTL
+request log	openid	et	Taotluse logi
+request log enabled, delete file to disable it again.	openid	et	Taotluse logi on lubatud, kustuta fail, et see uuesti välja lülitada.
+revoke	openid	et	Tühista
+revoke access tokens	preferences	et	Tunnuste tühistamine
+revoke this token	openid	et	Tühista see sümbol
+revoked	openid	et	Tühistatakse
+saves the changes made	openid	et	Salvestab tehtud muudatused
+scopes	openid	et	Scopes
+secret	openid	et	Secret
+secret/password to enter at the client	openid	et	Kliendis sisestatav saladus/salasõna
+start url	openid	et	Start URL
+status	openid	et	Staatus
+this name is already been taken by an installed egroupware application!	openid	et	See nimi on juba võetud installeeritud EGroupware'i rakenduse poolt!
+token revoked	openid	et	Token tagasi võetud
+updated	openid	et	Uuendatud
+url to show when the user opens the app	openid	et	URL, mis kuvatakse, kui kasutaja avab rakenduse
+use default of	openid	et	Kasutage vaikimisi
+user agent	openid	et	Kasutaja agent
+your address	openid	et	Teie aadress
+your email address	openid	et	Teie e-posti aadress
+your full profile	openid	et	Teie täielik profiil
+your phone number	openid	et	Teie telefoninumber

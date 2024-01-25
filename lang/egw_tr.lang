@@ -1,0 +1,72 @@
+%1 days	openid	tr	%1 gün
+%1 hours	openid	tr	%1 saat
+%1 month	openid	tr	%1 ay
+%1 weeks	openid	tr	%1 hafta
+%1 years	openid	tr	%1 yıl
+%s would like to access	openid	tr	%s erişmek istiyor
+- authentication only succeeds if user has run-rights for the application	openid	tr	- kimlik doğrulama yalnızca kullanıcı uygulama için çalıştırma haklarına sahipse başarılı olur
+- client application is displayed inside egroupware (iframe)	openid	tr	- istemci uygulaması EGroupware içinde görüntülenir (iframe)
+- no explicit user consent required for oauth login	openid	tr	- OAuth oturum açma (SSO) için açık kullanıcı onayı gerekmez
+1 year	openid	tr	1 yıl
+access token revoked.	openid	tr	Erişim Belirteci iptal edildi.
+access-token ttl	openid	tr	Erişim Jetonu TTL
+administration rights or regular user	openid	tr	Yönetim hakları veya normal kullanıcı
+allowed for	openid	tr	Şunlar için izin verilir
+allowed grants	openid	tr	İzin verilen hibeler
+application name	openid	tr	Uygulama adı
+approve	openid	tr	Onaylamak
+basic details about you	openid	tr	Sizinle ilgili temel bilgiler
+client	openid	tr	Müşteri
+client copied. please enter a new (unique) identifer and secret.	openid	tr	Müşteri kopyalandı. Lütfen yeni (benzersiz) bir tanımlayıcı ve gizli bilgi girin.
+client disabled.	openid	tr	İstemci devre dışı.
+client not found!	openid	tr	İstemci bulunamadı!
+client saved.	openid	tr	İstemci kaydedildi.
+client status	openid	tr	Müşteri Durumu
+created	openid	tr	Oluşturuldu
+deny	openid	tr	Reddet
+disable	openid	tr	Devre dışı bırak
+disable this client	openid	tr	Bu istemciyi devre dışı bırakın
+egroupware internal application name	openid	tr	EGroupware dahili uygulama adı
+enable openid connect support	openid	tr	OpenID Connect desteğini etkinleştirme
+error saving client!	openid	tr	İstemci kaydedilirken hata oluştu!
+exists without saving the changes	openid	tr	değişiklikler kaydedilmeden var
+general	openid	tr	Genel
+grants	openid	tr	Hibeler
+icon	openid	tr	Simge
+identifier	openid	tr	Tanımlayıcı
+identifier to enter at the client	openid	tr	İstemcide girilecek tanımlayıcı
+if an oauth client is managed as egroupware app	openid	tr	Bir OAuth istemcisi EGroupware uygulaması olarak yönetiliyorsa
+ip address	openid	tr	IP Adresi
+limit scopes	openid	tr	Sınır kapsamları
+login to authorize %1	openid	tr	%1'i yetkilendirmek için giriş yapın
+manage as egroupware application	openid	tr	EGroupware uygulaması olarak yönetin
+name	openid	tr	İsim
+name used inside egroupware	openid	tr	EGroupware içinde kullanılan ad
+openid	common	tr	OpenID / OAuth2 Sunucusu
+openid / oauth2 server	openid	tr	OpenID / OAuth2 Sunucusu
+order	openid	tr	Sipariş
+redirect uri	openid	tr	URI Yönlendirmesi
+refresh-token	openid	tr	Yenile-Token
+refresh-token ttl	openid	tr	Yenile-Token TTL
+request log	openid	tr	Talep kaydı
+request log enabled, delete file to disable it again.	openid	tr	İstek günlüğü etkinleştirildi, tekrar devre dışı bırakmak için dosyayı silin.
+revoke	openid	tr	İptal
+revoke access tokens	preferences	tr	Erişim Belirteçlerini İptal Etme
+revoke this token	openid	tr	Bu belirteci iptal et
+revoked	openid	tr	İptal edildi
+saves the changes made	openid	tr	Yapılan değişiklikleri kaydeder
+scopes	openid	tr	Dürbünler
+secret	openid	tr	Gizli
+secret/password to enter at the client	openid	tr	İstemcide girilecek gizli/parola
+start url	openid	tr	URL'yi Başlat
+status	openid	tr	Durum
+this name is already been taken by an installed egroupware application!	openid	tr	Bu isim zaten yüklü bir EGroupware uygulaması tarafından alınmış!
+token revoked	openid	tr	Belirteç İptal Edildi
+updated	openid	tr	Güncellenmiş
+url to show when the user opens the app	openid	tr	Kullanıcı uygulamayı açtığında gösterilecek URL
+use default of	openid	tr	Varsayılanı kullan
+user agent	openid	tr	Kullanıcı Aracısı
+your address	openid	tr	Adresiniz
+your email address	openid	tr	E-posta adresiniz
+your full profile	openid	tr	Tam profiliniz
+your phone number	openid	tr	Telefon numaranız

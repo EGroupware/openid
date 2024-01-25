@@ -1,0 +1,72 @@
+%1 days	openid	it	%1 giorni
+%1 hours	openid	it	%1 ore
+%1 month	openid	it	%1 mese
+%1 weeks	openid	it	%1 settimane
+%1 years	openid	it	%1 anni
+%s would like to access	openid	it	%s desidera accedere
+- authentication only succeeds if user has run-rights for the application	openid	it	- l'autenticazione riesce solo se l'utente ha i diritti di esecuzione per l'applicazione
+- client application is displayed inside egroupware (iframe)	openid	it	- l'applicazione client viene visualizzata all'interno di EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	it	- non è richiesto il consenso esplicito dell'utente per il login OAuth (SSO)
+1 year	openid	it	1 anno
+access token revoked.	openid	it	Token di accesso revocato.
+access-token ttl	openid	it	TTL del token di accesso
+administration rights or regular user	openid	it	Diritti di amministrazione o utente normale
+allowed for	openid	it	Consentito per
+allowed grants	openid	it	Concessioni consentite
+application name	openid	it	Nome dell'applicazione
+approve	openid	it	Approvare
+basic details about you	openid	it	Dettagli di base sull'utente
+client	openid	it	Cliente
+client copied. please enter a new (unique) identifer and secret.	openid	it	Cliente copiato. Inserire un nuovo identificativo (unico) e un nuovo segreto.
+client disabled.	openid	it	Cliente disabilitato.
+client not found!	openid	it	Cliente non trovato!
+client saved.	openid	it	Client salvato.
+client status	openid	it	Stato del cliente
+created	openid	it	Creato
+deny	openid	it	Negare
+disable	openid	it	Disattivare
+disable this client	openid	it	Disabilita questo client
+egroupware internal application name	openid	it	Nome applicazione interna EGroupware
+enable openid connect support	openid	it	Abilita il supporto di OpenID Connect
+error saving client!	openid	it	Errore nel salvataggio del client!
+exists without saving the changes	openid	it	esiste senza salvare le modifiche
+general	openid	it	Generale
+grants	openid	it	Sussidi
+icon	openid	it	Icona
+identifier	openid	it	Identificatore
+identifier to enter at the client	openid	it	Identificatore da inserire nel client
+if an oauth client is managed as egroupware app	openid	it	Se un client OAuth è gestito come app EGroupware
+ip address	openid	it	Indirizzo IP
+limit scopes	openid	it	Limitare gli ambiti
+login to authorize %1	openid	it	Accesso per autorizzare %1
+manage as egroupware application	openid	it	Gestione come applicazione EGroupware
+name	openid	it	Nome
+name used inside egroupware	openid	it	Nome utilizzato all'interno di EGroupware
+openid	common	it	Server OpenID / OAuth2
+openid / oauth2 server	openid	it	Server OpenID / OAuth2
+order	openid	it	Ordine
+redirect uri	openid	it	URI di reindirizzamento
+refresh-token	openid	it	Aggiorna-Token
+refresh-token ttl	openid	it	TTL del token di aggiornamento
+request log	openid	it	Log della richiesta
+request log enabled, delete file to disable it again.	openid	it	Registro delle richieste abilitato, eliminare il file per disabilitarlo di nuovo.
+revoke	openid	it	Revoca
+revoke access tokens	preferences	it	Revoca dei token di accesso
+revoke this token	openid	it	Revocare questo token
+revoked	openid	it	Revocato
+saves the changes made	openid	it	Salva le modifiche apportate
+scopes	openid	it	Scopi
+secret	openid	it	Segreto
+secret/password to enter at the client	openid	it	Segreto/password da inserire nel client
+start url	openid	it	URL di avvio
+status	openid	it	Stato
+this name is already been taken by an installed egroupware application!	openid	it	Questo nome è già stato preso da un'applicazione EGroupware installata!
+token revoked	openid	it	Token revocato
+updated	openid	it	Aggiornato
+url to show when the user opens the app	openid	it	URL da mostrare quando l'utente apre l'applicazione
+use default of	openid	it	Utilizzare il valore predefinito di
+user agent	openid	it	Agente utente
+your address	openid	it	Il vostro indirizzo
+your email address	openid	it	Il vostro indirizzo e-mail
+your full profile	openid	it	Il profilo completo dell'utente
+your phone number	openid	it	Il vostro numero di telefono

@@ -1,0 +1,72 @@
+%1 days	openid	sl	%1 dni
+%1 hours	openid	sl	%1 ur
+%1 month	openid	sl	%1 mesec
+%1 weeks	openid	sl	%1 tednov
+%1 years	openid	sl	%1 leto
+%s would like to access	openid	sl	%s želi dostopati
+- authentication only succeeds if user has run-rights for the application	openid	sl	- avtentikacija je uspešna le, če ima uporabnik pravice za izvajanje aplikacije.
+- client application is displayed inside egroupware (iframe)	openid	sl	- odjemalčeva aplikacija je prikazana znotraj programa EGroupware (iframe).
+- no explicit user consent required for oauth login	openid	sl	- za prijavo OAuth (SSO) ni potrebno izrecno soglasje uporabnika
+1 year	openid	sl	1 leto
+access token revoked.	openid	sl	Žeton za dostop preklican.
+access-token ttl	openid	sl	TTL žetona za dostop
+administration rights or regular user	openid	sl	Upraviteljske pravice ali običajni uporabnik
+allowed for	openid	sl	Dovoljeno za
+allowed grants	openid	sl	Dovoljene subvencije
+application name	openid	sl	Ime aplikacije
+approve	openid	sl	Odobritev
+basic details about you	openid	sl	Osnovni podatki o vas
+client	openid	sl	Stranka
+client copied. please enter a new (unique) identifer and secret.	openid	sl	Stranka je kopirana. Vnesite nov (edinstven) identifikator in skrivnost.
+client disabled.	openid	sl	Odjemalec je onemogočen.
+client not found!	openid	sl	Odjemalca ni mogoče najti!
+client saved.	openid	sl	Stranka je shranjena.
+client status	openid	sl	Stanje stranke
+created	openid	sl	Ustvarjeno
+deny	openid	sl	Zavrnitev
+disable	openid	sl	Onemogoči
+disable this client	openid	sl	Onemogoči tega odjemalca
+egroupware internal application name	openid	sl	Ime notranje aplikacije EGroupware
+enable openid connect support	openid	sl	Omogoči podporo za OpenID Connect
+error saving client!	openid	sl	Napaka pri shranjevanju odjemalca!
+exists without saving the changes	openid	sl	obstaja brez shranjevanja sprememb
+general	openid	sl	Splošno
+grants	openid	sl	Dotacije
+icon	openid	sl	Ikona
+identifier	openid	sl	Identifikator
+identifier to enter at the client	openid	sl	Identifikator, ki se vnese pri stranki
+if an oauth client is managed as egroupware app	openid	sl	Če se odjemalec OAuth upravlja kot aplikacija EGroupware
+ip address	openid	sl	Naslov IP
+limit scopes	openid	sl	Omejitev obsega
+login to authorize %1	openid	sl	Prijava za avtorizacijo %1
+manage as egroupware application	openid	sl	Upravljanje kot aplikacija EGroupware
+name	openid	sl	Ime
+name used inside egroupware	openid	sl	Ime, ki se uporablja v sistemu EGroupware
+openid	common	sl	Strežnik OpenID / OAuth2
+openid / oauth2 server	openid	sl	Strežnik OpenID / OAuth2
+order	openid	sl	Naročilo
+redirect uri	openid	sl	Preusmeritev URI
+refresh-token	openid	sl	Refresh-Token
+refresh-token ttl	openid	sl	Osvežitev-žetona TTL
+request log	openid	sl	Dnevnik zahtevka
+request log enabled, delete file to disable it again.	openid	sl	Dnevnik zahtevkov je omogočen, če ga želite znova onemogočiti, izbrišite datoteko.
+revoke	openid	sl	Preklic
+revoke access tokens	preferences	sl	Preklic žetonov za dostop
+revoke this token	openid	sl	Prekličite ta žeton
+revoked	openid	sl	Preklican
+saves the changes made	openid	sl	Shrani opravljene spremembe
+scopes	openid	sl	Področja uporabe
+secret	openid	sl	Skrivnost
+secret/password to enter at the client	openid	sl	Skrivnost/geslo, ki se vnese v odjemalcu
+start url	openid	sl	Začetni URL
+status	openid	sl	Stanje
+this name is already been taken by an installed egroupware application!	openid	sl	To ime je že prevzeto od nameščenega programa EGroupware!
+token revoked	openid	sl	Token preklican
+updated	openid	sl	Posodobljeno
+url to show when the user opens the app	openid	sl	URL, ki se prikaže, ko uporabnik odpre aplikacijo
+use default of	openid	sl	Uporabite privzeto vrednost
+user agent	openid	sl	User Agent
+your address	openid	sl	Vaš naslov
+your email address	openid	sl	Vaš e-poštni naslov
+your full profile	openid	sl	Vaš celoten profil
+your phone number	openid	sl	Vaša telefonska številka
