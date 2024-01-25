@@ -1,0 +1,72 @@
+%1 days	openid	ja	%1日
+%1 hours	openid	ja	%1時間
+%1 month	openid	ja	%1ヶ月
+%1 weeks	openid	ja	%1週間
+%1 years	openid	ja	%1年
+%s would like to access	openid	ja	%sはアクセスしたい
+- authentication only succeeds if user has run-rights for the application	openid	ja	- ユーザがアプリケーションの実行権限を持っている場合のみ、認証が成功します。
+- client application is displayed inside egroupware (iframe)	openid	ja	- クライアントアプリケーションはEGroupware内に表示される（iframe）
+- no explicit user consent required for oauth login	openid	ja	- OAuthログイン(SSO)に明示的なユーザー同意は不要
+1 year	openid	ja	1年
+access token revoked.	openid	ja	アクセストークンが失効しました。
+access-token ttl	openid	ja	アクセス・トークンTTL
+administration rights or regular user	openid	ja	管理者権限または一般ユーザ
+allowed for	openid	ja	許可対象
+allowed grants	openid	ja	許可するグラント
+application name	openid	ja	アプリケーション名
+approve	openid	ja	承認
+basic details about you	openid	ja	基本情報
+client	openid	ja	クライアント
+client copied. please enter a new (unique) identifer and secret.	openid	ja	クライアントがコピーされました。新しい（ユニークな）識別子と秘密を入力してください。
+client disabled.	openid	ja	クライアントが無効です。
+client not found!	openid	ja	クライアントが見つかりません！
+client saved.	openid	ja	クライアントが保存されました。
+client status	openid	ja	クライアントのステータス
+created	openid	ja	作成
+deny	openid	ja	拒否
+disable	openid	ja	無効
+disable this client	openid	ja	このクライアントを無効にする
+egroupware internal application name	openid	ja	EGroupware内部アプリケーション名
+enable openid connect support	openid	ja	OpenID Connectのサポートを有効にする
+error saving client!	openid	ja	クライアントの保存エラー！
+exists without saving the changes	openid	ja	変更を保存せずに存在する
+general	openid	ja	一般
+grants	openid	ja	グラント
+icon	openid	ja	アイコン
+identifier	openid	ja	識別子
+identifier to enter at the client	openid	ja	クライアントで入力する識別子
+if an oauth client is managed as egroupware app	openid	ja	OAuthクライアントがEGroupwareアプリとして管理されている場合
+ip address	openid	ja	IPアドレス
+limit scopes	openid	ja	スコープを制限する
+login to authorize %1	openid	ja	ログインして %1 を認証する
+manage as egroupware application	openid	ja	EGroupware アプリケーションとして管理
+name	openid	ja	名前
+name used inside egroupware	openid	ja	EGroupware内部で使用される名前
+openid	common	ja	OpenID / OAuth2 サーバ
+openid / oauth2 server	openid	ja	OpenID / OAuth2 サーバ
+order	openid	ja	順序
+redirect uri	openid	ja	リダイレクトURI
+refresh-token	openid	ja	リフレッシュトークン
+refresh-token ttl	openid	ja	リフレッシュ・トークンTTL
+request log	openid	ja	リクエストログ
+request log enabled, delete file to disable it again.	openid	ja	リクエストログを有効にし、ファイルを削除して再び無効にする。
+revoke	openid	ja	取り消す
+revoke access tokens	preferences	ja	アクセストークンを取り消す
+revoke this token	openid	ja	このトークンを取り消す
+revoked	openid	ja	取り消す
+saves the changes made	openid	ja	変更を保存する
+scopes	openid	ja	スコープ
+secret	openid	ja	シークレット
+secret/password to enter at the client	openid	ja	クライアントで入力するシークレット／パスワード
+start url	openid	ja	開始URL
+status	openid	ja	ステータス
+this name is already been taken by an installed egroupware application!	openid	ja	この名前は、インストールされているEGroupwareアプリケーションによって既に使用されています！
+token revoked	openid	ja	トークン失効
+updated	openid	ja	更新
+url to show when the user opens the app	openid	ja	ユーザーがアプリを開いたときに表示するURL
+use default of	openid	ja	デフォルトの
+user agent	openid	ja	ユーザーエージェント
+your address	openid	ja	あなたのアドレス
+your email address	openid	ja	メールアドレス
+your full profile	openid	ja	プロフィール
+your phone number	openid	ja	電話番号

@@ -1,0 +1,72 @@
+%1 days	openid	hu	%1 nap
+%1 hours	openid	hu	%1 óra
+%1 month	openid	hu	%1 hónap
+%1 weeks	openid	hu	%1 hét
+%1 years	openid	hu	%1 év
+%s would like to access	openid	hu	%s szeretne hozzáférni
+- authentication only succeeds if user has run-rights for the application	openid	hu	- a hitelesítés csak akkor sikeres, ha a felhasználó rendelkezik az alkalmazás futtatási jogaival
+- client application is displayed inside egroupware (iframe)	openid	hu	- az ügyfélalkalmazás az EGroupware-en belül jelenik meg (iframe)
+- no explicit user consent required for oauth login	openid	hu	- nincs szükség a felhasználó kifejezett hozzájárulására az OAuth bejelentkezéshez (SSO)
+1 year	openid	hu	1 év
+access token revoked.	openid	hu	A hozzáférési jelszót visszavonták.
+access-token ttl	openid	hu	Hozzáférési jelszó TTL
+administration rights or regular user	openid	hu	Adminisztrációs jogok vagy normál felhasználó
+allowed for	openid	hu	Engedélyezve
+allowed grants	openid	hu	Engedélyezett támogatások
+application name	openid	hu	Alkalmazás neve
+approve	openid	hu	Jóváhagyás
+basic details about you	openid	hu	Alapvető adatok Önről
+client	openid	hu	Ügyfél
+client copied. please enter a new (unique) identifer and secret.	openid	hu	Másolt ügyfél. Kérjük, adjon meg egy új (egyedi) azonosítót és titkot.
+client disabled.	openid	hu	Ügyfél letiltva.
+client not found!	openid	hu	Ügyfél nem található!
+client saved.	openid	hu	Ügyfél mentve.
+client status	openid	hu	Ügyfél állapota
+created	openid	hu	Létrehozva
+deny	openid	hu	Deny
+disable	openid	hu	Letiltás
+disable this client	openid	hu	Az ügyfél letiltása
+egroupware internal application name	openid	hu	EGroupware belső alkalmazás neve
+enable openid connect support	openid	hu	OpenID Connect támogatás engedélyezése
+error saving client!	openid	hu	Hiba az ügyfél mentése!
+exists without saving the changes	openid	hu	a módosítások mentése nélkül létezik
+general	openid	hu	Általános
+grants	openid	hu	Támogatások
+icon	openid	hu	Ikon
+identifier	openid	hu	Azonosító
+identifier to enter at the client	openid	hu	Az ügyfélnél megadandó azonosító
+if an oauth client is managed as egroupware app	openid	hu	Ha egy OAuth-ügyfél EGroupware-alkalmazásként van kezelve
+ip address	openid	hu	IP-cím
+limit scopes	openid	hu	Határértékek korlátozása
+login to authorize %1	openid	hu	Bejelentkezés %1 engedélyezéséhez
+manage as egroupware application	openid	hu	EGroupware alkalmazásként való kezelés
+name	openid	hu	Név
+name used inside egroupware	openid	hu	Az EGroupware-en belül használt név
+openid	common	hu	OpenID / OAuth2 kiszolgáló
+openid / oauth2 server	openid	hu	OpenID / OAuth2 kiszolgáló
+order	openid	hu	Megrendelés
+redirect uri	openid	hu	Átirányítási URI
+refresh-token	openid	hu	Frissítési token
+refresh-token ttl	openid	hu	Frissítési token TTL
+request log	openid	hu	Kérési napló
+request log enabled, delete file to disable it again.	openid	hu	A kérési napló engedélyezve, a fájl törlésével ismét letiltható.
+revoke	openid	hu	Visszavonás
+revoke access tokens	preferences	hu	Hozzáférési tokenek visszavonása
+revoke this token	openid	hu	A token visszavonása
+revoked	openid	hu	Visszavont
+saves the changes made	openid	hu	A végrehajtott módosítások mentése
+scopes	openid	hu	Területek
+secret	openid	hu	Titkos
+secret/password to enter at the client	openid	hu	Az ügyfélnél megadandó titok/jelszó
+start url	openid	hu	Kezdeti URL
+status	openid	hu	Állapot
+this name is already been taken by an installed egroupware application!	openid	hu	Ezt a nevet már egy telepített EGroupware alkalmazás használja!
+token revoked	openid	hu	Token visszavonva
+updated	openid	hu	Frissített
+url to show when the user opens the app	openid	hu	A felhasználó által az alkalmazás megnyitásakor megjelenítendő URL
+use default of	openid	hu	Az alapértelmezett
+user agent	openid	hu	Felhasználói ügynök
+your address	openid	hu	Az Ön címe
+your email address	openid	hu	Az Ön e-mail címe
+your full profile	openid	hu	Az Ön teljes profilja
+your phone number	openid	hu	Az Ön telefonszáma

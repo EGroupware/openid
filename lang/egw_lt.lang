@@ -1,0 +1,72 @@
+%1 days	openid	lt	%1 dienos
+%1 hours	openid	lt	%1 val.
+%1 month	openid	lt	%1 mėnuo
+%1 weeks	openid	lt	%1 savaitės
+%1 years	openid	lt	%1 metai
+%s would like to access	openid	lt	%s norėtų gauti prieigą
+- authentication only succeeds if user has run-rights for the application	openid	lt	- autentiškumo patvirtinimas sėkmingas tik tuo atveju, jei naudotojas turi programos paleidimo teises.
+- client application is displayed inside egroupware (iframe)	openid	lt	- kliento programa rodoma "EGroupware" viduje (iframe)
+- no explicit user consent required for oauth login	openid	lt	- nereikia aiškaus naudotojo sutikimo OAuth prisijungimui (SSO)
+1 year	openid	lt	1 metai
+access token revoked.	openid	lt	Prieigos žetonas atšauktas.
+access-token ttl	openid	lt	Prieigos žetono TTL
+administration rights or regular user	openid	lt	Administravimo teisės arba paprastas naudotojas
+allowed for	openid	lt	Leidžiama
+allowed grants	openid	lt	Leidžiamos dotacijos
+application name	openid	lt	Programos pavadinimas
+approve	openid	lt	Patvirtinti
+basic details about you	openid	lt	Pagrindiniai duomenys apie jus
+client	openid	lt	Klientas
+client copied. please enter a new (unique) identifer and secret.	openid	lt	Klientas nukopijuotas. Įveskite naują (unikalų) identifikatorių ir paslaptį.
+client disabled.	openid	lt	Klientas išjungtas.
+client not found!	openid	lt	Klientas nerastas!
+client saved.	openid	lt	Klientas išsaugotas.
+client status	openid	lt	Kliento būsena
+created	openid	lt	Sukurtas
+deny	openid	lt	Deny
+disable	openid	lt	Išjungti
+disable this client	openid	lt	Išjungti šį klientą
+egroupware internal application name	openid	lt	EGroupware vidinės programos pavadinimas
+enable openid connect support	openid	lt	Įjungti "OpenID Connect" palaikymą
+error saving client!	openid	lt	Klaida išsaugant klientą!
+exists without saving the changes	openid	lt	egzistuoja neišsaugojus pakeitimų
+general	openid	lt	Bendra
+grants	openid	lt	Suteikia
+icon	openid	lt	Ikona
+identifier	openid	lt	Identifikatorius
+identifier to enter at the client	openid	lt	Identifikatorius, kurį reikia įvesti klientui
+if an oauth client is managed as egroupware app	openid	lt	Jei OAuth klientas valdomas kaip EGroupware programa
+ip address	openid	lt	IP adresas
+limit scopes	openid	lt	Apribojimo sritys
+login to authorize %1	openid	lt	Prisijunkite, kad patvirtintumėte %1
+manage as egroupware application	openid	lt	Tvarkyti kaip "EGroupware" taikomąją programą
+name	openid	lt	Pavadinimas
+name used inside egroupware	openid	lt	Pavadinimas, naudojamas "EGroupware" viduje
+openid	common	lt	OpenID / OAuth2 serveris
+openid / oauth2 server	openid	lt	OpenID / OAuth2 serveris
+order	openid	lt	Užsakymas
+redirect uri	openid	lt	Peradresavimo URI
+refresh-token	openid	lt	Refresh-Token
+refresh-token ttl	openid	lt	Atnaujinimo taikinio TTL
+request log	openid	lt	Užklausos žurnalas
+request log enabled, delete file to disable it again.	openid	lt	Užklausų žurnalas įjungtas, ištrinkite failą, kad vėl jį išjungtumėte.
+revoke	openid	lt	Atšaukti
+revoke access tokens	preferences	lt	Atšaukti prieigos žetonus
+revoke this token	openid	lt	Atšaukite šį simbolį
+revoked	openid	lt	Atšaukti
+saves the changes made	openid	lt	Išsaugo atliktus pakeitimus
+scopes	openid	lt	Apimtys
+secret	openid	lt	Slaptas
+secret/password to enter at the client	openid	lt	Slaptas / slaptažodis, kurį reikia įvesti klientui
+start url	openid	lt	Pradžios URL
+status	openid	lt	Būsena
+this name is already been taken by an installed egroupware application!	openid	lt	Šį pavadinimą jau užėmė įdiegta "EGroupware" programa!
+token revoked	openid	lt	Žetonas atšauktas
+updated	openid	lt	Atnaujinta
+url to show when the user opens the app	openid	lt	URL, kuris bus rodomas naudotojui atidarius programą
+use default of	openid	lt	Naudokite numatytąjį nustatymą
+user agent	openid	lt	Vartotojo agentas
+your address	openid	lt	Jūsų adresas
+your email address	openid	lt	Jūsų el. pašto adresas
+your full profile	openid	lt	Visas jūsų profilis
+your phone number	openid	lt	Jūsų telefono numeris

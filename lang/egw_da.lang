@@ -1,0 +1,72 @@
+%1 days	openid	da	%1 dage
+%1 hours	openid	da	%1 timer
+%1 month	openid	da	%1 måned
+%1 weeks	openid	da	%1 uge
+%1 years	openid	da	%1 år
+%s would like to access	openid	da	%s vil gerne have adgang til
+- authentication only succeeds if user has run-rights for the application	openid	da	- autentificering lykkes kun, hvis brugeren har run-rettigheder til applikationen
+- client application is displayed inside egroupware (iframe)	openid	da	- klientapplikationen vises inde i EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	da	- der kræves ikke eksplicit brugergodkendelse til OAuth-login (SSO)
+1 year	openid	da	1 år
+access token revoked.	openid	da	Adgangstoken tilbagekaldt.
+access-token ttl	openid	da	Adgangstoken TTL
+administration rights or regular user	openid	da	Administrationsrettigheder eller almindelig bruger
+allowed for	openid	da	Tilladt for
+allowed grants	openid	da	Tilladte bevillinger
+application name	openid	da	Applikationens navn
+approve	openid	da	Godkend
+basic details about you	openid	da	Grundlæggende oplysninger om dig
+client	openid	da	Klient
+client copied. please enter a new (unique) identifer and secret.	openid	da	Klient kopieret. Indtast venligst en ny (unik) identifikator og hemmelighed.
+client disabled.	openid	da	Klient deaktiveret.
+client not found!	openid	da	Klient ikke fundet!
+client saved.	openid	da	Klient gemt.
+client status	openid	da	Klientens status
+created	openid	da	Oprettet
+deny	openid	da	Afvist
+disable	openid	da	Deaktiver
+disable this client	openid	da	Deaktiver denne klient
+egroupware internal application name	openid	da	EGroupwares interne applikationsnavn
+enable openid connect support	openid	da	Aktivér understøttelse af OpenID Connect
+error saving client!	openid	da	Fejl ved lagring af klient!
+exists without saving the changes	openid	da	eksisterer uden at gemme ændringerne
+general	openid	da	Generelt
+grants	openid	da	Tilskud
+icon	openid	da	Ikon
+identifier	openid	da	Identifikator
+identifier to enter at the client	openid	da	Identifikator, der skal indtastes på klienten
+if an oauth client is managed as egroupware app	openid	da	Hvis en OAuth-klient administreres som en EGroupware-app
+ip address	openid	da	IP-adresse
+limit scopes	openid	da	Begræns scopes
+login to authorize %1	openid	da	Log ind for at autorisere %1
+manage as egroupware application	openid	da	Administrer som EGroupware-applikation
+name	openid	da	Navn
+name used inside egroupware	openid	da	Navn brugt i EGroupware
+openid	common	da	OpenID/OAuth2-server
+openid / oauth2 server	openid	da	OpenID/OAuth2-server
+order	openid	da	Ordre
+redirect uri	openid	da	Redirect URI
+refresh-token	openid	da	Refresh-Token
+refresh-token ttl	openid	da	Refresh-Token TTL
+request log	openid	da	Anmodningslog
+request log enabled, delete file to disable it again.	openid	da	Request log aktiveret, slet filen for at deaktivere den igen.
+revoke	openid	da	Tilbagekald
+revoke access tokens	preferences	da	Tilbagekald adgangstokens
+revoke this token	openid	da	Tilbagekald dette token
+revoked	openid	da	Tilbagekaldt
+saves the changes made	openid	da	Gemmer de foretagne ændringer
+scopes	openid	da	Områder
+secret	openid	da	Hemmelighed
+secret/password to enter at the client	openid	da	Hemmelighed/adgangskode, der skal indtastes på klienten
+start url	openid	da	Start URL
+status	openid	da	Status
+this name is already been taken by an installed egroupware application!	openid	da	Dette navn er allerede taget af en installeret EGroupware-applikation!
+token revoked	openid	da	Token tilbagekaldt
+updated	openid	da	Opdateret
+url to show when the user opens the app	openid	da	URL, der skal vises, når brugeren åbner appen
+use default of	openid	da	Brug standard af
+user agent	openid	da	Brugeragent
+your address	openid	da	Din adresse
+your email address	openid	da	Din e-mailadresse
+your full profile	openid	da	Din fulde profil
+your phone number	openid	da	Dit telefonnummer

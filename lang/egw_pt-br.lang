@@ -1,0 +1,72 @@
+%1 days	openid	pt-br	%1 dias
+%1 hours	openid	pt-br	%1 horas
+%1 month	openid	pt-br	%1 mês
+%1 weeks	openid	pt-br	%1 semanas
+%1 years	openid	pt-br	%1 anos
+%s would like to access	openid	pt-br	%s gostaria de acessar
+- authentication only succeeds if user has run-rights for the application	openid	pt-br	- a autenticação só será bem-sucedida se o usuário tiver direitos de execução para o aplicativo
+- client application is displayed inside egroupware (iframe)	openid	pt-br	- o aplicativo cliente é exibido dentro do EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	pt-br	- não é necessário consentimento explícito do usuário para login OAuth (SSO)
+1 year	openid	pt-br	1 ano
+access token revoked.	openid	pt-br	Token de acesso revogado.
+access-token ttl	openid	pt-br	TTL do token de acesso
+administration rights or regular user	openid	pt-br	Direitos de administração ou usuário comum
+allowed for	openid	pt-br	Permitido para
+allowed grants	openid	pt-br	Concessões permitidas
+application name	openid	pt-br	Nome do aplicativo
+approve	openid	pt-br	Aprovar
+basic details about you	openid	pt-br	Detalhes básicos sobre você
+client	openid	pt-br	Cliente
+client copied. please enter a new (unique) identifer and secret.	openid	pt-br	Cliente copiado. Digite um novo identificador (exclusivo) e um segredo.
+client disabled.	openid	pt-br	Cliente desativado.
+client not found!	openid	pt-br	Cliente não encontrado!
+client saved.	openid	pt-br	Cliente salvo.
+client status	openid	pt-br	Status do cliente
+created	openid	pt-br	Criado
+deny	openid	pt-br	Recusar
+disable	openid	pt-br	Desativar
+disable this client	openid	pt-br	Desativar esse cliente
+egroupware internal application name	openid	pt-br	Nome do aplicativo interno do EGroupware
+enable openid connect support	openid	pt-br	Ativar o suporte ao OpenID Connect
+error saving client!	openid	pt-br	Erro ao salvar o cliente!
+exists without saving the changes	openid	pt-br	existe sem salvar as alterações
+general	openid	pt-br	Geral
+grants	openid	pt-br	Subsídios
+icon	openid	pt-br	Ícone
+identifier	openid	pt-br	Identificador
+identifier to enter at the client	openid	pt-br	Identificador a ser inserido no cliente
+if an oauth client is managed as egroupware app	openid	pt-br	Se um cliente OAuth for gerenciado como aplicativo EGroupware
+ip address	openid	pt-br	Endereço IP
+limit scopes	openid	pt-br	Limitar escopos
+login to authorize %1	openid	pt-br	Fazer login para autorizar %1
+manage as egroupware application	openid	pt-br	Gerenciar como aplicativo EGroupware
+name	openid	pt-br	Nome do aplicativo
+name used inside egroupware	openid	pt-br	Nome usado dentro do EGroupware
+openid	common	pt-br	Servidor OpenID / OAuth2
+openid / oauth2 server	openid	pt-br	Servidor OpenID / OAuth2
+order	openid	pt-br	Pedido
+redirect uri	openid	pt-br	URI de redirecionamento
+refresh-token	openid	pt-br	Refresh-Token
+refresh-token ttl	openid	pt-br	TTL do Refresh-Token
+request log	openid	pt-br	Registro de solicitação
+request log enabled, delete file to disable it again.	openid	pt-br	Registro de solicitações ativado, exclua o arquivo para desativá-lo novamente.
+revoke	openid	pt-br	Revogar
+revoke access tokens	preferences	pt-br	Revogar tokens de acesso
+revoke this token	openid	pt-br	Revogar esse token
+revoked	openid	pt-br	Revogado
+saves the changes made	openid	pt-br	Salva as alterações feitas
+scopes	openid	pt-br	Escopos
+secret	openid	pt-br	Segredo
+secret/password to enter at the client	openid	pt-br	Segredo/senha a ser inserido no cliente
+start url	openid	pt-br	URL inicial
+status	openid	pt-br	Status
+this name is already been taken by an installed egroupware application!	openid	pt-br	Esse nome já está sendo usado por um aplicativo EGroupware instalado!
+token revoked	openid	pt-br	Token revogado
+updated	openid	pt-br	Atualizado
+url to show when the user opens the app	openid	pt-br	URL a ser exibido quando o usuário abrir o aplicativo
+use default of	openid	pt-br	Use o padrão de
+user agent	openid	pt-br	Agente do usuário
+your address	openid	pt-br	Seu endereço
+your email address	openid	pt-br	Seu endereço de e-mail
+your full profile	openid	pt-br	Seu perfil completo
+your phone number	openid	pt-br	Seu número de telefone

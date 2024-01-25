@@ -1,0 +1,72 @@
+%1 days	openid	ro	%1 zile
+%1 hours	openid	ro	%1 ore
+%1 month	openid	ro	%1 lună
+%1 weeks	openid	ro	%1 săptămâni
+%1 years	openid	ro	%1 ani
+%s would like to access	openid	ro	%s ar dori să acceseze
+- authentication only succeeds if user has run-rights for the application	openid	ro	- autentificarea reușește doar dacă utilizatorul are drepturi de execuție pentru aplicație
+- client application is displayed inside egroupware (iframe)	openid	ro	- aplicația client este afișată în interiorul EGroupware (iframe).
+- no explicit user consent required for oauth login	openid	ro	- nu este necesar consimțământul explicit al utilizatorului pentru autentificarea OAuth (SSO)
+1 year	openid	ro	1 an
+access token revoked.	openid	ro	Token de acces revocat.
+access-token ttl	openid	ro	Access-Token TTL
+administration rights or regular user	openid	ro	Drepturi de administrare sau utilizator obișnuit
+allowed for	openid	ro	Permisă pentru
+allowed grants	openid	ro	Allowed grants
+application name	openid	ro	Numele aplicației
+approve	openid	ro	Approve
+basic details about you	openid	ro	Detalii de bază despre dvs.
+client	openid	ro	Client
+client copied. please enter a new (unique) identifer and secret.	openid	ro	Client copiat. Vă rugăm să introduceți un nou identificator (unic) și un secret.
+client disabled.	openid	ro	Client dezactivat.
+client not found!	openid	ro	Client nedescoperit!
+client saved.	openid	ro	Client salvat.
+client status	openid	ro	Starea clientului
+created	openid	ro	Creat
+deny	openid	ro	Refuzat
+disable	openid	ro	Dezactivat
+disable this client	openid	ro	Dezactivați acest client
+egroupware internal application name	openid	ro	Numele aplicației interne EGroupware
+enable openid connect support	openid	ro	Activați suportul pentru OpenID Connect
+error saving client!	openid	ro	Eroare la salvarea clientului!
+exists without saving the changes	openid	ro	există fără a salva modificările
+general	openid	ro	General
+grants	openid	ro	Subvenții
+icon	openid	ro	Icoană
+identifier	openid	ro	Identificator
+identifier to enter at the client	openid	ro	Identificatorul care trebuie introdus la client
+if an oauth client is managed as egroupware app	openid	ro	În cazul în care un client OAuth este gestionat ca aplicație EGroupware
+ip address	openid	ro	Adresa IP
+limit scopes	openid	ro	Limitarea domeniului de aplicare
+login to authorize %1	openid	ro	Autentificare pentru a autoriza %1
+manage as egroupware application	openid	ro	Gestionați ca aplicație EGroupware
+name	openid	ro	Nume
+name used inside egroupware	openid	ro	Numele utilizat în interiorul EGroupware
+openid	common	ro	Server OpenID / OAuth2
+openid / oauth2 server	openid	ro	Server OpenID / OAuth2
+order	openid	ro	Comandă
+redirect uri	openid	ro	Redirecționare URI
+refresh-token	openid	ro	Refresh-Token
+refresh-token ttl	openid	ro	Refresh-Token TTL
+request log	openid	ro	Jurnal de cerere
+request log enabled, delete file to disable it again.	openid	ro	Jurnal de cerere activat, ștergeți fișierul pentru a-l dezactiva din nou.
+revoke	openid	ro	Revocare
+revoke access tokens	preferences	ro	Revocați jetoanele de acces
+revoke this token	openid	ro	Revocați acest token
+revoked	openid	ro	Revoked
+saves the changes made	openid	ro	Salvează modificările efectuate
+scopes	openid	ro	Domenii de aplicare
+secret	openid	ro	Secret
+secret/password to enter at the client	openid	ro	Secretul/parola care trebuie introdusă la client
+start url	openid	ro	URL de pornire
+status	openid	ro	Stare
+this name is already been taken by an installed egroupware application!	openid	ro	Acest nume a fost deja ocupat de o aplicație EGroupware instalată!
+token revoked	openid	ro	Token revocat
+updated	openid	ro	Actualizat
+url to show when the user opens the app	openid	ro	URL-ul care trebuie afișat atunci când utilizatorul deschide aplicația
+use default of	openid	ro	Utilizați valoarea implicită de
+user agent	openid	ro	Agent utilizator
+your address	openid	ro	Adresa dvs.
+your email address	openid	ro	Adresa dvs. de e-mail
+your full profile	openid	ro	Profilul dvs. complet
+your phone number	openid	ro	Numărul dvs. de telefon

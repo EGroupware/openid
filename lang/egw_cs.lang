@@ -1,0 +1,72 @@
+%1 days	openid	cs	%1 dnů
+%1 hours	openid	cs	%1 hodin
+%1 month	openid	cs	%1 měsíc
+%1 weeks	openid	cs	%1 týdnů
+%1 years	openid	cs	%1 rok
+%s would like to access	openid	cs	%s si přeje přístup
+- authentication only succeeds if user has run-rights for the application	openid	cs	- ověřování je úspěšné pouze v případě, že uživatel má práva ke spuštění aplikace.
+- client application is displayed inside egroupware (iframe)	openid	cs	- klientská aplikace se zobrazuje uvnitř EGroupware (iframe).
+- no explicit user consent required for oauth login	openid	cs	- pro přihlášení pomocí OAuth (SSO) není vyžadován výslovný souhlas uživatele
+1 year	openid	cs	1 rok
+access token revoked.	openid	cs	Přístupový token zrušen.
+access-token ttl	openid	cs	TTL přístupového tokenu
+administration rights or regular user	openid	cs	Administrátorská práva nebo běžný uživatel
+allowed for	openid	cs	Povoleno pro
+allowed grants	openid	cs	Povolené dotace
+application name	openid	cs	Název aplikace
+approve	openid	cs	Schválit
+basic details about you	openid	cs	Základní údaje o vás
+client	openid	cs	Klient
+client copied. please enter a new (unique) identifer and secret.	openid	cs	Zkopírovaný klient. Zadejte prosím nový (jedinečný) identifikátor a tajemství.
+client disabled.	openid	cs	Klient je zakázán.
+client not found!	openid	cs	Klient nebyl nalezen!
+client saved.	openid	cs	Klient uložen.
+client status	openid	cs	Stav klienta
+created	openid	cs	Vytvořeno
+deny	openid	cs	Deny
+disable	openid	cs	Zakázat
+disable this client	openid	cs	Zakázat tohoto klienta
+egroupware internal application name	openid	cs	Název interní aplikace EGroupware
+enable openid connect support	openid	cs	Povolit podporu OpenID Connect
+error saving client!	openid	cs	Chyba při ukládání klienta!
+exists without saving the changes	openid	cs	existuje bez uložení změn
+general	openid	cs	Obecné
+grants	openid	cs	Granty
+icon	openid	cs	Ikona
+identifier	openid	cs	Identifikátor
+identifier to enter at the client	openid	cs	Identifikátor, který se zadává u klienta
+if an oauth client is managed as egroupware app	openid	cs	Pokud je klient OAuth spravován jako aplikace EGroupware
+ip address	openid	cs	IP adresa
+limit scopes	openid	cs	Omezení rozsahu
+login to authorize %1	openid	cs	Přihlášení k autorizaci %1
+manage as egroupware application	openid	cs	Spravovat jako aplikaci EGroupware
+name	openid	cs	Název
+name used inside egroupware	openid	cs	Název používaný uvnitř EGroupware
+openid	common	cs	Server OpenID / OAuth2
+openid / oauth2 server	openid	cs	Server OpenID / OAuth2
+order	openid	cs	Objednávka
+redirect uri	openid	cs	URI přesměrování
+refresh-token	openid	cs	Refresh-Token
+refresh-token ttl	openid	cs	Refresh-Token TTL
+request log	openid	cs	Protokol požadavků
+request log enabled, delete file to disable it again.	openid	cs	Protokol požadavků povolen, odstraněním souboru jej opět zakážete.
+revoke	openid	cs	Odvolání
+revoke access tokens	preferences	cs	Odvolání přístupových tokenů
+revoke this token	openid	cs	Odvolání tohoto tokenu
+revoked	openid	cs	Revoked
+saves the changes made	openid	cs	Uloží provedené změny
+scopes	openid	cs	Rozsahy
+secret	openid	cs	Tajné
+secret/password to enter at the client	openid	cs	Tajné/heslo, které se zadává u klienta
+start url	openid	cs	Počáteční adresa URL
+status	openid	cs	Stav
+this name is already been taken by an installed egroupware application!	openid	cs	Tento název je již obsazen nainstalovanou aplikací EGroupware!
+token revoked	openid	cs	Token odvolán
+updated	openid	cs	Aktualizováno
+url to show when the user opens the app	openid	cs	Adresa URL, která se zobrazí, když uživatel otevře aplikaci
+use default of	openid	cs	Použijte výchozí hodnotu
+user agent	openid	cs	Agent uživatele
+your address	openid	cs	Vaše adresa
+your email address	openid	cs	Vaše e-mailová adresa
+your full profile	openid	cs	Váš úplný profil
+your phone number	openid	cs	Vaše telefonní číslo

@@ -1,0 +1,72 @@
+%1 days	openid	el	%1 ημέρες
+%1 hours	openid	el	%1 ώρες
+%1 month	openid	el	%1 μήνας
+%1 weeks	openid	el	%1 εβδομάδες
+%1 years	openid	el	%1 χρόνια
+%s would like to access	openid	el	%s θα ήθελε να έχει πρόσβαση
+- authentication only succeeds if user has run-rights for the application	openid	el	- ο έλεγχος ταυτότητας επιτυγχάνεται μόνο εάν ο χρήστης έχει δικαιώματα εκτέλεσης για την εφαρμογή
+- client application is displayed inside egroupware (iframe)	openid	el	- η εφαρμογή πελάτη εμφανίζεται μέσα στο EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	el	- δεν απαιτείται ρητή συγκατάθεση του χρήστη για σύνδεση OAuth (SSO)
+1 year	openid	el	1 έτος
+access token revoked.	openid	el	Το Token πρόσβασης ανακλήθηκε.
+access-token ttl	openid	el	Access-Token TTL
+administration rights or regular user	openid	el	Δικαιώματα διαχείρισης ή κανονικός χρήστης
+allowed for	openid	el	Επιτρέπεται για
+allowed grants	openid	el	Επιτρέπονται οι χορηγήσεις
+application name	openid	el	Όνομα εφαρμογής
+approve	openid	el	Έγκριση
+basic details about you	openid	el	Βασικά στοιχεία για εσάς
+client	openid	el	Πελάτης
+client copied. please enter a new (unique) identifer and secret.	openid	el	Πελάτης που αντιγράφηκε. Παρακαλώ εισάγετε ένα νέο (μοναδικό) αναγνωριστικό και μυστικό.
+client disabled.	openid	el	Ο πελάτης είναι απενεργοποιημένος.
+client not found!	openid	el	Ο πελάτης δεν βρέθηκε!
+client saved.	openid	el	Ο πελάτης αποθηκεύτηκε.
+client status	openid	el	Κατάσταση πελάτη
+created	openid	el	Δημιουργήθηκε
+deny	openid	el	Άρνηση
+disable	openid	el	Απενεργοποίηση
+disable this client	openid	el	Απενεργοποίηση αυτού του πελάτη
+egroupware internal application name	openid	el	Όνομα εσωτερικής εφαρμογής EGroupware
+enable openid connect support	openid	el	Ενεργοποίηση της υποστήριξης OpenID Connect
+error saving client!	openid	el	Σφάλμα αποθήκευσης του πελάτη!
+exists without saving the changes	openid	el	υπάρχει χωρίς αποθήκευση των αλλαγών
+general	openid	el	Γενικά
+grants	openid	el	Επιχορηγήσεις
+icon	openid	el	Εικονίδιο
+identifier	openid	el	Αναγνωριστικό
+identifier to enter at the client	openid	el	Αναγνωριστικό που πρέπει να εισαχθεί στον πελάτη
+if an oauth client is managed as egroupware app	openid	el	Εάν ένας πελάτης OAuth διαχειρίζεται ως εφαρμογή EGroupware
+ip address	openid	el	Διεύθυνση IP
+limit scopes	openid	el	Περιορισμός πεδίων εφαρμογής
+login to authorize %1	openid	el	Σύνδεση για εξουσιοδότηση %1
+manage as egroupware application	openid	el	Διαχείριση ως εφαρμογή EGroupware
+name	openid	el	Όνομα
+name used inside egroupware	openid	el	Όνομα που χρησιμοποιείται εντός του EGroupware
+openid	common	el	Διακομιστής OpenID / OAuth2
+openid / oauth2 server	openid	el	Διακομιστής OpenID / OAuth2
+order	openid	el	Παραγγελία
+redirect uri	openid	el	URI ανακατεύθυνσης
+refresh-token	openid	el	Refresh-Token
+refresh-token ttl	openid	el	Ανανέωση-τόκεν TTL
+request log	openid	el	Αρχείο καταγραφής αιτήσεων
+request log enabled, delete file to disable it again.	openid	el	Το αρχείο καταγραφής αιτήσεων είναι ενεργοποιημένο, διαγράψτε το αρχείο για να το απενεργοποιήσετε ξανά.
+revoke	openid	el	Ανάκληση
+revoke access tokens	preferences	el	Ανάκληση Tokens πρόσβασης
+revoke this token	openid	el	Ανάκληση αυτού του κουπονιού
+revoked	openid	el	Ανάκληση
+saves the changes made	openid	el	Αποθηκεύει τις αλλαγές που έγιναν
+scopes	openid	el	Πεδία εφαρμογής
+secret	openid	el	Μυστικό
+secret/password to enter at the client	openid	el	Μυστικό/κωδικός πρόσβασης που πρέπει να εισαχθεί στον πελάτη
+start url	openid	el	URL έναρξης
+status	openid	el	Κατάσταση
+this name is already been taken by an installed egroupware application!	openid	el	Αυτό το όνομα έχει ήδη καταληφθεί από μια εγκατεστημένη εφαρμογή EGroupware!
+token revoked	openid	el	Token ανακλήθηκε
+updated	openid	el	Ενημερωμένο
+url to show when the user opens the app	openid	el	URL που θα εμφανίζεται όταν ο χρήστης ανοίγει την εφαρμογή
+use default of	openid	el	Χρησιμοποιήστε την προεπιλογή
+user agent	openid	el	Πράκτορας χρήστη
+your address	openid	el	Η διεύθυνσή σας
+your email address	openid	el	Η διεύθυνση ηλεκτρονικού ταχυδρομείου σας
+your full profile	openid	el	Το πλήρες προφίλ σας
+your phone number	openid	el	Ο αριθμός τηλεφώνου σας

@@ -1,0 +1,72 @@
+%1 days	openid	uk	%1 день
+%1 hours	openid	uk	%1 година
+%1 month	openid	uk	%1 місяць
+%1 weeks	openid	uk	%1 тиждень
+%1 years	openid	uk	%1 рік
+%s would like to access	openid	uk	%s хотіли б отримати доступ
+- authentication only succeeds if user has run-rights for the application	openid	uk	- автентифікація проходить успішно, тільки якщо користувач має права на запуск програми
+- client application is displayed inside egroupware (iframe)	openid	uk	- клієнтський додаток відображається всередині EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	uk	- для входу по OAuth (SSO) не потрібна явна згода користувача
+1 year	openid	uk	1 рік
+access token revoked.	openid	uk	Токен доступу відкликано.
+access-token ttl	openid	uk	Токен доступу TTL
+administration rights or regular user	openid	uk	Права адміністратора або звичайного користувача
+allowed for	openid	uk	Дозволено для
+allowed grants	openid	uk	Дозволені гранти
+application name	openid	uk	Назва програми
+approve	openid	uk	Затвердити
+basic details about you	openid	uk	Основні дані про вас
+client	openid	uk	Клієнт
+client copied. please enter a new (unique) identifer and secret.	openid	uk	Клієнт скопійовано. Будь ласка, введіть новий (унікальний) ідентифікатор і секрет.
+client disabled.	openid	uk	Клієнта вимкнено.
+client not found!	openid	uk	Клієнта не знайдено!
+client saved.	openid	uk	Клієнта збережено.
+client status	openid	uk	Статус клієнта
+created	openid	uk	Створено
+deny	openid	uk	Заборонити
+disable	openid	uk	Вимкнути
+disable this client	openid	uk	Вимкнути цього клієнта
+egroupware internal application name	openid	uk	Внутрішня назва програми EGroupware
+enable openid connect support	openid	uk	Увімкнути підтримку OpenID Connect
+error saving client!	openid	uk	Помилка збереження клієнта!
+exists without saving the changes	openid	uk	існує без збереження змін
+general	openid	uk	Загальна інформація
+grants	openid	uk	Гранти
+icon	openid	uk	Іконка
+identifier	openid	uk	Ідентифікатор
+identifier to enter at the client	openid	uk	Ідентифікатор, який потрібно ввести на клієнті
+if an oauth client is managed as egroupware app	openid	uk	Якщо клієнт OAuth управляється як додаток EGroupware
+ip address	openid	uk	IP-адреса
+limit scopes	openid	uk	Обмежити діапазони
+login to authorize %1	openid	uk	Увійдіть для авторизації %1
+manage as egroupware application	openid	uk	Керувати як додаток EGroupware
+name	openid	uk	Ім'я
+name used inside egroupware	openid	uk	Ім'я, що використовується всередині EGroupware
+openid	common	uk	Сервер OpenID / OAuth2
+openid / oauth2 server	openid	uk	Сервер OpenID / OAuth2
+order	openid	uk	Порядок
+redirect uri	openid	uk	Перенаправити URI
+refresh-token	openid	uk	Токен оновлення
+refresh-token ttl	openid	uk	Оновити токен TTL
+request log	openid	uk	Журнал запитів
+request log enabled, delete file to disable it again.	openid	uk	Журнал запитів увімкнено, видаліть файл, щоб знову його вимкнути.
+revoke	openid	uk	Відкликати
+revoke access tokens	preferences	uk	Відкликати токени доступу
+revoke this token	openid	uk	Відкликати цей токен
+revoked	openid	uk	Відкликано
+saves the changes made	openid	uk	Зберігає внесені зміни
+scopes	openid	uk	Області видимості
+secret	openid	uk	Секрет
+secret/password to enter at the client	openid	uk	Секрет/пароль для введення на клієнті
+start url	openid	uk	URL для запуску
+status	openid	uk	Статус
+this name is already been taken by an installed egroupware application!	openid	uk	Це ім'я вже зайнято встановленим додатком EGroupware!
+token revoked	openid	uk	Токен відкликано
+updated	openid	uk	Оновлений
+url to show when the user opens the app	openid	uk	URL для показу, коли користувач відкриває додаток
+use default of	openid	uk	Використовувати за замовчуванням
+user agent	openid	uk	User Agent
+your address	openid	uk	Ваша адреса
+your email address	openid	uk	Ваша адреса електронної пошти
+your full profile	openid	uk	Ваш повний профіль
+your phone number	openid	uk	Ваш номер телефону

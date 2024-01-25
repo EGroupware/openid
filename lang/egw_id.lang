@@ -1,0 +1,72 @@
+%1 days	openid	id	%1 hari
+%1 hours	openid	id	%1 jam
+%1 month	openid	id	%1 bulan
+%1 weeks	openid	id	%1 minggu
+%1 years	openid	id	%1 tahun
+%s would like to access	openid	id	%s ingin mengakses
+- authentication only succeeds if user has run-rights for the application	openid	id	- otentikasi hanya berhasil jika pengguna memiliki hak-run untuk aplikasi
+- client application is displayed inside egroupware (iframe)	openid	id	- aplikasi klien ditampilkan di dalam EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	id	- tidak diperlukan persetujuan pengguna secara eksplisit untuk login OAuth (SSO)
+1 year	openid	id	1 tahun
+access token revoked.	openid	id	Token Akses dicabut.
+access-token ttl	openid	id	TTL Token Akses
+administration rights or regular user	openid	id	Hak administrasi atau pengguna biasa
+allowed for	openid	id	Diizinkan untuk
+allowed grants	openid	id	Hibah yang diizinkan
+application name	openid	id	Nama aplikasi
+approve	openid	id	Menyetujui
+basic details about you	openid	id	Detail dasar tentang Anda
+client	openid	id	Klien
+client copied. please enter a new (unique) identifer and secret.	openid	id	Klien disalin. Masukkan pengenal dan rahasia baru (unik).
+client disabled.	openid	id	Klien dinonaktifkan.
+client not found!	openid	id	Klien tidak ditemukan!
+client saved.	openid	id	Klien disimpan.
+client status	openid	id	Status Klien
+created	openid	id	Dibuat
+deny	openid	id	Menolak
+disable	openid	id	Nonaktifkan
+disable this client	openid	id	Nonaktifkan klien ini
+egroupware internal application name	openid	id	Nama aplikasi internal EGroupware
+enable openid connect support	openid	id	Mengaktifkan dukungan OpenID Connect
+error saving client!	openid	id	Kesalahan menyimpan klien!
+exists without saving the changes	openid	id	ada tanpa menyimpan perubahan
+general	openid	id	Umum
+grants	openid	id	Hibah
+icon	openid	id	Ikon
+identifier	openid	id	Pengenal
+identifier to enter at the client	openid	id	Pengenal untuk dimasukkan pada klien
+if an oauth client is managed as egroupware app	openid	id	Jika klien OAuth dikelola sebagai aplikasi EGroupware
+ip address	openid	id	Alamat IP
+limit scopes	openid	id	Batasi cakupan
+login to authorize %1	openid	id	Masuk untuk mengotorisasi %1
+manage as egroupware application	openid	id	Kelola sebagai aplikasi EGroupware
+name	openid	id	Nama
+name used inside egroupware	openid	id	Nama yang digunakan di dalam EGroupware
+openid	common	id	Server OpenID / OAuth2
+openid / oauth2 server	openid	id	Server OpenID / OAuth2
+order	openid	id	Memesan
+redirect uri	openid	id	Mengalihkan URI
+refresh-token	openid	id	Refresh-Token
+refresh-token ttl	openid	id	Refresh-Token TTL
+request log	openid	id	Log permintaan
+request log enabled, delete file to disable it again.	openid	id	Minta log diaktifkan, hapus file untuk menonaktifkannya lagi.
+revoke	openid	id	Mencabut
+revoke access tokens	preferences	id	Cabut Token Akses
+revoke this token	openid	id	Cabut token ini
+revoked	openid	id	Dicabut
+saves the changes made	openid	id	Menyimpan perubahan yang dibuat
+scopes	openid	id	Cakupan
+secret	openid	id	Rahasia
+secret/password to enter at the client	openid	id	Rahasia/kata sandi untuk dimasukkan pada klien
+start url	openid	id	URL Mulai
+status	openid	id	Status
+this name is already been taken by an installed egroupware application!	openid	id	Nama ini sudah diambil oleh aplikasi EGroupware yang terinstal!
+token revoked	openid	id	Token Dicabut
+updated	openid	id	Diperbarui
+url to show when the user opens the app	openid	id	URL yang akan ditampilkan ketika pengguna membuka aplikasi
+use default of	openid	id	Gunakan default dari
+user agent	openid	id	Agen Pengguna
+your address	openid	id	Alamat Anda
+your email address	openid	id	Alamat email Anda
+your full profile	openid	id	Profil lengkap Anda
+your phone number	openid	id	Nomor telepon Anda

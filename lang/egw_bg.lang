@@ -1,0 +1,72 @@
+%1 days	openid	bg	%1 дни
+%1 hours	openid	bg	%1 часа
+%1 month	openid	bg	%1 месец
+%1 weeks	openid	bg	%1 седмици
+%1 years	openid	bg	%1 години
+%s would like to access	openid	bg	%s желае да получи достъп
+- authentication only succeeds if user has run-rights for the application	openid	bg	- удостоверяването е успешно само ако потребителят има права за изпълнение на приложението.
+- client application is displayed inside egroupware (iframe)	openid	bg	- клиентското приложение се показва в EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	bg	- не се изисква изрично съгласие на потребителя за влизане с OAuth (SSO)
+1 year	openid	bg	1 година
+access token revoked.	openid	bg	Токенът за достъп е отнет.
+access-token ttl	openid	bg	TTL на токена за достъп
+administration rights or regular user	openid	bg	Административни права или обикновен потребител
+allowed for	openid	bg	Разрешено за
+allowed grants	openid	bg	Разрешени помощи
+application name	openid	bg	Име на приложението
+approve	openid	bg	Одобряване
+basic details about you	openid	bg	Основни данни за вас
+client	openid	bg	Клиент
+client copied. please enter a new (unique) identifer and secret.	openid	bg	Копиран клиент. Моля, въведете нов (уникален) идентификатор и тайна.
+client disabled.	openid	bg	Клиентът е деактивиран.
+client not found!	openid	bg	Клиентът не е намерен!
+client saved.	openid	bg	Клиентът е запазен.
+client status	openid	bg	Състояние на клиента
+created	openid	bg	Създаден
+deny	openid	bg	Отказ
+disable	openid	bg	Деактивиране
+disable this client	openid	bg	Деактивиране на този клиент
+egroupware internal application name	openid	bg	Име на вътрешното приложение на EGroupware
+enable openid connect support	openid	bg	Активиране на поддръжката на OpenID Connect
+error saving client!	openid	bg	Грешка при запазване на клиента!
+exists without saving the changes	openid	bg	съществува, без да са запазени промените
+general	openid	bg	Общо
+grants	openid	bg	Безвъзмездни средства
+icon	openid	bg	Икона
+identifier	openid	bg	Идентификатор
+identifier to enter at the client	openid	bg	Идентификатор, който да се въведе при клиента
+if an oauth client is managed as egroupware app	openid	bg	Ако клиентът OAuth се управлява като приложение на EGroupware
+ip address	openid	bg	IP адрес
+limit scopes	openid	bg	Ограничаване на обхвата
+login to authorize %1	openid	bg	Влезте, за да оторизирате %1
+manage as egroupware application	openid	bg	Управлявайте като приложение на EGroupware
+name	openid	bg	Име
+name used inside egroupware	openid	bg	Име, използвано в EGroupware
+openid	common	bg	OpenID / OAuth2 сървър
+openid / oauth2 server	openid	bg	OpenID / OAuth2 сървър
+order	openid	bg	Поръчка
+redirect uri	openid	bg	URI за пренасочване
+refresh-token	openid	bg	Refresh-Token
+refresh-token ttl	openid	bg	Refresh-Token TTL
+request log	openid	bg	Регистър на заявките
+request log enabled, delete file to disable it again.	openid	bg	Регистърът на заявките е активиран, изтрийте файла, за да го деактивирате отново.
+revoke	openid	bg	Отмяна на
+revoke access tokens	preferences	bg	Отмяна на токени за достъп
+revoke this token	openid	bg	Отмяна на този токен
+revoked	openid	bg	Отнемане
+saves the changes made	openid	bg	Запазва направените промени
+scopes	openid	bg	Обхват
+secret	openid	bg	Секретен
+secret/password to enter at the client	openid	bg	Секретна информация/парола, която да се въведе в клиента
+start url	openid	bg	Начален URL адрес
+status	openid	bg	Статус
+this name is already been taken by an installed egroupware application!	openid	bg	Това име вече е заето от инсталирано приложение на EGroupware!
+token revoked	openid	bg	Токенът е отнет
+updated	openid	bg	Актуализиран
+url to show when the user opens the app	openid	bg	URL адрес, който да се покаже, когато потребителят отвори приложението
+use default of	openid	bg	Използвайте по подразбиране
+user agent	openid	bg	Потребителски агент
+your address	openid	bg	Вашият адрес
+your email address	openid	bg	Вашият имейл адрес
+your full profile	openid	bg	Вашият пълен профил
+your phone number	openid	bg	Вашият телефонен номер

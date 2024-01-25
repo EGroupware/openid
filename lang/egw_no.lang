@@ -1,0 +1,72 @@
+%1 days	openid	no	%1 dager
+%1 hours	openid	no	%1 timer
+%1 month	openid	no	%1 måned
+%1 weeks	openid	no	%1 uke
+%1 years	openid	no	%1 år
+%s would like to access	openid	no	%s ønsker å få tilgang til
+- authentication only succeeds if user has run-rights for the application	openid	no	- autentiseringen lykkes bare hvis brukeren har kjørerettigheter for applikasjonen
+- client application is displayed inside egroupware (iframe)	openid	no	- klientapplikasjonen vises inne i EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	no	- det kreves ikke eksplisitt samtykke fra brukeren for OAuth-pålogging (SSO)
+1 year	openid	no	%1 år
+access token revoked.	openid	no	Tilgangstoken tilbakekalt.
+access-token ttl	openid	no	TTL for tilgangstoken
+administration rights or regular user	openid	no	Administrasjonsrettigheter eller vanlig bruker
+allowed for	openid	no	Tillatt for
+allowed grants	openid	no	Tillatte tillatelser
+application name	openid	no	Navn på applikasjon
+approve	openid	no	Godkjenne
+basic details about you	openid	no	Grunnleggende informasjon om deg
+client	openid	no	Klient
+client copied. please enter a new (unique) identifer and secret.	openid	no	Klienten er kopiert. Vennligst skriv inn en ny (unik) identifikator og hemmelighet.
+client disabled.	openid	no	Klienten er deaktivert.
+client not found!	openid	no	Klient ikke funnet!
+client saved.	openid	no	Klient lagret.
+client status	openid	no	Status for klienten
+created	openid	no	Opprettet
+deny	openid	no	Avslått
+disable	openid	no	Deaktiver
+disable this client	openid	no	Deaktiver denne klienten
+egroupware internal application name	openid	no	EGroupwares interne applikasjonsnavn
+enable openid connect support	openid	no	Aktiver støtte for OpenID Connect
+error saving client!	openid	no	Feil ved lagring av klient!
+exists without saving the changes	openid	no	eksisterer uten å lagre endringene
+general	openid	no	Generelt
+grants	openid	no	Tilskudd
+icon	openid	no	Ikon
+identifier	openid	no	Identifikator
+identifier to enter at the client	openid	no	Identifikator som skal angis på klienten
+if an oauth client is managed as egroupware app	openid	no	Hvis en OAuth-klient administreres som en EGroupware-app
+ip address	openid	no	IP-adresse
+limit scopes	openid	no	Begrense omfang
+login to authorize %1	openid	no	Logg inn for å autorisere %1
+manage as egroupware application	openid	no	Administrer som EGroupware-applikasjon
+name	openid	no	Navn
+name used inside egroupware	openid	no	Navn som brukes i EGroupware
+openid	common	no	OpenID/OAuth2-server
+openid / oauth2 server	openid	no	OpenID/OAuth2-server
+order	openid	no	Bestilling
+redirect uri	openid	no	Omdirigere URI
+refresh-token	openid	no	Refresh-Token
+refresh-token ttl	openid	no	Oppdaterings-Token TTL
+request log	openid	no	Forespørselslogg
+request log enabled, delete file to disable it again.	openid	no	Forespørselslogg aktivert, slett filen for å deaktivere den igjen.
+revoke	openid	no	Tilbakekalling
+revoke access tokens	preferences	no	Tilbakekalling av tilgangstokener
+revoke this token	openid	no	Tilbakekall dette tokenet
+revoked	openid	no	Tilbakekalt
+saves the changes made	openid	no	Lagrer endringene som er gjort
+scopes	openid	no	Områder
+secret	openid	no	Hemmelighet
+secret/password to enter at the client	openid	no	Hemmelighet/passord som skal oppgis på klienten
+start url	openid	no	Start-URL
+status	openid	no	Status
+this name is already been taken by an installed egroupware application!	openid	no	Dette navnet er allerede tatt av en installert EGroupware-applikasjon!
+token revoked	openid	no	Token tilbakekalt
+updated	openid	no	Oppdatert
+url to show when the user opens the app	openid	no	URL som skal vises når brukeren åpner appen
+use default of	openid	no	Bruk standardinnstillingen
+user agent	openid	no	Brukeragent
+your address	openid	no	Din adresse
+your email address	openid	no	E-postadressen din
+your full profile	openid	no	Din fullstendige profil
+your phone number	openid	no	Telefonnummeret ditt

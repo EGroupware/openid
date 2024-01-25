@@ -1,0 +1,72 @@
+%1 days	openid	pt	%1 dias
+%1 hours	openid	pt	%1 horas
+%1 month	openid	pt	%1 mês
+%1 weeks	openid	pt	%1 semanas
+%1 years	openid	pt	%1 anos
+%s would like to access	openid	pt	%s gostaria de aceder
+- authentication only succeeds if user has run-rights for the application	openid	pt	- a autenticação só é bem sucedida se o utilizador tiver direitos de execução para a aplicação
+- client application is displayed inside egroupware (iframe)	openid	pt	- a aplicação cliente é apresentada dentro do EGroupware (iframe)
+- no explicit user consent required for oauth login	openid	pt	- não é necessário o consentimento explícito do utilizador para o início de sessão OAuth (SSO)
+1 year	openid	pt	1 ano
+access token revoked.	openid	pt	Token de acesso revogado.
+access-token ttl	openid	pt	Token de acesso TTL
+administration rights or regular user	openid	pt	Direitos de administração ou utilizador normal
+allowed for	openid	pt	Permitido para
+allowed grants	openid	pt	Concessões permitidas
+application name	openid	pt	Nome da aplicação
+approve	openid	pt	Aprovar
+basic details about you	openid	pt	Detalhes básicos sobre o utilizador
+client	openid	pt	Cliente
+client copied. please enter a new (unique) identifer and secret.	openid	pt	Cliente copiado. Introduza um novo identificador (único) e um segredo.
+client disabled.	openid	pt	Cliente desativado.
+client not found!	openid	pt	Cliente não encontrado!
+client saved.	openid	pt	Cliente guardado.
+client status	openid	pt	Estado do cliente
+created	openid	pt	Criado
+deny	openid	pt	Recusar
+disable	openid	pt	Desativar
+disable this client	openid	pt	Desativar este cliente
+egroupware internal application name	openid	pt	Nome da aplicação interna do EGroupware
+enable openid connect support	openid	pt	Ativar o suporte de OpenID Connect
+error saving client!	openid	pt	Erro ao guardar o cliente!
+exists without saving the changes	openid	pt	existe sem guardar as alterações
+general	openid	pt	Geral
+grants	openid	pt	Subsídios
+icon	openid	pt	Ícone
+identifier	openid	pt	Identificador
+identifier to enter at the client	openid	pt	Identificador a introduzir no cliente
+if an oauth client is managed as egroupware app	openid	pt	Se um cliente OAuth for gerido como aplicação EGroupware
+ip address	openid	pt	Endereço IP
+limit scopes	openid	pt	Limitar âmbitos de aplicação
+login to authorize %1	openid	pt	Iniciar sessão para autorizar %1
+manage as egroupware application	openid	pt	Gerir como aplicação EGroupware
+name	openid	pt	Nome do utilizador
+name used inside egroupware	openid	pt	Nome utilizado no EGroupware
+openid	common	pt	Servidor OpenID / OAuth2
+openid / oauth2 server	openid	pt	Servidor OpenID / OAuth2
+order	openid	pt	Pedido
+redirect uri	openid	pt	URI de redireccionamento
+refresh-token	openid	pt	Refresh-Token
+refresh-token ttl	openid	pt	TTL do Refresh-Token
+request log	openid	pt	Registo do pedido
+request log enabled, delete file to disable it again.	openid	pt	Registo de pedidos ativado, apagar ficheiro para o desativar novamente.
+revoke	openid	pt	Revogar
+revoke access tokens	preferences	pt	Revogar tokens de acesso
+revoke this token	openid	pt	Revogar este token
+revoked	openid	pt	Revogado
+saves the changes made	openid	pt	Guarda as alterações efectuadas
+scopes	openid	pt	Âmbitos
+secret	openid	pt	Segredo
+secret/password to enter at the client	openid	pt	Segredo/palavra-passe a introduzir no cliente
+start url	openid	pt	URL de início
+status	openid	pt	Estado
+this name is already been taken by an installed egroupware application!	openid	pt	Este nome já está a ser utilizado por uma aplicação EGroupware instalada!
+token revoked	openid	pt	Token revogado
+updated	openid	pt	Atualizado
+url to show when the user opens the app	openid	pt	URL a mostrar quando o utilizador abre a aplicação
+use default of	openid	pt	Utilizar a predefinição de
+user agent	openid	pt	Agente do utilizador
+your address	openid	pt	O seu endereço
+your email address	openid	pt	O seu endereço de correio eletrónico
+your full profile	openid	pt	O seu perfil completo
+your phone number	openid	pt	O seu número de telefone
