@@ -6,7 +6,7 @@
 %s would like to access	openid	en	%s would like to access
 - authentication only succeeds if user has run-rights for the application	openid	en	- authentication only succeeds if user has run-rights for the application
 - client application is displayed inside egroupware (iframe)	openid	en	- client application is displayed inside EGroupware (iframe)
-- no explicit user consent required for oauth login	openid	en	- no explicit user consent required for OAuth login  (SSO)
+- no explicit user consent required for oauth login	openid	en	- no explicit user consent required for OAuth login (SSO)
 1 year	openid	en	1 year
 access token revoked.	openid	en	Access Token revoked.
 access-token ttl	openid	en	Access-Token TTL
