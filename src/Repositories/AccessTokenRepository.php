@@ -206,6 +206,30 @@ class AccessTokenRepository extends Api\Storage\Base implements AccessTokenRepos
 	 */
 	function &search($criteria, $only_keys=True, $order_by='', $extra_cols='', $wildcard='', $empty=False, $op='AND', $start=false, $filter=null, $join='', $need_full_no_count=false)
 	{
+		// by default, query only own tokens
+		if (!isset($filter['account_id']))
+		{
+			$filter['account_id'] = $GLOBALS['egw_info']['user']['account_id'];
+		}
+
+		// optimize slow MariaDB 10.6 query, by first querying the id's and then everything for just these ids
+		if ($start && is_array($start) && count($filter) === 1 && preg_match('/^[a-z0-9_]+( ASC| DESC)?$/i', $order_by))
+		{
+			[$offset, $num_rows] = $start;
+			$filter['access_token_id'] = [];
+			foreach($this->db->select(self::TABLE, 'SQL_CALC_FOUND_ROWS access_token_id', [
+				'account_id' => $filter['account_id'],
+			], __LINE__, __FILE__, $offset, 'ORDER BY '.$order_by, self::APP, $num_rows) as $row)
+			{
+				$filter['access_token_id'][] = $row['access_token_id'];
+			}
+			$ret = $this->search($criteria, $only_keys, $order_by, $extra_cols, $wildcard, $empty, $op, false, $filter, $join, $need_full_no_count);
+			$this->total = $this->db->select($this->table_name, 'COUNT(*)', [
+				'account_id' => $filter['account_id'],
+			],__LINE__,__FILE__,false,'', $this->app, 0, $join)->fetchColumn();
+			return $ret;
+		}
+
 		if ($extra_cols)
 		{
 			$extra_cols = is_array($extra_cols) ? $extra_cols : implode(',', $extra_cols);
@@ -244,11 +268,6 @@ class AccessTokenRepository extends Api\Storage\Base implements AccessTokenRepos
 			}
 		}
 
-		// by default, query only own tokens
-		if (!isset($filter['account_id']))
-		{
-			$filter['account_id'] = $GLOBALS['egw_info']['user']['account_id'];
-		}
 		if (!empty($filter['access_token_scopes']))
 		{
 			$join .= ' JOIN '.self::TOKEN_SCOPES_TABLE.' ON '.self::TOKEN_SCOPES_TABLE.'.access_token_id='.self::TABLE.'.access_token_id';
