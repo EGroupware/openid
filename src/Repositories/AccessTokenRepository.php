@@ -219,7 +219,7 @@ class AccessTokenRepository extends Api\Storage\Base implements AccessTokenRepos
 			$filter['access_token_id'] = [];
 			foreach($this->db->select(self::TABLE, 'SQL_CALC_FOUND_ROWS access_token_id', [
 				'account_id' => $filter['account_id'],
-			], __LINE__, __FILE__, $offset, 'ORDER BY '.$order_by, self::APP, $num_rows) as $row)
+			], __LINE__, __FILE__, $offset, '', self::APP, $num_rows) as $row)
 			{
 				$filter['access_token_id'][] = $row['access_token_id'];
 			}
