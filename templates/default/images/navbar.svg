@@ -1,1 +1,14 @@
-<svg width="32" height="32" version="1.0" viewBox="0 0 10.667 10.667" xmlns="http://www.w3.org/2000/svg"><path d="m4.8923 10.181c-10.169-1.849-2.4268-9.9382 4.738-5.8936l1.04-0.69336v1.9645h-3.0046l0.92449-0.5778c-6.3558-2.889-9.9382 3.3513-3.6979 4.1602z" style="fill:#cccccc;stroke-width:.11556"/><path d="m4.8923 10.181v-8.667l1.6178-1.04v8.667z" style="fill:#ff6600;stroke-width:.11556"/></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+<g id="g2189" transform="matrix(69.45,0,0,69.45,-8759.476,-989.3969)">
+	<g id="g2202" transform="matrix(1.031807e-2,0,0,1.031807e-2,143.3621,-90.91537)">
+		<path id="path2204" fill="#CCCCCC" d="M-1630.348,10209.886c-4.225-2.631-10.127-4.266-16.584-4.266
+			c-12.996,0-23.521,6.498-23.521,14.511c0,7.335,8.772,13.355,20.133,14.392v-4.225c-7.654-0.958-13.395-5.144-13.395-10.167
+			c0-5.702,7.495-10.364,16.784-10.364c4.624,0,8.81,1.155,11.84,3.03l-4.304,2.671h13.433v-8.293L-1630.348,10209.886z"/>
+		<path id="path2206" fill="#FF6200" d="M-1650.32,10198.444v31.854v4.225l6.738-4.225v-36.198L-1650.32,10198.444z"/>
+	</g>
+</g>
+</svg>
