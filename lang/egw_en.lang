@@ -59,9 +59,8 @@ scopes	openid	en	Scopes
 secret	openid	en	Secret
 secret/password to enter at the client	openid	en	Secret/password to enter at the client
 start url	openid	en	Start URL
-status	openid	en	Status
 this name is already been taken by an installed egroupware application!	openid	en	This name is already been taken by an installed EGroupware application!
-token revoked	openid	en	Token Revoked
+token revoked	openid	en	Token revoked.
 updated	openid	en	Updated
 url to show when the user opens the app	openid	en	URL to show when the user opens the app
 use default of	openid	en	Use default of
