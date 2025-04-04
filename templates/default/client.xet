@@ -125,7 +125,7 @@
 						<et2-button  statustext="Saves the changes made" label="Save" id="button[save]"></et2-button>
 						<et2-button  statustext="Applies the changes made" label="Apply" id="button[apply]"></et2-button>
 						<et2-button  statustext="exists without saving the changes" label="Cancel" id="button[cancel]" onclick="window.close();"></et2-button>
-						<et2-button  align="right" statustext="Disable this client" label="Disable" id="button[delete]" onclick="et2_dialog.confirm(widget,'Disable this client','Disable');"></et2-button>
+                        <et2-button align="right" statustext="Disable this client" label="Disable" id="button[delete]" onclick="Et2Dialog.confirm(widget,'Disable this client','Disable');"></et2-button>
 					</et2-hbox>
 				</row>
 			</rows>
