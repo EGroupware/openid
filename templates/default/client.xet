@@ -96,16 +96,18 @@
 					<et2-label  value="Name" for="client_name"></et2-label>
 					<et2-textbox  id="client_name" statustext="Name used inside EGroupware" maxlength="128" required="true"></et2-textbox>
 				</row>
-				<et2-tabbox  id="tabs" class="et2_nowrap" span="all" width="100%" tabHeight="270px">
-					<tabs>
-						<tab id="general" label="General"/>
-						<tab id="app" label="Manage as EGroupware application"/>
-					</tabs>
-					<tabpanels>
-						<template id="openid.client.edit"/>
-						<template id="openid.client.app"/>
-					</tabpanels>
-				</et2-tabbox>
+				<row>
+					<et2-tabbox  id="tabs" class="et2_nowrap" span="all" width="100%" tabHeight="350px">
+						<tabs>
+							<tab id="general" label="General"/>
+							<tab id="app" label="Manage as EGroupware application"/>
+						</tabs>
+						<tabpanels>
+							<template id="openid.client.edit"/>
+							<template id="openid.client.app"/>
+						</tabpanels>
+					</et2-tabbox>
+				</row>
 				<row disabled="!@client_created">
 					<et2-label  value="Created"></et2-label>
 					<et2-hbox>

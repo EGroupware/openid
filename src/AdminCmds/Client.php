@@ -194,21 +194,24 @@ class Client extends admin_cmd
 				throw new WrongParameter(lang("Error saving client!"));
 			}
 		}
-		if (!empty($this->app_name))
+		if (!empty($this->app_name) && (!isset($this->active) || $this->active))
 		{
-			$this->save_application();
+			$extra_msg = $this->save_application();
 		}
 		$this->client_id = $this->repo->data['client_id'];
 
-		// saving allowd grants and scopes in their tables
+		// saving allowed grants and scopes in their tables
 		if (isset($this->grants)) $this->repo->saveGrants($this->client_id, $this->grants);
 		if (isset($this->scopes)) $this->repo->saveScopes($this->client_id, $this->scopes);
 
-		return isset($this->active) && !$this->active ? lang('Client disabled.') : lang('Client saved.');
+		return isset($this->active) && !$this->active ? lang('Client disabled.') :
+			lang('Client saved.').(!empty($extra_msg) ? "\n".$extra_msg : '');
 	}
 
 	/**
 	 * Save data to egw_application table, if client is managed as EGroupware application
+	 *
+	 * @return ?string extra message, if additional OpenId run rights were necessary and therefore set
 	 */
 	protected function save_application()
 	{
@@ -245,7 +248,23 @@ class Client extends admin_cmd
 		{
 			$acl->delete_repository($this->app_name, 'run', $account_id);
 		}
+		// if we need a CSP to allow framing, make sure users also have OpenID run rights, as the hook is otherwise NOT called!
+		if ($this->app_index[0] !== '/' && !str_starts_with($this->app_index, Api\Framework::getUrl('/')))
+		{
+			$existing_openid = $acl->get_ids_for_location('run', 1, 'openid') ?: [];
+			if (($needed_openid_run_rights=array_diff($this->run_rights, $existing_openid)))
+			{
+				foreach($needed_openid_run_rights as $account_id)
+				{
+					$acl->add_repository('openid', 'run', $account_id, 1);
+				}
+				$extra_msg = lang('Following accounts have been given %1 run rights required to set Content-Security-Policy', lang('openid')).': '.
+					implode(', ', array_map(Api\Accounts::class.'::name2id', $needed_openid_run_rights));
+			}
+		}
 		$GLOBALS['egw']->invalidate_session_cache();
+
+		return $extra_msg ?? null;
 	}
 
 	/**
