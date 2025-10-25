@@ -60,9 +60,9 @@ class Ui
 	/**
 	 * Edit/add a client
 	 *
-	 * @param array $content =null
+	 * @param ?array $content =null
 	 */
-	public function client(array $content=null)
+	public function client(?array $content=null)
 	{
 		$tpl = new Api\Etemplate('openid.client');
 		if (!is_array($content))
@@ -226,9 +226,9 @@ class Ui
 	/**
 	 * Display list of clients
 	 *
-	 * @param array $_content =null
+	 * @param ?array $_content =null
 	 */
-	public function clients(array $_content=null)
+	public function clients(?array $_content=null)
 	{
 		if (is_array($_content))
 		{

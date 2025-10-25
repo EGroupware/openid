@@ -70,9 +70,11 @@ class IdTokenResponse extends BaseIdTokenResponse
 	 * - add nonce as claim as required by OpenID Connect spec
 	 *
 	 * @param AccessTokenEntityInterface $accessToken
-	 * @return array
+	 * @param AuthorizationRequest|null $authorizationRequest
+	 * @return array|string[]
+	 * @throws \EGroupware\Api\Exception\WrongParameter
 	 */
-	public function getExtraParams(AccessTokenEntityInterface $accessToken, AuthorizationRequest $authorizationRequest=null)
+	public function getExtraParams(AccessTokenEntityInterface $accessToken, ?AuthorizationRequest $authorizationRequest=null)
 	{
 		if (false === $this->isOpenIDRequest($accessToken->getScopes())) {
 			return [];

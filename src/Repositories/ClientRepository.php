@@ -291,9 +291,9 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 	 * Save scope-ids for given client
 	 *
 	 * @param int $client_id
-	 * @param array $scopes =null integer scope-ids
+	 * @param ?array $scopes =null integer scope-ids
 	 */
-	public function saveScopes($client_id, array $scopes=null)
+	public function saveScopes($client_id, ?array $scopes=null)
 	{
 		if ($client_id != $this->data['client_id'])
 		{

@@ -69,9 +69,9 @@ class ClientEntity implements ClientEntityInterface
 	/**
 	 * Set supported scope identifiers
 	 *
-	 * @param array $scopes
+	 * @param ?array $scopes
 	 */
-	public function setScopes(array $scopes=null)
+	public function setScopes(?array $scopes=null)
 	{
 		$this->scopes = $scopes;
 	}
@@ -94,9 +94,9 @@ class ClientEntity implements ClientEntityInterface
 	/**
 	 * Set supported grant identifiers
 	 *
-	 * @param array $grants
+	 * @param ?array $grants
 	 */
-	public function setGrants(array $grants=null)
+	public function setGrants(?array $grants=null)
 	{
 		$this->grants = $grants;
 	}
