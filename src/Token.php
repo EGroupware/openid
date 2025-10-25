@@ -14,6 +14,9 @@
 
 namespace EGroupware\OpenID;
 
+// suppress deprecation errors, until we're able to updated steverhoades/oauth2-openid-connect-server and specially lcobucci/jwt
+error_reporting(E_ALL & ~E_DEPRECATED);
+
 use DateInterval;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Keychain;
@@ -24,7 +27,7 @@ use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * Generate tokens (programatic) for current user
+ * Generate tokens (programmatic) for current user
  */
 class Token extends AbstractGrant
 {

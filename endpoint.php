@@ -42,6 +42,9 @@ use EGroupware\OpenID\Authorize;
 use EGroupware\OpenID\Log;
 use EGroupware\OpenID\ClaimExtractor;
 
+// suppress deprecation errors, until we're able to updated steverhoades/oauth2-openid-connect-server and specially lcobucci/jwt
+error_reporting(E_ALL & ~E_DEPRECATED);
+
 $GLOBALS['egw_info'] = array(
 	'flags' => array(
 		// only /authorize needs a session, /access_token does not
