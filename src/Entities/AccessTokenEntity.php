@@ -43,9 +43,9 @@ class AccessTokenEntity implements AccessTokenEntityInterface
 		$builder = new Builder();
 		$builder->setAudience($this->getClient()->getIdentifier())
 			->setId($this->getIdentifier(), true)
-			->setIssuedAt(time())
-			->setNotBefore(time())
-			->setExpiration($this->getExpiryDateTime()->getTimestamp())
+			->setIssuedAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
+			->setNotBefore(new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
+			->setExpiration(\DateTimeImmutable::createFromInterface($this->getExpiryDateTime()))
 			->setSubject($this->getUserIdentifier())
 			->set('scopes', $this->getScopes());
 
