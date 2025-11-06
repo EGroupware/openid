@@ -45,8 +45,8 @@ class IdTokenResponse extends BaseIdTokenResponse
 		$builder = (new Builder())
 			->setAudience($accessToken->getClient()->getIdentifier())
 			->setIssuer(Http::schema().'://' . Http::host())
-			->setIssuedAt(time())
-			->setExpiration($accessToken->getExpiryDateTime()->getTimestamp())
+			->setIssuedAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
+			->setExpiration(\DateTimeImmutable::createFromInterface($accessToken->getExpiryDateTime()))
 			->setSubject($userEntity->getIdentifier());
 
 		return $builder;
