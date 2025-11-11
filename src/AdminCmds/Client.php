@@ -259,7 +259,7 @@ class Client extends admin_cmd
 					$acl->add_repository('openid', 'run', $account_id, 1);
 				}
 				$extra_msg = lang('Following accounts have been given %1 run rights required to set Content-Security-Policy', lang('openid')).': '.
-					implode(', ', array_map(Api\Accounts::class.'::name2id', $needed_openid_run_rights));
+					implode(', ', array_map(Api\Accounts::class.'::id2name', $needed_openid_run_rights));
 			}
 		}
 		$GLOBALS['egw']->invalidate_session_cache();
