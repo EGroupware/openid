@@ -17,11 +17,13 @@ namespace EGroupware\OpenID;
 // suppress deprecation errors, until we're able to updated steverhoades/oauth2-openid-connect-server and specially lcobucci/jwt
 error_reporting(E_ALL & ~E_DEPRECATED);
 
+use EGroupware\Api;
 use DateInterval;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Keychain;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\ValidationData;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Grant\AbstractGrant;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -105,7 +107,7 @@ class Token extends AbstractGrant
 	 * We only validate expiration date and signature, not that the token is a (stored and not revoked) access-token.
 	 *
 	 * @param string $jwt
-	 * @return ?Token null if token is expired or signature not valid, otherwise the token to e.g. retrive a claim
+	 * @return ?Token null if token is expired or signature not valid, otherwise the token to e.g. retrieve a claim
 	 */
 	public function validateJWT($jwt)
 	{
@@ -116,6 +118,27 @@ class Token extends AbstractGrant
 			return null;
 		}
 		return $token;
+	}
+
+	/**
+	 * Validate an accessToken
+	 *
+	 * @param string $jwt
+	 * @param string $min_lifetime ="PT5M" default 5minutes
+	 * @param ClientEntityInterface|null &$client on return client-entity
+	 * @return ?Token null if token is expired or signature not valid, otherwise the token to e.g. retrieve a claim
+	 * @throws \League\OAuth2\Server\Exception\OAuthServerException
+	 */
+	public function validate($jwt, string $min_lifetime="PT5M", ?ClientEntityInterface &$client=null)
+	{
+		if (($token = $this->validateJWT($jwt)) &&
+			($client = $this->clientRepository->getClientEntity($token->claims()->get('aud')[0], null, null, false)) &&
+			($account_id = Api\Accounts::getInstance()->name2id($token->claims()->get('sub'))) &&
+			$this->accessTokenRepository->findToken($client, $account_id, $min_lifetime, $token->claims()->get('jti')))
+		{
+			return $token;
+		}
+		return null;
 	}
 
 	/**

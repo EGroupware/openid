@@ -17,6 +17,7 @@
 namespace EGroupware\OpenID\Repositories;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use EGroupware\OpenID\Entities\ScopeEntity;
@@ -28,6 +29,11 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 	 * Name of scopes table
 	 */
 	const TABLE = 'egw_openid_scopes';
+
+	/**
+	 * Prefix for application scopes
+	 */
+	const APP_PREFIX = 'app-';
 
 	/**
 	 * Get available scopes
@@ -42,7 +48,24 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 		{
 			$scopes[$row['scope_identifier']] = Api\Db::strip_array_keys($row, 'scope_');
 		}
+		// adding app-scopes
+		foreach($GLOBALS['egw_info']['apps'] ?? [] as $app)
+		{
+			if ($app['status'] && $app['status'] != 3)  // enabled and not API
+			{
+				$scopes[self::APP_PREFIX.$app['name']] = [
+					'id' => -$app['id'],
+					'identifier' => self::APP_PREFIX.$app['name'],
+					'description' => self::appScopeDescription($app['name']),
+				];
+			}
+		}
 		return $scopes;
+	}
+
+	protected static function appScopeDescription(string $app)
+	{
+		return lang('Application %1, allows to run that application', lang($app));
 	}
 
 	/**
@@ -55,7 +78,16 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 	 */
 	public function getScopeEntityByIdentifier($identifier)
 	{
-		if (!($data = $this->db->select(self::TABLE, '*', ['scope_identifier' => $identifier],
+		if (str_starts_with($identifier, self::APP_PREFIX) && isset($GLOBALS['egw_info']['apps'][$app=substr($identifier, strlen(self::APP_PREFIX))]))
+		{
+			$data = [
+				'scope_id' => -$GLOBALS['egw_info']['apps'][$app]['id'],
+				'scope_identifier' => self::APP_PREFIX . $app,
+				'scope_description' => self::appScopeDescription($app),
+			];
+		}
+		elseif (str_starts_with($identifier, self::APP_PREFIX) ||
+			!($data = $this->db->select(self::TABLE, '*', ['scope_identifier' => $identifier],
 			__LINE__, __FILE__, false, '', self::APP)->fetch()))
 		{
 			throw OAuthServerException::invalidScope($identifier);
@@ -76,18 +108,36 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 	 *
 	 * @return ScopeEntityInterface[]
 	 */
-	public function getScopeEntitiesById($ids)
+	public function getScopeEntitiesById($_ids)
 	{
-		$scopes = [];
-		foreach($this->db->select(self::TABLE, '*', [
-			'scope_id' => is_array($ids) ? $ids : explode(',', $ids)
-			], __LINE__, __FILE__, false, '', self::APP) as $data)
+		if (!is_array($_ids))
 		{
-			$scope = new ScopeEntity();
-			$scope->setID($data['scope_id']);
-			$scope->setIdentifier($data['scope_identifier']);
-			$scope->setDescription($data['scope_description']);
-			$scopes[] = $scope;
+			$_ids = explode(',', (string)$_ids);
+		}
+		$scopes = [];
+		if (($ids = array_filter($_ids, static fn($id) => $id > 0)))
+		{
+			foreach($this->db->select(self::TABLE, '*', [
+				'scope_id' => $ids,
+			], __LINE__, __FILE__, false, '', self::APP) as $data)
+			{
+				$scope = new ScopeEntity();
+				$scope->setID($data['scope_id']);
+				$scope->setIdentifier($data['scope_identifier']);
+				$scope->setDescription($data['scope_description']);
+				$scopes[] = $scope;
+			}
+		}
+		if (($apps = array_filter($GLOBALS['egw_info']['apps'] ?? [], static fn($app) => in_array(-$app['id'], $_ids))))
+		{
+			foreach ($apps as $data)
+			{
+				$scope = new ScopeEntity();
+				$scope->setID(-$data['id']);
+				$scope->setIdentifier(self::APP_PREFIX.$data['name']);
+				$scope->setDescription(self::appScopeDescription($data['name']));
+				$scopes[] = $scope;
+			}
 		}
 		return $scopes;
 	}
@@ -142,16 +192,16 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 		if (!isset($scopes))
 		{
 			$scopes = [];
-			foreach($this->db->select(self::TABLE, 'scope_id,scope_identifier,scope_description', false,
-				__LINE__, __FILE__, false, '', self::APP) as $row)
+			foreach($this->getScopes() as $row)
 			{
-				if ($row['scope_identifier'] === 'openid')
+				if ($row['identifier'] === 'openid')
 				{
-					$row['scope_identifier'] = 'OpenID ';	// hack to not translate to app-name
+					$row['identifier'] = 'OpenID ';	// hack to not translate to app-name
 				}
-				$scopes[$row['scope_id']] = [
-					'label' => $row['scope_identifier'],
-					'title' => $row['scope_description'],
+				$scopes[(string)$row['id']] = [
+					'label' => !str_starts_with($row['identifier'], self::APP_PREFIX) ? $row['identifier'] :
+						lang('Application %1', lang(substr($row['identifier'], strlen(self::APP_PREFIX)))),
+					'title' => $row['description'],
 				];
 			}
 		}

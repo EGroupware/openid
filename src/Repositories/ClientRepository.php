@@ -60,9 +60,10 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 			' FROM '.self::CLIENT_SCOPES_TABLE.
 			' WHERE '.self::CLIENT_SCOPES_TABLE.'.client_id='.self::TABLE.'.client_id';
 
-		$this->scope_identifiers_sql = 'SELECT '.$this->db->group_concat('scope_identifier').
+		$this->scope_identifiers_sql = 'SELECT '.$this->db->group_concat("COALESCE(scope_identifier, CONCAT('app-', app_name))").
 			' FROM '.self::CLIENT_SCOPES_TABLE.
-			' JOIN '.ScopeRepository::TABLE.' ON '.ScopeRepository::TABLE.'.scope_id='.self::CLIENT_SCOPES_TABLE.'.scope_id'.
+			' LEFT JOIN '.ScopeRepository::TABLE.' ON '.ScopeRepository::TABLE.'.scope_id='.self::CLIENT_SCOPES_TABLE.'.scope_id'.
+			' LEFT JOIN egw_applications ON -app_id='.self::CLIENT_SCOPES_TABLE.'.scope_id'.
 			' WHERE '.self::CLIENT_SCOPES_TABLE.'.client_id='.self::TABLE.'.client_id';
 	}
 

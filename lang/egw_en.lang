@@ -13,6 +13,8 @@ access-token ttl	openid	en	Access-Token TTL
 administration rights or regular user	openid	en	Administration rights or regular user
 allowed for	openid	en	Allowed for
 allowed grants	openid	en	Allowed grants
+application %1	openid	en	Application %1
+application %1, allows to run that application	openid	en	Application %1, allows to run that application
 application name	openid	en	Application name
 approve	openid	en	Approve
 basic details about you	openid	en	Basic details about you
