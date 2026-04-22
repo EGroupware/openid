@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2.0//EN" "https://www.egroupware.org/etemplate2.0.dtd">
 <overlay>
-	<template id="openid.clients.add" template="" lang="" group="0" version="1.9.001">
-		<et2-button  label="Add" id="add" onclick="egw.open_link('openid.EGroupware\\openid\\Ui.client',false,'600x450');" noSubmit="true"></et2-button>
-	</template>
 	<template id="openid.clients.rows" template="" lang="" group="0" version="1.9.001">
 		<grid width="100%">
 			<columns>
@@ -55,7 +52,11 @@
 			</rows>
 		</grid>
 	</template>
+	<template id="openid.clients.header" template="" lang="" group="0" version="1.9.001">
+		<et2-button  label="Add" id="add" onclick="egw.open_link('openid.EGroupware\\openid\\Ui.client',false,'600x450');" noSubmit="true"></et2-button>
+	</template>
 	<template id="openid.clients" template="" lang="" group="0" version="1.9.001">
-		<nextmatch id="nm" template="openid.clients.rows" header_left="openid.clients.add"/>
+		<template template="openid.clients.header" slot="main-header"></template>
+		<nextmatch id="nm" template="openid.clients.rows"/>
 	</template>
 </overlay>
