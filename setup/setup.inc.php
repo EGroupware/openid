@@ -36,6 +36,7 @@ $setup_info['openid']['hooks']['admin']   = OpenID\Ui::class.'::menu';
 $setup_info['openid']['hooks']['sidebox']   = OpenID\Ui::class.'::menu';
 $setup_info['openid']['hooks']['preferences_security'] = OpenID\User::class.'::security';
 $setup_info['openid']['hooks']['csp-frame-src'] = OpenID\Hooks::class.'::csp_frame_src';
+$setup_info['openid']['hooks']['iframe-allow'] = OpenID\Hooks::class.'::iframe_allow';
 
 $setup_info['openid']['depends'][] = [
 	'appname' => 'api',
