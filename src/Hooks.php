@@ -10,6 +10,8 @@
 
 namespace EGroupware\OpenID;
 
+use EGroupware\OpenID\Repositories\ScopeRepository;
+
 /**
  * Display tokens of current user under Preferences >> Password & Security
  */
@@ -36,5 +38,17 @@ class Hooks
 			}
 		}
 		return $srcs;
+	}
+
+	/**
+	 * Tell framework which iframe allow properties certain client-apps should be given
+	 *
+	 * @param array $data
+	 * @return string[]
+	 */
+	public static function iframe_allow(array $data)
+	{
+		$scopes = new ScopeRepository();
+		return array_map(static fn($values) => implode('; ', $values), $scopes->listAppClientAllowScopes());
 	}
 }

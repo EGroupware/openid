@@ -10,6 +10,7 @@
 import {EgwApp} from '../../api/js/jsapi/egw_app';
 import {app} from "../../api/js/jsapi/egw_global";
 import type {etemplate2} from "../../api/js/etemplate/etemplate2";
+import type {AdminApp} from "../../admin/js/app";
 
 /**
  * UI for OpenIDConnect
@@ -23,7 +24,7 @@ export class OpenIDConnectApp extends EgwApp
 		switch (name)
 		{
 			case 'openid.clients':
-				app.admin?.enableAppToolbar(et2, name);
+				(<AdminApp>app.admin)?.enableAppToolbar(et2, name);
 				break;
 		}
 	}

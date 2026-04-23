@@ -36,6 +36,22 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 	const APP_PREFIX = 'app-';
 
 	/**
+	 * Prefix for iframe allow values
+	 */
+	const ALLOW_PREFIX = 'allow-';
+
+	/**
+	 * Allow-* scopes setting iframe allow property
+	 *
+	 * @var string[]
+	 */
+	protected static $allow_values = [
+		-100000 => 'microphone',
+		-100001 => 'clipboard-read',
+		-100002 => 'clipboard-write',
+	];
+
+	/**
 	 * Get available scopes
 	 *
 	 * @return array identifier => ['description'=>'...', ...]
@@ -60,12 +76,26 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 				];
 			}
 		}
+		// adding allow-scopes for iframe allow values
+		foreach(self::$allow_values as $id => $value)
+		{
+			$scopes[self::ALLOW_PREFIX.$value] = [
+				'id' => $id,
+				'identifier' => self::ALLOW_PREFIX.$value,
+				'description' => self::allowScopeDescription($value),
+			];
+		}
 		return $scopes;
 	}
 
 	protected static function appScopeDescription(string $app)
 	{
 		return lang('Application %1, allows to run that application', lang($app));
+	}
+
+	protected static function allowScopeDescription(string $value)
+	{
+		return lang('Allow iframe access to').': '.$value;
 	}
 
 	/**
@@ -82,11 +112,19 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 		{
 			$data = [
 				'scope_id' => -$GLOBALS['egw_info']['apps'][$app]['id'],
-				'scope_identifier' => self::APP_PREFIX . $app,
+				'scope_identifier' => $identifier,
 				'scope_description' => self::appScopeDescription($app),
 			];
 		}
-		elseif (str_starts_with($identifier, self::APP_PREFIX) ||
+		elseif (str_starts_with($identifier, self::ALLOW_PREFIX) && ($id = array_search($allow=substr($identifier, strlen(self::ALLOW_PREFIX)), self::$allow_values)) !== false)
+		{
+			$data = [
+				'scope_id' => $id,
+				'scope_identifier' => $identifier,
+				'scope_description' => self::allowScopeDescription($allow),
+			];
+		}
+		elseif (str_starts_with($identifier, self::APP_PREFIX) || str_starts_with($identifier, self::ALLOW_PREFIX) ||
 			!($data = $this->db->select(self::TABLE, '*', ['scope_identifier' => $identifier],
 			__LINE__, __FILE__, false, '', self::APP)->fetch()))
 		{
@@ -136,6 +174,17 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 				$scope->setID(-$data['id']);
 				$scope->setIdentifier(self::APP_PREFIX.$data['name']);
 				$scope->setDescription(self::appScopeDescription($data['name']));
+				$scopes[] = $scope;
+			}
+		}
+		foreach(self::$allow_values as $id => $value)
+		{
+			if (in_array($id, $_ids))
+			{
+				$scope = new ScopeEntity();
+				$scope->setID($id);
+				$scope->setIdentifier(self::ALLOW_PREFIX.$value);
+				$scope->setDescription(self::allowScopeDescription($value));
 				$scopes[] = $scope;
 			}
 		}
@@ -199,8 +248,11 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 					$row['identifier'] = 'OpenID ';	// hack to not translate to app-name
 				}
 				$scopes[(string)$row['id']] = [
-					'label' => !str_starts_with($row['identifier'], self::APP_PREFIX) ? $row['identifier'] :
-						lang('Application %1', lang(substr($row['identifier'], strlen(self::APP_PREFIX)))),
+					'label' => str_starts_with($row['identifier'], self::APP_PREFIX) ?
+						lang('Application %1', lang(substr($row['identifier'], strlen(self::APP_PREFIX)))) :
+						(str_starts_with($row['identifier'], self::ALLOW_PREFIX) ?
+							lang('iFrame %1', substr($row['identifier'], strlen(self::ALLOW_PREFIX))) :
+							$row['identifier']),
 					'title' => $row['description'],
 				];
 			}
@@ -239,5 +291,27 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 			}
 		}
 		return $ids;
+	}
+
+	/**
+	 * Get the iFrame allow values of manged apps
+	 *
+	 * @return array[] app-name => array of allow values
+	 * @throws Api\Db\Exception
+	 * @throws Api\Db\Exception\InvalidSql
+	 */
+	public function listAppClientAllowScopes() : array
+	{
+		$apps = [];
+		foreach($this->db->select(ClientRepository::CLIENT_SCOPES_TABLE, '*', [
+			'scope_id' => array_keys(self::$allow_values),
+		], __LINE__, __FILE__, false, '', self::APP_PREFIX, '',
+			'JOIN '.ClientRepository::TABLE.' ON '.ClientRepository::CLIENT_SCOPES_TABLE.'.client_id='.
+			ClientRepository::TABLE.'.client_id AND app_name IS NOT NULL') as $row)
+		{
+			$apps[$row['app_name']] ??= [];
+			$apps[$row['app_name']][] = self::$allow_values[$row['scope_id']];
+		}
+		return $apps;
 	}
 }
