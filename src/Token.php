@@ -14,6 +14,9 @@
 
 namespace EGroupware\OpenID;
 
+// require autoloader from our own vendor dir
+require_once __DIR__ . "/../vendor/autoload.php";
+
 // suppress deprecation errors, until we're able to updated steverhoades/oauth2-openid-connect-server and specially lcobucci/jwt
 error_reporting(E_ALL & ~E_DEPRECATED);
 

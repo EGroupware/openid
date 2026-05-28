@@ -17,6 +17,9 @@
 use EGroupware\Api;
 use EGroupware\OpenID;
 
+// require autoloader from our own vendor dir
+require_once __DIR__ . "/vendor/autoload.php";
+
 $GLOBALS['egw_info'] = array(
 	'flags' => array(
 		// only /authorize needs a session, /access_token does not

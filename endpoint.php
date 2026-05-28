@@ -14,6 +14,18 @@
  * @link https://github.com/thephpleague/oauth2-server
  */
 
+// require autoloader from our own vendor dir
+require_once __DIR__ . "/vendor/autoload.php";
+// make sure our (older) Psr versions are preferred over / loaded before the newer ones in EGroupware itself
+class_exists('Psr\Container\ContainerInterface');
+class_exists('Psr\Log\LoggerInterface');
+class_exists('Psr\Http\Message\MessageInterface');
+class_exists('Psr\Http\Message\ResponseInterface');
+class_exists('Psr\Http\Message\StreamInterface');
+class_exists('Psr\Http\Message\ServerRequestInterface');
+class_exists('Psr\Http\Message\UriInterface');
+class_exists('Psr\Http\Message\UploadedFileInterface');
+
 // until #925 is merged: use League\OAuth2\Server\AuthorizationServer;
 use EGroupware\OpenId\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
