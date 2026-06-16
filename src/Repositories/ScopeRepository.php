@@ -23,6 +23,8 @@ use League\OAuth2\Server\Exception\OAuthServerException;
 use EGroupware\OpenID\Entities\ScopeEntity;
 use EGroupware\Api;
 
+require_once __DIR__ . "/../../vendor/autoload.php";
+
 class ScopeRepository extends Base implements ScopeRepositoryInterface
 {
 	/**
