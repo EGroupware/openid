@@ -22,8 +22,6 @@ use League\OAuth2\Server\Exception\OAuthServerException;
 use EGroupware\OpenID\Entities\ClientEntity;
 use EGroupware\Api;
 
-require_once __DIR__ . "/../../vendor/autoload.php";
-
 class ClientRepository extends Api\Storage\Base implements ClientRepositoryInterface
 {
 	/**

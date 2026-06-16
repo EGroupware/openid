@@ -16,6 +16,8 @@ namespace EGroupware\OpenID\Repositories;
 
 use EGroupware\Api;
 
+require_once __DIR__ . "/../../vendor/autoload.php";
+
 /**
  * Base class for all OpenID repositories / storage objects
  */
