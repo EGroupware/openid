@@ -14,6 +14,9 @@
 
 namespace EGroupware\OpenID;
 
+// require autoloader from our own vendor dir
+require_once __DIR__ . "/../vendor/autoload.php";
+
 // until #925 is merged: use League\OAuth2\Server\AuthorizationServer;
 use EGroupware\OpenId\AuthorizationServer;
 use League\OAuth2\Server\RequestTypes\AuthorizationRequest;
