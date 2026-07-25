@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author      Alex Bilbie <hello@alexbilbie.com>
  * @copyright   Copyright (c) Alex Bilbie
@@ -7,27 +8,23 @@
  * @link        https://github.com/thephpleague/oauth2-server
  */
 
+declare(strict_types=1);
+
 namespace League\OAuth2\Server\Entities\Traits;
 
-use DateTime;
+use DateTimeImmutable;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 
 trait RefreshTokenTrait
 {
-    /**
-     * @var AccessTokenEntityInterface
-     */
-    protected $accessToken;
+    protected AccessTokenEntityInterface $accessToken;
 
-    /**
-     * @var DateTime
-     */
-    protected $expiryDateTime;
+    protected DateTimeImmutable $expiryDateTime;
 
     /**
      * {@inheritdoc}
      */
-    public function setAccessToken(AccessTokenEntityInterface $accessToken)
+    public function setAccessToken(AccessTokenEntityInterface $accessToken): void
     {
         $this->accessToken = $accessToken;
     }
@@ -35,27 +32,23 @@ trait RefreshTokenTrait
     /**
      * {@inheritdoc}
      */
-    public function getAccessToken()
+    public function getAccessToken(): AccessTokenEntityInterface
     {
         return $this->accessToken;
     }
 
     /**
      * Get the token's expiry date time.
-     *
-     * @return DateTime
      */
-    public function getExpiryDateTime()
+    public function getExpiryDateTime(): DateTimeImmutable
     {
         return $this->expiryDateTime;
     }
 
     /**
      * Set the date time when the token expires.
-     *
-     * @param DateTime $dateTime
      */
-    public function setExpiryDateTime(DateTime $dateTime)
+    public function setExpiryDateTime(DateTimeImmutable $dateTime): void
     {
         $this->expiryDateTime = $dateTime;
     }

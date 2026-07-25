@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author      Alex Bilbie <hello@alexbilbie.com>
  * @copyright   Copyright (c) Alex Bilbie
@@ -7,100 +8,135 @@
  * @link        https://github.com/thephpleague/oauth2-server
  */
 
+declare(strict_types=1);
+
 namespace League\OAuth2\Server\AuthorizationValidators;
 
-use BadMethodCallException;
-use InvalidArgumentException;
-use Lcobucci\JWT\Parser;
+use DateInterval;
+use DateTimeImmutable;
+use DateTimeZone;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Exception;
+use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
-use Lcobucci\JWT\ValidationData;
-use League\OAuth2\Server\CryptKey;
+use Lcobucci\JWT\UnencryptedToken;
+use Lcobucci\JWT\Validation\Constraint\LooseValidAt;
+use Lcobucci\JWT\Validation\Constraint\SignedWith;
+use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
+use League\OAuth2\Server\CryptKeyInterface;
 use League\OAuth2\Server\CryptTrait;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
+use Psr\Clock\ClockInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
+
+use function date_default_timezone_get;
+use function preg_replace;
+use function trim;
 
 class BearerTokenValidator implements AuthorizationValidatorInterface
 {
     use CryptTrait;
 
-    /**
-     * @var AccessTokenRepositoryInterface
-     */
-    private $accessTokenRepository;
+    protected CryptKeyInterface $publicKey;
 
-    /**
-     * @var CryptKey
-     */
-    protected $publicKey;
+    private Configuration $jwtConfiguration;
 
-    /**
-     * @param AccessTokenRepositoryInterface $accessTokenRepository
-     */
-    public function __construct(AccessTokenRepositoryInterface $accessTokenRepository)
+    public function __construct(private AccessTokenRepositoryInterface $accessTokenRepository, private ?DateInterval $jwtValidAtDateLeeway = null)
     {
-        $this->accessTokenRepository = $accessTokenRepository;
     }
 
     /**
      * Set the public key
-     *
-     * @param CryptKey $key
      */
-    public function setPublicKey(CryptKey $key)
+    public function setPublicKey(CryptKeyInterface $key): void
     {
         $this->publicKey = $key;
+
+        $this->initJwtConfiguration();
+    }
+
+    /**
+     * Initialise the JWT configuration.
+     */
+    private function initJwtConfiguration(): void
+    {
+        $this->jwtConfiguration = Configuration::forSymmetricSigner(
+            new Sha256(),
+            InMemory::plainText('empty', 'empty')
+        );
+
+        $clock = new class () implements ClockInterface {
+            public function now(): DateTimeImmutable
+            {
+                return new DateTimeImmutable('now', new DateTimeZone(date_default_timezone_get()));
+            }
+        };
+
+        $publicKeyContents = $this->publicKey->getKeyContents();
+
+        if ($publicKeyContents === '') {
+            throw new RuntimeException('Public key is empty');
+        }
+
+        // TODO: next major release: replace deprecated method and remove phpstan ignored error
+        $this->jwtConfiguration->setValidationConstraints(
+            new LooseValidAt($clock, $this->jwtValidAtDateLeeway),
+            new SignedWith(
+                new Sha256(),
+                InMemory::plainText($publicKeyContents, $this->publicKey->getPassPhrase() ?? '')
+            )
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function validateAuthorization(ServerRequestInterface $request)
+    public function validateAuthorization(ServerRequestInterface $request): ServerRequestInterface
     {
         if ($request->hasHeader('authorization') === false) {
             throw OAuthServerException::accessDenied('Missing "Authorization" header');
         }
 
         $header = $request->getHeader('authorization');
-        $jwt = trim(preg_replace('/^(?:\s+)?Bearer\s/', '', $header[0]));
+        $jwt = trim((string) preg_replace('/^\s*Bearer\s/i', '', $header[0]));
+
+        if ($jwt === '') {
+            throw OAuthServerException::accessDenied('Missing "Bearer" token');
+        }
 
         try {
-            // Attempt to parse and validate the JWT
-            $token = (new Parser())->parse($jwt);
-            try {
-                if ($token->verify(new Sha256(), $this->publicKey->getKeyPath()) === false) {
-                    throw OAuthServerException::accessDenied('Access token could not be verified');
-                }
-            } catch (BadMethodCallException $exception) {
-                throw OAuthServerException::accessDenied('Access token is not signed', null, $exception);
-            }
-
-            // Ensure access token hasn't expired
-            $data = new ValidationData();
-            $data->setCurrentTime(time());
-
-            if ($token->validate($data) === false) {
-                throw OAuthServerException::accessDenied('Access token is invalid');
-            }
-
-            // Check if token has been revoked
-            if ($this->accessTokenRepository->isAccessTokenRevoked($token->getClaim('jti'))) {
-                throw OAuthServerException::accessDenied('Access token has been revoked');
-            }
-
-            // Return the request with additional attributes
-            return $request
-                ->withAttribute('oauth_access_token_id', $token->getClaim('jti'))
-                ->withAttribute('oauth_client_id', $token->getClaim('aud'))
-                ->withAttribute('oauth_user_id', $token->getClaim('sub'))
-                ->withAttribute('oauth_scopes', $token->getClaim('scopes'));
-        } catch (InvalidArgumentException $exception) {
-            // JWT couldn't be parsed so return the request as is
+            // Attempt to parse the JWT
+            $token = $this->jwtConfiguration->parser()->parse($jwt);
+        } catch (Exception $exception) {
             throw OAuthServerException::accessDenied($exception->getMessage(), null, $exception);
-        } catch (RuntimeException $exception) {
-            //JWR couldn't be parsed so return the request as is
-            throw OAuthServerException::accessDenied('Error while decoding to JSON', null, $exception);
         }
+
+        try {
+            // Attempt to validate the JWT
+            $constraints = $this->jwtConfiguration->validationConstraints();
+            $this->jwtConfiguration->validator()->assert($token, ...$constraints);
+        } catch (RequiredConstraintsViolated $exception) {
+            throw OAuthServerException::accessDenied('Access token could not be verified', null, $exception);
+        }
+
+        if (!$token instanceof UnencryptedToken) {
+            throw OAuthServerException::accessDenied('Access token is not an instance of UnencryptedToken');
+        }
+
+        $claims = $token->claims();
+
+        // Check if token has been revoked
+        if ($this->accessTokenRepository->isAccessTokenRevoked($claims->get('jti'))) {
+            throw OAuthServerException::accessDenied('Access token has been revoked');
+        }
+
+        // Return the request with additional attributes
+        return $request
+            ->withAttribute('oauth_access_token_id', $claims->get('jti'))
+            ->withAttribute('oauth_client_id', $claims->get('aud')[0])
+            ->withAttribute('oauth_user_id', $claims->get('sub'))
+            ->withAttribute('oauth_scopes', $claims->get('scopes'));
     }
 }

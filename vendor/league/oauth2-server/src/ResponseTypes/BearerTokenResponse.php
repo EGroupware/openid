@@ -1,4 +1,5 @@
 <?php
+
 /**
  * OAuth 2.0 Bearer Token Response.
  *
@@ -9,48 +10,53 @@
  * @link        https://github.com/thephpleague/oauth2-server
  */
 
+declare(strict_types=1);
+
 namespace League\OAuth2\Server\ResponseTypes;
 
-use DateTime;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
-use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
+use LogicException;
 use Psr\Http\Message\ResponseInterface;
+use SensitiveParameter;
+
+use function array_merge;
+use function json_encode;
+use function time;
 
 class BearerTokenResponse extends AbstractResponseType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function generateHttpResponse(ResponseInterface $response)
+    public function generateHttpResponse(ResponseInterface $response): ResponseInterface
     {
         $expireDateTime = $this->accessToken->getExpiryDateTime()->getTimestamp();
 
-        $jwtAccessToken = $this->accessToken->convertToJWT($this->privateKey);
-
         $responseParams = [
             'token_type'   => 'Bearer',
-            'expires_in'   => $expireDateTime - (new DateTime())->getTimestamp(),
-            'access_token' => (string) $jwtAccessToken,
+            'expires_in'   => $expireDateTime - time(),
+            'access_token' => $this->accessToken->toString(),
         ];
 
-        if ($this->refreshToken instanceof RefreshTokenEntityInterface) {
-            $refreshToken = $this->encrypt(
-                json_encode(
-                    [
-                        'client_id'        => $this->accessToken->getClient()->getIdentifier(),
-                        'refresh_token_id' => $this->refreshToken->getIdentifier(),
-                        'access_token_id'  => $this->accessToken->getIdentifier(),
-                        'scopes'           => $this->accessToken->getScopes(),
-                        'user_id'          => $this->accessToken->getUserIdentifier(),
-                        'expire_time'      => $this->refreshToken->getExpiryDateTime()->getTimestamp(),
-                    ]
-                )
-            );
+        if (isset($this->refreshToken)) {
+            $refreshTokenPayload = json_encode([
+                    'client_id'        => $this->accessToken->getClient()->getIdentifier(),
+                    'refresh_token_id' => $this->refreshToken->getIdentifier(),
+                    'access_token_id'  => $this->accessToken->getIdentifier(),
+                    'scopes'           => $this->accessToken->getScopes(),
+                    'user_id'          => $this->accessToken->getUserIdentifier(),
+                    'expire_time'      => $this->refreshToken->getExpiryDateTime()->getTimestamp(),
+            ]);
 
-            $responseParams['refresh_token'] = $refreshToken;
+            if ($refreshTokenPayload === false) {
+                throw new LogicException('Error encountered JSON encoding the refresh token payload');
+            }
+
+            $responseParams['refresh_token'] = $this->encrypt($refreshTokenPayload);
         }
 
-        $responseParams = array_merge($this->getExtraParams($this->accessToken), $responseParams);
+        $responseParams = json_encode(array_merge($this->getExtraParams($this->accessToken), $responseParams));
+
+        if ($responseParams === false) {
+            throw new LogicException('Error encountered JSON encoding response parameters');
+        }
 
         $response = $response
             ->withStatus(200)
@@ -58,7 +64,7 @@ class BearerTokenResponse extends AbstractResponseType
             ->withHeader('cache-control', 'no-store')
             ->withHeader('content-type', 'application/json; charset=UTF-8');
 
-        $response->getBody()->write(json_encode($responseParams));
+        $response->getBody()->write($responseParams);
 
         return $response;
     }
@@ -68,12 +74,12 @@ class BearerTokenResponse extends AbstractResponseType
      * AuthorizationServer::getResponseType() to pull in your version of
      * this class rather than the default.
      *
-     * @param AccessTokenEntityInterface $accessToken
-     *
-     * @return array
+     * @return array<array-key,mixed>
      */
-    protected function getExtraParams(AccessTokenEntityInterface $accessToken)
-    {
+    protected function getExtraParams(
+        #[SensitiveParameter]
+        AccessTokenEntityInterface $accessToken
+    ): array {
         return [];
     }
 }

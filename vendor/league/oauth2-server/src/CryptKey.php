@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Cryptography key holder.
  *
@@ -9,114 +10,135 @@
  * @link        https://github.com/thephpleague/oauth2-server
  */
 
+declare(strict_types=1);
+
 namespace League\OAuth2\Server;
 
 use LogicException;
-use RuntimeException;
+use OpenSSLAsymmetricKey;
+use SensitiveParameter;
 
-class CryptKey
+use function decoct;
+use function file_get_contents;
+use function fileperms;
+use function in_array;
+use function is_file;
+use function is_readable;
+use function openssl_pkey_get_details;
+use function openssl_pkey_get_private;
+use function openssl_pkey_get_public;
+use function sprintf;
+use function trigger_error;
+
+class CryptKey implements CryptKeyInterface
 {
-    const RSA_KEY_PATTERN =
-        '/^(-----BEGIN (RSA )?(PUBLIC|PRIVATE) KEY-----)\R.*(-----END (RSA )?(PUBLIC|PRIVATE) KEY-----)\R?$/s';
+    private const FILE_PREFIX = 'file://';
 
     /**
-     * @var string
+     * @var string Key contents
      */
-    protected $keyPath;
+    protected string $keyContents;
 
-    /**
-     * @var null|string
-     */
-    protected $passPhrase;
+    protected string $keyPath;
 
-    /**
-     * @param string      $keyPath
-     * @param null|string $passPhrase
-     * @param bool        $keyPermissionsCheck
-     */
-    public function __construct($keyPath, $passPhrase = null, $keyPermissionsCheck = true)
-    {
-        if (preg_match(self::RSA_KEY_PATTERN, $keyPath)) {
-            $keyPath = $this->saveKeyToFile($keyPath);
+    public function __construct(
+        string $keyPath,
+        #[SensitiveParameter]
+        protected ?string $passPhrase = null,
+        bool $keyPermissionsCheck = true
+    ) {
+        if (str_starts_with($keyPath, self::FILE_PREFIX) === false && $this->isValidKey($keyPath, $this->passPhrase ?? '')) {
+            $this->keyContents = $keyPath;
+            $this->keyPath = '';
+            // There's no file, so no need for permission check.
+            $keyPermissionsCheck = false;
+        } elseif (is_file($keyPath)) {
+            if (str_starts_with($keyPath, self::FILE_PREFIX) === false) {
+                $keyPath = self::FILE_PREFIX . $keyPath;
+            }
+
+            if (!is_readable($keyPath)) {
+                throw new LogicException(sprintf('Key path "%s" does not exist or is not readable', $keyPath));
+            }
+
+            $keyContents = file_get_contents($keyPath);
+
+            if ($keyContents === false) {
+                throw new LogicException('Unable to read key from file ' . $keyPath);
+            }
+
+            $this->keyContents = $keyContents;
+            $this->keyPath = $keyPath;
+
+            if (!$this->isValidKey($this->keyContents, $this->passPhrase ?? '')) {
+                throw new LogicException('Unable to read key from file ' . $keyPath);
+            }
+        } else {
+            throw new LogicException('Invalid key supplied');
         }
 
-        if (strpos($keyPath, 'file://') !== 0) {
-            $keyPath = 'file://' . $keyPath;
-        }
-
-        if (!file_exists($keyPath) || !is_readable($keyPath)) {
-            throw new LogicException(sprintf('Key path "%s" does not exist or is not readable', $keyPath));
-        }
-
-        if ($keyPermissionsCheck === true) {
+        if ($keyPermissionsCheck === true && PHP_OS_FAMILY !== 'Windows') {
             // Verify the permissions of the key
-            $keyPathPerms = decoct(fileperms($keyPath) & 0777);
+            $keyPathPerms = decoct(fileperms($this->keyPath) & 0777);
             if (in_array($keyPathPerms, ['400', '440', '600', '640', '660'], true) === false) {
-                trigger_error(sprintf(
-                    'Key file "%s" permissions are not correct, recommend changing to 600 or 660 instead of %s',
-                    $keyPath,
-                    $keyPathPerms
-                ), E_USER_NOTICE);
+                trigger_error(
+                    sprintf(
+                        'Key file "%s" permissions are not correct, recommend changing to 600 or 660 instead of %s',
+                        $this->keyPath,
+                        $keyPathPerms
+                    ),
+                    E_USER_NOTICE
+                );
             }
         }
-
-        $this->keyPath = $keyPath;
-        $this->passPhrase = $passPhrase;
     }
 
     /**
-     * @param string $key
-     *
-     * @throws RuntimeException
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    private function saveKeyToFile($key)
+    public function getKeyContents(): string
     {
-        $tmpDir = sys_get_temp_dir();
-        $keyPath = $tmpDir . '/' . sha1($key) . '.key';
-
-        if (file_exists($keyPath)) {
-            return 'file://' . $keyPath;
-        }
-
-        if (!touch($keyPath)) {
-            // @codeCoverageIgnoreStart
-            throw new RuntimeException(sprintf('"%s" key file could not be created', $keyPath));
-            // @codeCoverageIgnoreEnd
-        }
-
-        if (file_put_contents($keyPath, $key) === false) {
-            // @codeCoverageIgnoreStart
-            throw new RuntimeException(sprintf('Unable to write key file to temporary directory "%s"', $tmpDir));
-            // @codeCoverageIgnoreEnd
-        }
-
-        if (chmod($keyPath, 0600) === false) {
-            // @codeCoverageIgnoreStart
-            throw new RuntimeException(sprintf('The key file "%s" file mode could not be changed with chmod to 600', $keyPath));
-            // @codeCoverageIgnoreEnd
-        }
-
-        return 'file://' . $keyPath;
+        return $this->keyContents;
     }
 
     /**
-     * Retrieve key path.
-     *
-     * @return string
+     * Validate key contents.
      */
-    public function getKeyPath()
+    private function isValidKey(
+        #[SensitiveParameter]
+        string $contents,
+        #[SensitiveParameter]
+        string $passPhrase
+    ): bool {
+        $privateKey = openssl_pkey_get_private($contents, $passPhrase);
+
+        $key = $privateKey instanceof OpenSSLAsymmetricKey ? $privateKey : openssl_pkey_get_public($contents);
+
+        if ($key === false) {
+            return false;
+        }
+
+        $details = openssl_pkey_get_details($key);
+
+        return $details !== false && in_array(
+            $details['type'] ?? -1,
+            [OPENSSL_KEYTYPE_RSA, OPENSSL_KEYTYPE_EC],
+            true
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getKeyPath(): string
     {
         return $this->keyPath;
     }
 
     /**
-     * Retrieve key pass phrase.
-     *
-     * @return null|string
+     * {@inheritdoc}
      */
-    public function getPassPhrase()
+    public function getPassPhrase(): ?string
     {
         return $this->passPhrase;
     }

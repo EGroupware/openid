@@ -1,4 +1,5 @@
 <?php
+
 /**
  * OAuth 2.0 Client credentials grant.
  *
@@ -9,9 +10,13 @@
  * @link        https://github.com/thephpleague/oauth2-server
  */
 
+declare(strict_types=1);
+
 namespace League\OAuth2\Server\Grant;
 
 use DateInterval;
+use League\OAuth2\Server\Exception\OAuthServerException;
+use League\OAuth2\Server\RequestAccessTokenEvent;
 use League\OAuth2\Server\RequestEvent;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -28,9 +33,15 @@ class ClientCredentialsGrant extends AbstractGrant
         ServerRequestInterface $request,
         ResponseTypeInterface $responseType,
         DateInterval $accessTokenTTL
-    ) {
-        // Validate request
+    ): ResponseTypeInterface {
         $client = $this->validateClient($request);
+
+        if (!$client->isConfidential()) {
+            $this->getEmitter()->emit(new RequestEvent(RequestEvent::CLIENT_AUTHENTICATION_FAILED, $request));
+
+            throw OAuthServerException::invalidClient($request);
+        }
+
         $scopes = $this->validateScopes($this->getRequestParameter('scope', $request, $this->defaultScope));
 
         // Finalize the requested scopes
@@ -40,7 +51,7 @@ class ClientCredentialsGrant extends AbstractGrant
         $accessToken = $this->issueAccessToken($accessTokenTTL, $client, null, $finalizedScopes);
 
         // Send event to emitter
-        $this->getEmitter()->emit(new RequestEvent(RequestEvent::ACCESS_TOKEN_ISSUED, $request));
+        $this->getEmitter()->emit(new RequestAccessTokenEvent(RequestEvent::ACCESS_TOKEN_ISSUED, $request, $accessToken));
 
         // Inject access token into response type
         $responseType->setAccessToken($accessToken);
@@ -51,7 +62,7 @@ class ClientCredentialsGrant extends AbstractGrant
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return 'client_credentials';
     }

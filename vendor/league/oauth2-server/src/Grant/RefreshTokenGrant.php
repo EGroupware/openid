@@ -1,4 +1,5 @@
 <?php
+
 /**
  * OAuth 2.0 Refresh token grant.
  *
@@ -9,24 +10,30 @@
  * @link        https://github.com/thephpleague/oauth2-server
  */
 
+declare(strict_types=1);
+
 namespace League\OAuth2\Server\Grant;
 
 use DateInterval;
 use Exception;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
+use League\OAuth2\Server\RequestAccessTokenEvent;
 use League\OAuth2\Server\RequestEvent;
+use League\OAuth2\Server\RequestRefreshTokenEvent;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use Psr\Http\Message\ServerRequestInterface;
+
+use function implode;
+use function in_array;
+use function json_decode;
+use function time;
 
 /**
  * Refresh token grant.
  */
 class RefreshTokenGrant extends AbstractGrant
 {
-    /**
-     * @param RefreshTokenRepositoryInterface $refreshTokenRepository
-     */
     public function __construct(RefreshTokenRepositoryInterface $refreshTokenRepository)
     {
         $this->setRefreshTokenRepository($refreshTokenRepository);
@@ -41,14 +48,17 @@ class RefreshTokenGrant extends AbstractGrant
         ServerRequestInterface $request,
         ResponseTypeInterface $responseType,
         DateInterval $accessTokenTTL
-    ) {
+    ): ResponseTypeInterface {
         // Validate request
         $client = $this->validateClient($request);
         $oldRefreshToken = $this->validateOldRefreshToken($request, $client->getIdentifier());
-        $scopes = $this->validateScopes($this->getRequestParameter(
-            'scope',
-            $request,
-            implode(self::SCOPE_DELIMITER_STRING, $oldRefreshToken['scopes']))
+
+        $scopes = $this->validateScopes(
+            $this->getRequestParameter(
+                'scope',
+                $request,
+                implode(self::SCOPE_DELIMITER_STRING, $oldRefreshToken['scopes'])
+            )
         );
 
         // The OAuth spec says that a refreshed access token can have the original scopes or fewer so ensure
@@ -59,20 +69,29 @@ class RefreshTokenGrant extends AbstractGrant
             }
         }
 
+        $userId = $oldRefreshToken['user_id'];
+        if (is_int($userId)) {
+            $userId = (string) $userId;
+        }
+
+        $scopes = $this->scopeRepository->finalizeScopes($scopes, $this->getIdentifier(), $client, $userId);
+
         // Expire old tokens
         $this->accessTokenRepository->revokeAccessToken($oldRefreshToken['access_token_id']);
-        $this->refreshTokenRepository->revokeRefreshToken($oldRefreshToken['refresh_token_id']);
+        if ($this->revokeRefreshTokens) {
+            $this->refreshTokenRepository->revokeRefreshToken($oldRefreshToken['refresh_token_id']);
+        }
 
         // Issue and persist new access token
-        $accessToken = $this->issueAccessToken($accessTokenTTL, $client, $oldRefreshToken['user_id'], $scopes);
-        $this->getEmitter()->emit(new RequestEvent(RequestEvent::ACCESS_TOKEN_ISSUED, $request));
+        $accessToken = $this->issueAccessToken($accessTokenTTL, $client, $userId, $scopes);
+        $this->getEmitter()->emit(new RequestAccessTokenEvent(RequestEvent::ACCESS_TOKEN_ISSUED, $request, $accessToken));
         $responseType->setAccessToken($accessToken);
 
         // Issue and persist new refresh token if given
         $refreshToken = $this->issueRefreshToken($accessToken);
 
         if ($refreshToken !== null) {
-            $this->getEmitter()->emit(new RequestEvent(RequestEvent::REFRESH_TOKEN_ISSUED, $request));
+            $this->getEmitter()->emit(new RequestRefreshTokenEvent(RequestEvent::REFRESH_TOKEN_ISSUED, $request, $refreshToken));
             $responseType->setRefreshToken($refreshToken);
         }
 
@@ -80,19 +99,14 @@ class RefreshTokenGrant extends AbstractGrant
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @param string                 $clientId
-     *
      * @throws OAuthServerException
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    protected function validateOldRefreshToken(ServerRequestInterface $request, $clientId)
+    protected function validateOldRefreshToken(ServerRequestInterface $request, string $clientId): array
     {
-        $encryptedRefreshToken = $this->getRequestParameter('refresh_token', $request);
-        if (is_null($encryptedRefreshToken)) {
-            throw OAuthServerException::invalidRequest('refresh_token');
-        }
+        $encryptedRefreshToken = $this->getRequestParameter('refresh_token', $request)
+            ?? throw OAuthServerException::invalidRequest('refresh_token');
 
         // Validate refresh token
         try {
@@ -121,7 +135,7 @@ class RefreshTokenGrant extends AbstractGrant
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return 'refresh_token';
     }

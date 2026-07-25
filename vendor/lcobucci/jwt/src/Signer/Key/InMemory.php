@@ -1,52 +1,98 @@
 <?php
+declare(strict_types=1);
 
 namespace Lcobucci\JWT\Signer\Key;
 
-use Lcobucci\JWT\Encoding\CannotDecodeContent;
+use Lcobucci\JWT\Signer\InvalidKeyProvided;
 use Lcobucci\JWT\Signer\Key;
+use Lcobucci\JWT\SodiumBase64Polyfill;
+use SensitiveParameter;
+use SplFileObject;
+use Throwable;
 
-use function base64_decode;
+use function assert;
+use function is_string;
 
-final class InMemory extends Key
+final class InMemory implements Key
 {
-    /**
-     * @param string $contents
-     * @param string $passphrase
-     *
-     * @return self
-     */
-    public static function plainText($contents, $passphrase = '')
-    {
+    /** @param non-empty-string $contents */
+    private function __construct(
+        #[SensitiveParameter]
+        public readonly string $contents,
+        #[SensitiveParameter]
+        public readonly string $passphrase,
+    ) {
+    }
+
+    /** @param non-empty-string $contents */
+    public static function plainText(
+        #[SensitiveParameter]
+        string $contents,
+        #[SensitiveParameter]
+        string $passphrase = '',
+    ): self {
+        self::guardAgainstEmptyKey($contents);
+
         return new self($contents, $passphrase);
     }
 
-    /**
-     * @param string $contents
-     * @param string $passphrase
-     *
-     * @return self
-     */
-    public static function base64Encoded($contents, $passphrase = '')
-    {
-        $decoded = base64_decode($contents, true);
+    /** @param non-empty-string $contents */
+    public static function base64Encoded(
+        #[SensitiveParameter]
+        string $contents,
+        #[SensitiveParameter]
+        string $passphrase = '',
+    ): self {
+        $decoded = SodiumBase64Polyfill::base642bin(
+            $contents,
+            SodiumBase64Polyfill::SODIUM_BASE64_VARIANT_ORIGINAL,
+        );
 
-        if ($decoded === false) {
-            throw CannotDecodeContent::invalidBase64String();
-        }
+        self::guardAgainstEmptyKey($decoded);
 
         return new self($decoded, $passphrase);
     }
 
     /**
-     * @param string $path
-     * @param string $passphrase
-     *
-     * @return InMemory
+     * @param non-empty-string $path
      *
      * @throws FileCouldNotBeRead
      */
-    public static function file($path, $passphrase = '')
+    public static function file(
+        string $path,
+        #[SensitiveParameter]
+        string $passphrase = '',
+    ): self {
+        try {
+            $file = new SplFileObject($path);
+        } catch (Throwable $exception) {
+            throw FileCouldNotBeRead::onPath($path, $exception);
+        }
+
+        $fileSize = $file->getSize();
+        $contents = $fileSize > 0 ? $file->fread($file->getSize()) : '';
+        assert(is_string($contents));
+
+        self::guardAgainstEmptyKey($contents);
+
+        return new self($contents, $passphrase);
+    }
+
+    /** @phpstan-assert non-empty-string $contents */
+    private static function guardAgainstEmptyKey(string $contents): void
     {
-        return new self('file://' . $path, $passphrase);
+        if ($contents === '') {
+            throw InvalidKeyProvided::cannotBeEmpty();
+        }
+    }
+
+    public function contents(): string
+    {
+        return $this->contents;
+    }
+
+    public function passphrase(): string
+    {
+        return $this->passphrase;
     }
 }

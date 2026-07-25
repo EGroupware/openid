@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Lcobucci\JWT\Validation;
 
@@ -10,33 +11,27 @@ use function implode;
 
 final class RequiredConstraintsViolated extends RuntimeException implements Exception
 {
-    /** @var ConstraintViolation[] */
-    private $violations = [];
-
-    /**
-     * @param ConstraintViolation ...$violations
-     * @return self
-     */
-    public static function fromViolations(ConstraintViolation ...$violations)
-    {
-        $exception             = new self(self::buildMessage($violations));
-        $exception->violations = $violations;
-
-        return $exception;
+    /** @param ConstraintViolation[] $violations */
+    public function __construct(
+        string $message = '',
+        public readonly array $violations = [],
+    ) {
+        parent::__construct($message);
     }
 
-    /**
-     * @param ConstraintViolation[] $violations
-     *
-     * @return string
-     */
-    private static function buildMessage(array $violations)
+    public static function fromViolations(ConstraintViolation ...$violations): self
+    {
+        return new self(message: self::buildMessage($violations), violations: $violations);
+    }
+
+    /** @param ConstraintViolation[] $violations */
+    private static function buildMessage(array $violations): string
     {
         $violations = array_map(
-            static function (ConstraintViolation $violation) {
+            static function (ConstraintViolation $violation): string {
                 return '- ' . $violation->getMessage();
             },
-            $violations
+            $violations,
         );
 
         $message  = "The token violates some mandatory constraints, details:\n";
@@ -46,7 +41,7 @@ final class RequiredConstraintsViolated extends RuntimeException implements Exce
     }
 
     /** @return ConstraintViolation[] */
-    public function violations()
+    public function violations(): array
     {
         return $this->violations;
     }
