@@ -30,6 +30,7 @@ class_exists('Psr\Http\Message\UploadedFileInterface');
 use EGroupware\OpenId\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use EGroupware\OpenId\Grant\AuthCodeGrant;
+use EGroupware\OpenId\Grant\ClientCredentialsGrant;
 use EGroupware\OpenId\Grant\ImplicitGrant;
 use EGroupware\OpenId\Grant\PasswordGrant;
 use EGroupware\OpenId\Grant\RefreshTokenGrant;
@@ -95,7 +96,7 @@ $app = new App([
 
 		// Enable the client credentials grant on the server
 		$server->enableGrantType(
-			new \League\OAuth2\Server\Grant\ClientCredentialsGrant(),
+			new ClientCredentialsGrant(),
 			new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
 		);
 

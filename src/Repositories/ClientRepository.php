@@ -169,7 +169,7 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 			{
 				$this->db->insert(self::CLIENT_GRANTS_TABLE, [
 					'client_id' => $clientEntity->getID(),
-					'grant_id' => $grant > 0 ? $grant : GrantRepository::getGrantId($grant),
+					'grant_id' => is_numeric($grant) ? $grant : GrantRepository::getGrantId($grant),
 				], false, __LINE__, __FILE__, self::APP);
 			}
 		}
