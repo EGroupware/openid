@@ -19,6 +19,7 @@ return array(
     'League\\OAuth2\\Server\\' => array($vendorDir . '/league/oauth2-server/src'),
     'League\\Event\\' => array($vendorDir . '/league/event/src'),
     'Lcobucci\\JWT\\' => array($vendorDir . '/lcobucci/jwt/src'),
+    'Lcobucci\\Clock\\' => array($vendorDir . '/lcobucci/clock/src'),
     'Laminas\\Diactoros\\' => array($vendorDir . '/laminas/laminas-diactoros/src'),
     'FastRoute\\' => array($vendorDir . '/nikic/fast-route/src'),
     'EGroupware\\OpenID\\' => array($baseDir . '/src'),

@@ -21,14 +21,14 @@
 namespace EGroupware\OpenID\IntrospectionValidators;
 
 use InvalidArgumentException;
-use Lcobucci\JWT\Parser;
-use Lcobucci\JWT\Signer\Keychain;
-use Lcobucci\JWT\Signer\Rsa\Sha256;
-use Lcobucci\JWT\Token;
-use Lcobucci\JWT\ValidationData;
+use Lcobucci\Clock\SystemClock;
+use Lcobucci\JWT\UnencryptedToken;
+use Lcobucci\JWT\Validation\Constraint\SignedWith;
+use Lcobucci\JWT\Validation\Constraint\StrictValidAt;
 use League\OAuth2\Server\CryptKey;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use EGroupware\OpenID\Keys;
 
 class BearerTokenValidator implements IntrospectionValidatorInterface
 {
@@ -87,58 +87,64 @@ class BearerTokenValidator implements IntrospectionValidatorInterface
      *
      * @param ServerRequestInterface $request
      *
-     * @return Token
+     * @return UnencryptedToken
      */
     public function getTokenFromRequest(ServerRequestInterface $request)
     {
         $jwt = $request->getParsedBody()['token'] ?? null;
 
-        return (new Parser())
-            ->parse($jwt);
+        if (!is_string($jwt) || $jwt === '')
+        {
+            throw new InvalidArgumentException('No token given');
+        }
+
+        $token = (new Keys())->jwtConfiguration()->parser()->parse($jwt);
+
+        if (!($token instanceof UnencryptedToken))
+        {
+            throw new InvalidArgumentException('Not an unencrypted token');
+        }
+
+        return $token;
     }
 
     /**
      * Checks whether the token is unverified.
      *
-     * @param Token $token
+     * @param UnencryptedToken $token
      *
      * @return bool
      */
-    private function isTokenUnverified(Token $token)
+    private function isTokenUnverified(UnencryptedToken $token)
     {
-        $keychain = new Keychain();
+        $config = (new Keys())->jwtConfiguration();
 
-        $key = $keychain->getPrivateKey(
-            $this->privateKey->getKeyPath(),
-            $this->privateKey->getPassPhrase()
-        );
-
-        return $token->verify(new Sha256(), $key->getContent()) === false;
+        return !$config->validator()->validate($token, new SignedWith($config->signer(), $config->verificationKey()));
     }
 
     /**
      * Ensure access token hasn't expired.
      *
-     * @param Token $token
+     * @param UnencryptedToken $token
      *
      * @return bool
      */
-    private function isTokenExpired(Token $token)
+    private function isTokenExpired(UnencryptedToken $token)
     {
-        $data = new ValidationData(time());
+        $config = (new Keys())->jwtConfiguration();
 
-        return !$token->validate($data);
+        return !$config->validator()->validate($token, new StrictValidAt(SystemClock::fromUTC()));
     }
 
     /**
      * Check if the given token is revoked.
      *
-     * @param Token $token
+     * @param UnencryptedToken $token
      *
      * @return bool
      */
-    private function isTokenRevoked(Token $token)
+    private function isTokenRevoked(UnencryptedToken $token)
     {
-        return $this->accessTokenRepository->isAccessTokenRevoked($token->getClaim('jti'));
+        return $this->accessTokenRepository->isAccessTokenRevoked($token->claims()->get('jti'));
     }
 }

@@ -23,7 +23,7 @@ use League\OAuth2\Server\Grant\AbstractAuthorizeGrant;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use League\OAuth2\Server\RequestEvent;
-use League\OAuth2\Server\RequestTypes\AuthorizationRequest as BaseAuthorizationRequest;
+use League\OAuth2\Server\RequestTypes\AuthorizationRequestInterface as BaseAuthorizationRequest;
 use League\OAuth2\Server\ResponseTypes\RedirectResponse;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -36,13 +36,18 @@ use EGroupware\OpenID\Repositories\ClientRepository;
 /**
  * Class ImplicitGrant
  *
- * Unfortunatly this class has to be a copied and modified version of
- * League\OAuth2\Server\Grant\ImplicitGrant to be able to repond to
+ * Unfortunately this class has to be a copied and modified version of
+ * League\OAuth2\Server\Grant\ImplicitGrant to be able to respond to
  * OpenIDConnect's multiple space-separated respond_type(s):
  * - token (original one of ImplicitGrant) returning access_token as Bearer token
  * - id_token returning access_token as JWT
  * - code returning additional auth-code
  * At least one of "token" or "id_token" is required, to respond!
+ *
+ * league/oauth2-server 9's own ImplicitGrant dropped this multi-response_type / hybrid-flow
+ * support entirely (it now only ever handles response_type=token, and no longer accepts an
+ * AuthCodeRepository), so we extend AbstractAuthorizeGrant directly instead of league's
+ * ImplicitGrant, same as before.
  *
  * @package EGroupware\OpenID\Grant
  */
@@ -70,8 +75,6 @@ class ImplicitGrant extends AbstractAuthorizeGrant
 	 * @param DateInterval $authCodeTTL
 	 * @param DateInterval $accessTokenTTL
 	 * @param string       $queryDelimiter
-	 *
-	 * @throws Exception
 	 */
 	public function __construct(
 		AuthCodeRepositoryInterface $authCodeRepository,
@@ -93,7 +96,7 @@ class ImplicitGrant extends AbstractAuthorizeGrant
 	 *
 	 * @throw LogicException
 	 */
-	public function setRefreshTokenTTL(DateInterval $refreshTokenTTL)
+	public function setRefreshTokenTTL(DateInterval $refreshTokenTTL) : void
 	{
 		throw new LogicException('The Implicit Grant does not return refresh tokens');
 	}
@@ -103,7 +106,7 @@ class ImplicitGrant extends AbstractAuthorizeGrant
 	 *
 	 * @throw LogicException
 	 */
-	public function setRefreshTokenRepository(RefreshTokenRepositoryInterface $refreshTokenRepository)
+	public function setRefreshTokenRepository(RefreshTokenRepositoryInterface $refreshTokenRepository) : void
 	{
 		throw new LogicException('The Implicit Grant does not return refresh tokens');
 	}
@@ -111,7 +114,7 @@ class ImplicitGrant extends AbstractAuthorizeGrant
 	/**
 	 * {@inheritdoc}
 	 */
-	public function canRespondToAccessTokenRequest(ServerRequestInterface $request)
+	public function canRespondToAccessTokenRequest(ServerRequestInterface $request) : bool
 	{
 		return false;
 	}
@@ -121,7 +124,7 @@ class ImplicitGrant extends AbstractAuthorizeGrant
 	 *
 	 * @return string
 	 */
-	public function getIdentifier()
+	public function getIdentifier() : string
 	{
 		return 'implicit';
 	}
@@ -139,7 +142,7 @@ class ImplicitGrant extends AbstractAuthorizeGrant
 		ServerRequestInterface $request,
 		ResponseTypeInterface $responseType,
 		DateInterval $accessTokenTTL
-	) {
+	) : ResponseTypeInterface {
 		throw new LogicException('This grant does not used this method');
 	}
 
@@ -149,7 +152,7 @@ class ImplicitGrant extends AbstractAuthorizeGrant
 	 *
 	 * {@inheritdoc}
 	 */
-	public function canRespondToAuthorizationRequest(ServerRequestInterface $request)
+	public function canRespondToAuthorizationRequest(ServerRequestInterface $request) : bool
 	{
 		return (
 			isset($request->getQueryParams()['response_type'])
@@ -161,7 +164,7 @@ class ImplicitGrant extends AbstractAuthorizeGrant
 	/**
 	 * {@inheritdoc}
 	 */
-	public function validateAuthorizationRequest(ServerRequestInterface $request)
+	public function validateAuthorizationRequest(ServerRequestInterface $request) : BaseAuthorizationRequest
 	{
 		$clientId = $this->getQueryStringParameter(
 			'client_id',
@@ -173,17 +176,7 @@ class ImplicitGrant extends AbstractAuthorizeGrant
 			throw OAuthServerException::invalidRequest('client_id');
 		}
 
-		$client = $this->clientRepository->getClientEntity(
-			$clientId,
-			$this->getIdentifier(),
-			null,
-			false
-		);
-
-		if ($client instanceof ClientEntityInterface === false) {
-			$this->getEmitter()->emit(new RequestEvent(RequestEvent::CLIENT_AUTHENTICATION_FAILED, $request));
-			throw OAuthServerException::invalidClient();
-		}
+		$client = $this->getClientEntityOrFail($clientId, $request);
 
 		$redirectUri = $this->getQueryStringParameter('redirect_uri', $request);
 
@@ -192,7 +185,7 @@ class ImplicitGrant extends AbstractAuthorizeGrant
 		} elseif (is_array($client->getRedirectUri()) && count($client->getRedirectUri()) !== 1
 			|| empty($client->getRedirectUri())) {
 			$this->getEmitter()->emit(new RequestEvent(RequestEvent::CLIENT_AUTHENTICATION_FAILED, $request));
-			throw OAuthServerException::invalidClient();
+			throw OAuthServerException::invalidClient($request);
 		} else {
 			$redirectUri = is_array($client->getRedirectUri())
 				? $client->getRedirectUri()[0]
@@ -218,7 +211,7 @@ class ImplicitGrant extends AbstractAuthorizeGrant
 		$authorizationRequest->setClient($client);
 		$authorizationRequest->setRedirectUri($redirectUri);
 		$authorizationRequest->setResponseTypes($response_types);
-		$authorizationRequest->setNonce($request->getQueryParams()['nonce']);
+		$authorizationRequest->setNonce($request->getQueryParams()['nonce'] ?? null);
 
 		if ($stateParameter !== null) {
 			$authorizationRequest->setState($stateParameter);
@@ -232,7 +225,7 @@ class ImplicitGrant extends AbstractAuthorizeGrant
 	/**
 	 * {@inheritdoc}
 	 */
-	public function completeAuthorizationRequest(BaseAuthorizationRequest $authorizationRequest)
+	public function completeAuthorizationRequest(BaseAuthorizationRequest $authorizationRequest) : ResponseTypeInterface
 	{
 		if ($authorizationRequest->getUser() instanceof UserEntityInterface === false) {
 			throw new LogicException('An instance of UserEntityInterface should be set on the AuthorizationRequest');
@@ -266,23 +259,23 @@ class ImplicitGrant extends AbstractAuthorizeGrant
 			];
 
 			// respond to response_type=token
-			if ($authorizationRequest->needResponseType('token'))
+			if ($authorizationRequest instanceof AuthorizationRequest && $authorizationRequest->needResponseType('token'))
 			{
 				$params += [
-					'access_token' => (string) $accessToken->convertToJWT($this->privateKey),
+					'access_token' => $accessToken->toString(),
 					'token_type'   => 'Bearer',
 					'expires_in'   => $accessToken->getExpiryDateTime()->getTimestamp() - (new DateTime())->getTimestamp(),
 				];
 			}
 
 			// respond to response_type=id_token
-			if ($authorizationRequest->needResponseType('id_token'))
+			if ($authorizationRequest instanceof AuthorizationRequest && $authorizationRequest->needResponseType('id_token'))
 			{
 				$params += $authorizationRequest->getResponse()->getExtraParams($accessToken, $authorizationRequest);
 			}
 
 			// responde to response_type=code
-			if ($authorizationRequest->needResponseType('code'))
+			if ($authorizationRequest instanceof AuthorizationRequest && $authorizationRequest->needResponseType('code'))
 			{
 				$authCode = $this->issueAuthCode(
 					$this->authCodeTTL,
@@ -292,19 +285,19 @@ class ImplicitGrant extends AbstractAuthorizeGrant
 					$authorizationRequest->getScopes()
 				);
 
+				// same encrypted-JSON-payload format as League\OAuth2\Server\Grant\AuthCodeGrant
+				// (and our own Grant\AuthCodeGrant::respondToAccessTokenRequest(), which decrypts it)
 				$params += [
-					'code'  => $this->encrypt(
-						json_encode([
-							'client_id'             => $authCode->getClient()->getIdentifier(),
-							'redirect_uri'          => $authCode->getRedirectUri(),
-							'auth_code_id'          => $authCode->getIdentifier(),
-							'scopes'                => $authCode->getScopes(),
-							'user_id'               => $authCode->getUserIdentifier(),
-							'expire_time'           => (new DateTime())->add($this->authCodeTTL)->format('U'),
-							'code_challenge'        => $authorizationRequest->getCodeChallenge(),
-							'code_challenge_method' => $authorizationRequest->getCodeChallengeMethod(),
-						])
-					),
+					'code' => $this->encrypt(json_encode([
+						'client_id'             => $authCode->getClient()->getIdentifier(),
+						'redirect_uri'          => $authCode->getRedirectUri(),
+						'auth_code_id'          => $authCode->getIdentifier(),
+						'scopes'                => $authCode->getScopes(),
+						'user_id'               => $authCode->getUserIdentifier(),
+						'expire_time'           => (new \DateTimeImmutable())->add($this->authCodeTTL)->getTimestamp(),
+						'code_challenge'        => $authorizationRequest->getCodeChallenge(),
+						'code_challenge_method' => $authorizationRequest->getCodeChallengeMethod(),
+					])),
 				];
 			}
 

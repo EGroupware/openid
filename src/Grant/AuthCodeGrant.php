@@ -24,7 +24,7 @@ use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Grant as OAuth2Grant;
-use League\OAuth2\Server\RequestTypes\AuthorizationRequest as OAuth2AuthorizationRequest;
+use League\OAuth2\Server\RequestTypes\AuthorizationRequestInterface;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use DateInterval;
@@ -40,7 +40,7 @@ class AuthCodeGrant extends OAuth2Grant\AuthCodeGrant
 	 *
 	 * {@inheritdoc}
 	 */
-	public function validateAuthorizationRequest(ServerRequestInterface $request)
+	public function validateAuthorizationRequest(ServerRequestInterface $request) : AuthorizationRequestInterface
 	{
 		$authorization_request = AuthorizationRequest::extend(
 			parent::validateAuthorizationRequest($request));
@@ -63,7 +63,7 @@ class AuthCodeGrant extends OAuth2Grant\AuthCodeGrant
 	 *
 	 * {@inheritdoc}
 	 */
-	public function completeAuthorizationRequest(OAuth2AuthorizationRequest $authorizationRequest)
+	public function completeAuthorizationRequest(AuthorizationRequestInterface $authorizationRequest) : ResponseTypeInterface
 	{
 		if ($authorizationRequest instanceof AuthorizationRequest)
 		{
@@ -94,10 +94,10 @@ class AuthCodeGrant extends OAuth2Grant\AuthCodeGrant
 	protected function issueAuthCode(
 		DateInterval $authCodeTTL,
 		ClientEntityInterface $client,
-		$userIdentifier,
-		$redirectUri,
+		string $userIdentifier,
+		?string $redirectUri,
 		array $scopes = []
-	)
+	) : AuthCodeEntityInterface
 	{
 		$authCode = parent::issueAuthCode($authCodeTTL, $client, $userIdentifier, $redirectUri, $scopes);
 
@@ -124,7 +124,7 @@ class AuthCodeGrant extends OAuth2Grant\AuthCodeGrant
 		ServerRequestInterface $request,
 		ResponseTypeInterface $responseType,
 		DateInterval $accessTokenTTL
-	)
+	) : ResponseTypeInterface
 	{
 		$response = parent::respondToAccessTokenRequest($request, $responseType, $accessTokenTTL);
 

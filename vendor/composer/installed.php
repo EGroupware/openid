@@ -3,7 +3,7 @@
         'name' => 'egroupware/openid',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'edfae55fec23992b44385056cd8cf34ba0926acf',
+        'reference' => 'f3da520630bb7ee2d02060b094334439c491227d',
         'type' => 'egroupware-app',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'egroupware/openid' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'edfae55fec23992b44385056cd8cf34ba0926acf',
+            'reference' => 'f3da520630bb7ee2d02060b094334439c491227d',
             'type' => 'egroupware-app',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -34,6 +34,15 @@
             'reference' => '60c182916b2749480895601649563970f3f12ec4',
             'type' => 'library',
             'install_path' => __DIR__ . '/../laminas/laminas-diactoros',
+            'aliases' => array(),
+            'dev_requirement' => true,
+        ),
+        'lcobucci/clock' => array(
+            'pretty_version' => '3.6.0',
+            'version' => '3.6.0.0',
+            'reference' => '4cdd88f761e9be9095ccbedf3e08d61ae216c643',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../lcobucci/clock',
             'aliases' => array(),
             'dev_requirement' => true,
         ),
@@ -129,6 +138,12 @@
             'install_path' => __DIR__ . '/../psr/clock',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'psr/clock-implementation' => array(
+            'dev_requirement' => true,
+            'provided' => array(
+                0 => '1.0',
+            ),
         ),
         'psr/container' => array(
             'pretty_version' => '2.0.2',

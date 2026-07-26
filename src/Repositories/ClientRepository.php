@@ -17,6 +17,7 @@
 namespace EGroupware\OpenID\Repositories;
 
 use EGroupware\OpenID\Entities\ScopeEntity;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use EGroupware\OpenID\Entities\ClientEntity;
@@ -69,31 +70,34 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 			' WHERE '.self::CLIENT_SCOPES_TABLE.'.client_id='.self::TABLE.'.client_id';
 	}
 
-    /**
-     * Get a client.
-     *
-     * @param string      $clientIdentifier   The client's identifier
-     * @param null|string $grantType          The grant type used (if sent)
-     * @param null|string $clientSecret       The client's secret (if sent)
-     * @param bool        $mustValidateSecret If true the client must attempt to validate the secret if the client
-     *                                        is confidential
-     *
-     * @return ClientEntityInterface
-     */
-    public function getClientEntity($clientIdentifier, $grantType = null, $clientSecret = null, $mustValidateSecret = true)
-    {
-		$where = ['client_identifier' => $clientIdentifier, 'client_status' => true];
+	/**
+	 * Read the raw DB row for an active client by identifier, incl. comma-separated grants/scopes
+	 *
+	 * @param string $clientIdentifier
+	 * @return array|false false if no such (active) client
+	 */
+	protected function readClientRow(string $clientIdentifier)
+	{
+		return $this->db->select(self::TABLE, "*,($this->grants_sql) AS grants,($this->scope_identifiers_sql) AS scopes",
+			['client_identifier' => $clientIdentifier, 'client_status' => true],
+			__LINE__, __FILE__, false, '', self::APP)->fetch();
+	}
 
-		if (!empty($grantType))
+	/**
+	 * Get a client.
+	 *
+	 * Reimplemented for league/oauth2-server 9: getClientEntity() no longer takes a grant-type or
+	 * secret (that moved to validateClient() below); the grant-type restriction is now enforced by
+	 * ClientEntity::supportsGrantType(), called separately by AbstractGrant::getClientEntityOrFail().
+	 *
+	 * @param string $clientIdentifier The client's identifier
+	 * @return ClientEntityInterface|null null if the client doesn't exist or isn't active
+	 */
+	public function getClientEntity(string $clientIdentifier) : ?ClientEntityInterface
+	{
+		if (!($data = $this->readClientRow($clientIdentifier)))
 		{
-			$where[] = $this->db->expression(self::CLIENT_GRANTS_TABLE, ['grant_id' => GrantRepository::getGrantId($grantType)]);
-			$join = 'JOIN '.self::CLIENT_GRANTS_TABLE.' ON '.self::CLIENT_GRANTS_TABLE.'.client_id='.self::TABLE.'.client_id';
-		}
-
-		if (!($data = $this->db->select(self::TABLE, "*,($this->grants_sql) AS grants,($this->scope_identifiers_sql) AS scopes",
-			$where, __LINE__, __FILE__, false, '', self::APP, null, $join)->fetch()))
-		{
-			throw OAuthServerException::invalidClient();
+			return null;
 		}
 		$data = Api\Db::strip_array_keys($data, 'client_');
 
@@ -106,14 +110,6 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 			$data['scopes'] = explode(',', $data['scopes']);
 		}
 
-        if (
-            $mustValidateSecret === true
-            && !empty($data['secret']) === true	// only store secrets for confidential clients
-            && password_verify($clientSecret, $data['secret']) === false
-        ) {
-            return;
-        }
-
         $client = new ClientEntity();
 		$client->setID($data['id']);
         $client->setIdentifier($data['identifier']);
@@ -123,12 +119,35 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 		$client->setGrants($data['grants']);
 		$client->setAccessTokenTTL($data['access_token_ttl']);
 		$client->setRefreshTokenTTL($data['refresh_token_ttl']);
+		$client->setSecretHash($data['secret']);
 		$client->setApplicationName($data['app_name'] ?:
 			// always consider rocketchat implicit as app managed by egroupware (to not require explicit user consent!)
 			(strpos($data['redirect_uri'], '/rocketchat/') !== false ? 'rocketchat' : null));
 
         return $client;
     }
+
+	/**
+	 * Validate a client's secret.
+	 *
+	 * Split out from getClientEntity() by league/oauth2-server 9's ClientRepositoryInterface.
+	 * Only called by the framework for confidential clients (ClientEntity::isConfidential()),
+	 * ie. ones that have a secret stored at all.
+	 *
+	 * @param string $clientIdentifier
+	 * @param string|null $clientSecret
+	 * @param string|null $grantType unused: grant-type restriction is enforced via
+	 *  ClientEntity::supportsGrantType(), not here
+	 * @return bool
+	 */
+	public function validateClient(string $clientIdentifier, ?string $clientSecret, ?string $grantType) : bool
+	{
+		unset($grantType);
+
+		return ($data = $this->readClientRow($clientIdentifier)) &&
+			!empty($data['client_secret']) &&
+			password_verify((string)$clientSecret, $data['client_secret']);
+	}
 
 	/**
 	 * Persists a client to permanent storage

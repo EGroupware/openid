@@ -46,6 +46,7 @@ class ComposerStaticInitaedce6193a32e3c1ab75703883a02f9b
             'League\\OAuth2\\Server\\' => 21,
             'League\\Event\\' => 13,
             'Lcobucci\\JWT\\' => 13,
+            'Lcobucci\\Clock\\' => 15,
             'Laminas\\Diactoros\\' => 18,
         ),
         'F' =>
@@ -117,6 +118,10 @@ class ComposerStaticInitaedce6193a32e3c1ab75703883a02f9b
         'Lcobucci\\JWT\\' =>
         array (
             0 => __DIR__ . '/..' . '/lcobucci/jwt/src',
+        ),
+        'Lcobucci\\Clock\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/lcobucci/clock/src',
         ),
         'Laminas\\Diactoros\\' =>
         array (

@@ -64,7 +64,7 @@ class AccessTokenRepository extends Api\Storage\Base implements AccessTokenRepos
 	 *
 	 * @throws UniqueTokenIdentifierConstraintViolationException
 	 */
-	public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity)
+	public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity) : void
 	{
 		//error_log(__METHOD__."(".array2string($accessTokenEntity).")");
 
@@ -99,26 +99,33 @@ class AccessTokenRepository extends Api\Storage\Base implements AccessTokenRepos
 
 	/**
 	 * Revoke an access token.
-	 *
-	 * @param string|array $tokenId token identifier or array with query
 	 */
-	public function revokeAccessToken($tokenId)
+	public function revokeAccessToken(string $tokenId) : void
+	{
+		$this->revokeAccessTokenByQuery(['access_token_identifier' => $tokenId]);
+	}
+
+	/**
+	 * Revoke access token(s) matching an arbitrary query, eg. ['access_token_id' => [...]]
+	 *
+	 * Used by User.php to revoke a token selected in the "manage your tokens" UI, where we only
+	 * have the numeric access_token_id, not the (unencrypted, unavailable) token identifier.
+	 *
+	 * @param array $query column => value pairs
+	 */
+	public function revokeAccessTokenByQuery(array $query) : void
 	{
 		$this->db->update(self::TABLE, [
 			'access_token_revoked' => true,
-		], is_array($tokenId) ? $tokenId : [
-			'access_token_identifier' => $tokenId,
-		], __LINE__, __FILE__, self::APP);
+		], $query, __LINE__, __FILE__, self::APP);
 	}
 
 	/**
 	 * Check if the access token has been revoked.
 	 *
-	 * @param string $tokenId
-	 *
 	 * @return bool Return true if this token has been revoked
 	 */
-	public function isAccessTokenRevoked($tokenId)
+	public function isAccessTokenRevoked(string $tokenId) : bool
 	{
 		$revoked = $this->db->select(self::TABLE, 'access_token_revoked', [
 			'access_token_identifier' => $tokenId,
@@ -136,14 +143,19 @@ class AccessTokenRepository extends Api\Storage\Base implements AccessTokenRepos
 	 *
 	 * @return AccessTokenEntityInterface
 	 */
-	public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null)
+	public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, ?string $userIdentifier = null) : AccessTokenEntityInterface
 	{
 		$accessToken = new AccessTokenEntity();
 		$accessToken->setClient($clientEntity);
 		foreach ($scopes as $scope) {
 			$accessToken->addScope($scope);
 		}
-		$accessToken->setUserIdentifier($userIdentifier);
+		if ($userIdentifier !== null)
+		{
+			// setUserIdentifier(): string is non-nullable since league/oauth2-server 9 - client_credentials
+			// grants have no user, so leave it unset (getUserIdentifier() itself stays nullable)
+			$accessToken->setUserIdentifier($userIdentifier);
+		}
 		$accessToken->setUserAgent();
 		$accessToken->setIP();
 
@@ -178,8 +190,8 @@ class AccessTokenRepository extends Api\Storage\Base implements AccessTokenRepos
 			$token->setClient($clientEntity);
 			$token->setId($data['access_token_id']);
 			$token->setIdentifier($data['access_token_identifier']);
-			$token->setExpiryDateTime(new \DateTime($data['access_token_expiration']));
-			$token->setUserIdentifier((int)$data['account_id']);
+			$token->setExpiryDateTime(new \DateTimeImmutable($data['access_token_expiration']));
+			$token->setUserIdentifier((string)$data['account_id']);
 		}
 		return $token;
 	}
