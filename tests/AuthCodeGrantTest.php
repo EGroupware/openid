@@ -30,7 +30,10 @@ use GuzzleHttp\RequestOptions;
  */
 class AuthCodeGrantTest extends OpenIDTestBase
 {
-	protected static array $test_grants = ['authorization_code'];
+	// refresh_token must also be enabled: league/oauth2-server 9 only issues a refresh_token if
+	// the client's grants include 'refresh_token' (AbstractGrant::issueRefreshToken() checks
+	// ClientEntity::supportsGrantType('refresh_token'))
+	protected static array $test_grants = ['authorization_code', 'refresh_token'];
 
 	protected function decodeJwtPayload(string $jwt) : array
 	{

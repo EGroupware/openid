@@ -74,10 +74,10 @@ class ClientCredentialsGrantTest extends OpenIDTestBase
 				'scope' => 'openid',
 			],
 		]);
-		// rejected as invalid_client (401): getClientEntity() looks up the client filtered by
-		// grant_type, and this client has no 'password' row in egw_openid_client_grants.
-		$this->assertHttpStatus(401, $response, 'Grant not enabled for client must be rejected');
+		// rejected as unauthorized_client (400): ClientEntity::supportsGrantType() returns false
+		// since this client has no 'password' row in egw_openid_client_grants.
+		$this->assertHttpStatus(400, $response, 'Grant not enabled for client must be rejected');
 		$data = $this->jsonDecode($response);
-		$this->assertSame('invalid_client', $data['error'] ?? null);
+		$this->assertSame('unauthorized_client', $data['error'] ?? null);
 	}
 }

@@ -97,7 +97,7 @@ class ImplicitGrantTest extends OpenIDTestBase
 		}
 		// response_type=code alone is the auth-code grant, not implicit - and this client only has
 		// the "implicit" grant enabled (no "authorization_code" row in egw_openid_client_grants),
-		// so AuthCodeGrant::getClientEntity() rejects it as invalid_client (401).
+		// so AuthCodeGrant::getClientEntityOrFail() rejects it as unauthorized_client (400).
 		$response = $client->get($this->endpointUrl('/authorize'), [
 			RequestOptions::ALLOW_REDIRECTS => false,
 			RequestOptions::QUERY => [
@@ -107,6 +107,6 @@ class ImplicitGrantTest extends OpenIDTestBase
 				'scope' => 'openid',
 			],
 		]);
-		$this->assertHttpStatus(401, $response);
+		$this->assertHttpStatus(400, $response);
 	}
 }

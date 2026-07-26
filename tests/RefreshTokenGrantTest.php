@@ -74,7 +74,7 @@ class RefreshTokenGrantTest extends OpenIDTestBase
 				'scope' => 'openid',
 			],
 		]);
-		$this->assertHttpStatus(401, $reuse, 'reusing a rotated-out refresh_token must be rejected');
+		$this->assertHttpStatus(400, $reuse, 'reusing a rotated-out refresh_token must be rejected');
 	}
 
 	public function testInvalidRefreshTokenRejected() : void
@@ -88,6 +88,6 @@ class RefreshTokenGrantTest extends OpenIDTestBase
 				'scope' => 'openid',
 			],
 		]);
-		$this->assertHttpStatus(401, $response);
+		$this->assertHttpStatus(400, $response);
 	}
 }
