@@ -16,11 +16,14 @@
 
 namespace EGroupware\OpenID\Entities;
 
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Signer\Key;
+use DateTimeImmutable;
+use Lcobucci\JWT\Encoding\ChainedFormatter;
+use Lcobucci\JWT\Encoding\JoseEncoder;
+use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token;
-use League\OAuth2\Server\CryptKey;
+use Lcobucci\JWT\Token\Builder;
+use League\OAuth2\Server\CryptKeyInterface;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\Traits\AccessTokenTrait;
 use League\OAuth2\Server\Entities\Traits\EntityTrait;
@@ -33,27 +36,33 @@ class AccessTokenEntity implements AccessTokenEntityInterface
 	/**
 	 * Generate a JWT from the access token
 	 *
-	 * @param CryptKey $privateKey
-	 * @param array $extra_claims $name => $value pairs with exra claims
+	 * Reimplemented (overriding AccessTokenTrait::toString()'s private convertToJWT()) to allow
+	 * adding extra claims - used by Token::accessToken() for programmatic token generation eg. for
+	 * "remember me".
+	 *
+	 * @param CryptKeyInterface|null $privateKey null to use the key set via setPrivateKey()
+	 * @param array $extra_claims $name => $value pairs with extra claims
 	 *
 	 * @return Token
 	 */
-	public function convertToJWT(CryptKey $privateKey, array $extra_claims=array())
+	public function convertToJWT(?CryptKeyInterface $privateKey=null, array $extra_claims=array())
 	{
-		$builder = new Builder();
-		$builder->setAudience($this->getClient()->getIdentifier())
-			->setId($this->getIdentifier(), true)
-			->setIssuedAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
-			->setNotBefore(new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
-			->setExpiration(\DateTimeImmutable::createFromInterface($this->getExpiryDateTime()))
-			->setSubject($this->getUserIdentifier())
-			->set('scopes', $this->getScopes());
+		$privateKey ??= $this->privateKey;
+
+		$builder = (new Builder(new JoseEncoder(), ChainedFormatter::withUnixTimestampDates()))
+			->permittedFor($this->getClient()->getIdentifier())
+			->identifiedBy($this->getIdentifier())
+			->issuedAt(new DateTimeImmutable('now', new \DateTimeZone('UTC')))
+			->canOnlyBeUsedAfter(new DateTimeImmutable('now', new \DateTimeZone('UTC')))
+			->expiresAt($this->getExpiryDateTime())
+			->relatedTo((string)$this->getUserIdentifier())
+			->withClaim('scopes', $this->getScopes());
 
 		foreach($extra_claims as $name => $value)
 		{
-			$builder->set($name, $value);
+			$builder = $builder->withClaim($name, $value);
 		}
-		return $builder->sign(new Sha256(), new Key($privateKey->getKeyPath(), $privateKey->getPassPhrase()))
-			->getToken();
+		return $builder->getToken(new Sha256(),
+			InMemory::plainText($privateKey->getKeyContents(), (string)$privateKey->getPassPhrase()));
 	}
 }

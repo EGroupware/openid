@@ -6,9 +6,6 @@
  * @author Ralf Becker <rb-At-egroupware.org>
  * @package openid
  * @license http://opensource.org/licenses/gpl-license.php GPL - GNU General Public License
- *
- * Based on the following MIT Licensed packages:
- * @link https://github.com/php-middleware/log-http-messages
  */
 
 declare (strict_types=1);
@@ -17,35 +14,28 @@ namespace EGroupware\OpenID\Log;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use PhpMiddleware\LogHttpMessages\Formatter\ResponseFormatter;
-use PhpMiddleware\LogHttpMessages\Formatter\ServerRequestFormatter;
-use PhpMiddleware\LogHttpMessages\Formatter\FormattedMessage;
 
 /**
  * Format request and response as they have been originaly send or will be send
  *
  * Does log all tokens and usernames, but no cleartext-passwords (replaced with "...")
  */
-class HttpFormatter implements ServerRequestFormatter, ResponseFormatter
+class HttpFormatter
 {
-	public function formatResponse(ResponseInterface $response): FormattedMessage
+	public function formatResponse(ResponseInterface $response): string
 	{
-		return FormattedMessage::fromString(
-			'HTTP/'.$response->getProtocolVersion().' '.
+		return 'HTTP/'.$response->getProtocolVersion().' '.
 				$response->getStatusCode().' '.$response->getReasonPhrase()."\r\n".
 			self::formatHeaders($response->getHeaders())."\r\n".
-			self::formatBody($response->getBody())
-		);
+			self::formatBody($response->getBody());
 	}
 
-	public function formatServerRequest(ServerRequestInterface $request): FormattedMessage
+	public function formatServerRequest(ServerRequestInterface $request): string
 	{
-		return FormattedMessage::fromString(
-			$request->getMethod().' '.$request->getRequestTarget().
+		return $request->getMethod().' '.$request->getRequestTarget().
 				' HTTP/'.$request->getProtocolVersion()."\r\n".
 			self::formatHeaders($request->getHeaders())."\r\n".
-			self::formatBody($request->getBody())
-		);
+			self::formatBody($request->getBody());
 	}
 
 	protected static function formatBody($body)

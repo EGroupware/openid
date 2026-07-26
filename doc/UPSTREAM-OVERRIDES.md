@@ -3,17 +3,19 @@
 Catalog of every `src/` class that forks, patches or extends upstream code (as opposed to
 EGroupware-specific storage/UI integration), why it exists, and what should happen to it once
 the app is rebased on current upstream releases (see the feature-branch rewrite plan). Vendored
-versions at time of writing: `league/oauth2-server` 7.4.0, `steverhoades/oauth2-openid-connect-server`
-1.3.0, `lcobucci/jwt` 3.4.6, `slim/slim` 3.13.0.
+versions when this catalog was first written (on `master`): `league/oauth2-server` 7.4.0,
+`steverhoades/oauth2-openid-connect-server` 1.3.0, `lcobucci/jwt` 3.4.6, `slim/slim` 3.13.0. The
+"Rewrite status" section below records what changed on the `upstream-rebase-2026` branch.
 
 ## (a) EGroupware integration code (not an override - keep as-is)
 
 The storage layer: `Repositories/{Client,AccessToken,AuthCode,RefreshToken,Scope,User,Identity,Grant,Base}.php`,
 `Entities/{Client,AccessToken,AuthCode,RefreshToken,Scope,User}Entity.php` (+ `Entities/Traits/*`).
-Plus `Keys.php`, `Authorize.php`, `Hooks.php`, `Log/*`, `Ui.php`, `User.php`, `Token.php`,
-`AdminCmds/Client.php`. These implement upstream *interfaces* (see table below) but contain no
-copied upstream logic - they are pure EGroupware integration and should be reused unchanged,
-adapting only to interface signature changes forced by the new league/oauth2-server version.
+Plus `Keys.php`, `Authorize.php`, `Hooks.php`, `Log/*`, `Ui.php`, `User.php`, `AdminCmds/Client.php`.
+These implement upstream *interfaces* (see table below) but contain no copied upstream logic - they
+are pure EGroupware integration and were reused as-is, only adapting to interface signature changes
+forced by the new league/oauth2-server version (see "API migration notes" below). `Token.php` is
+the one exception in this group - see "Not yet resolved" further down.
 
 | File | Interface(s) implemented |
 |---|---|
@@ -103,3 +105,68 @@ Any client (or no client at all) can introspect any token as long as they have t
 `openid/tests/IntrospectionTest.php` deliberately does NOT assert this is required (to avoid
 encoding the gap as "correct" in the regression suite) - decide during the rewrite whether to add
 proper client authentication to `/introspect`.
+
+## Rewrite status (`upstream-rebase-2026` branch)
+
+Done: `endpoint.php` bootstrap rewritten for Slim 4; `AuthorizationServer.php` now *extends*
+`League\OAuth2\Server\AuthorizationServer` (was a full copy) with only `respondToAccessTokenRequest()`
+(client TTL) and `completeAuthorizationRequest()` (carries response type for id_token) overridden,
+plus the introspection methods; `Grant/ImplicitGrant.php` still has to extend
+`AbstractAuthorizeGrant` directly (league v9's own `ImplicitGrant` dropped hybrid-flow/multi
+response_type support entirely - only handles plain `response_type=token` now); all
+Repositories/Entities updated for v9's typed, split interfaces (see "API migration notes" below);
+`ClientEntity` gained `isConfidential()`/`supportsGrantType()` (from `ClientTrait`, was previously
+enforced via a SQL join in `ClientRepository::getClientEntity()`); `IdTokenResponse.php`,
+`BearerTokenValidator.php`, `BearerTokenIntrospectionResponse.php` and `AccessTokenEntity.php`
+rewritten for lcobucci/jwt 5.x's immutable `Token\Builder`/`Validator`/`Constraint\*` API (was
+lcobucci/jwt 3.x's `Builder`/`Parser`/`->sign()->getToken()`). All 31 `openid/tests/*` pass against
+the new stack (`league/oauth2-server` 9.4, `steverhoades` v3.0.1, `slim/slim` 4.15, `lcobucci/jwt`
+5.6, `lcobucci/clock` 3.6).
+
+**Resolved: `Token.php` (used by the `rocketchat` app's SSO integration, called from a hook that
+runs on every EGroupware page).** Previously, `EGroupware\OpenID\Token` generated JWTs using our
+upgraded lcobucci/jwt 5.x while `egroupware/status`'s `Jitsi.php` backend still pulled in
+lcobucci/jwt 3.4.6 in the *same* main vendor tree. Since PHP resolves classes globally by name
+regardless of which package "owns" them, whichever copy's autoloader ran first for a given class
+name won for the rest of the process - and lcobucci/jwt 3.4.6's `compat/class-aliases.php`
+(`class_alias(Token::class, Token\Plain::class)`, a `class_alias()` call, which is irreversible)
+made this a permanent, order-dependent landmine whenever both packages were loaded in one request.
+
+Fixed by porting `egroupware/status`'s `Jitsi.php` to lcobucci/jwt 5.x (see that repo's
+`fix-lcobucci-jwt-5` branch) and merging openid's own `vendor/` directory into EGroupware's main
+vendor tree, so there is now exactly one copy of `lcobucci/jwt` (5.6) and `lcobucci/clock` (3.x) in
+the whole process - the class-identity collision can no longer happen. The defensive try/catch
+around `convertToJWT()` in `Token::accessToken()` and the preload/re-prepend workaround at the top
+of `endpoint.php` (both worked around the collision, not fixed it) have been removed as dead code.
+
+## API migration notes (league/oauth2-server 7 -> 9, steverhoades 1 -> 3, lcobucci/jwt 3 -> 5)
+
+For whoever picks this up next / reviews the diff:
+
+- `ClientRepositoryInterface::getClientEntity()` lost its `$grantType`/`$clientSecret`/
+  `$mustValidateSecret` params (now just `getClientEntity(string $clientIdentifier): ?ClientEntityInterface`).
+  Secret validation moved to a new `validateClient(string $id, ?string $secret, ?string $grantType): bool`
+  method; per-client grant restriction moved to `ClientEntityInterface::supportsGrantType()`
+  (duck-typed via `method_exists()` in `AbstractGrant::getClientEntityOrFail()`, not part of the
+  formal interface yet).
+- Rejecting a grant a client isn't allowed to use now throws `unauthorizedClient()` (400
+  `unauthorized_client`), not `invalidClient()` (401 `invalid_client`) as before.
+- `OAuthServerException::invalidCredentials()` (wrong password) and `invalidRefreshToken()` both
+  now map to 400 `invalid_grant` (previously 401 `invalid_credentials`/`invalid_request`
+  respectively) - RFC6749-compliance fix on league's side.
+- **New in v9: `AbstractGrant::issueRefreshToken()` only issues a refresh_token if
+  `$client->supportsGrantType('refresh_token')` is true.** A client must have the `refresh_token`
+  grant explicitly enabled (not just `password`/`authorization_code`) to receive one - this is a
+  behavior change from v7, not a bug; test fixtures were updated accordingly.
+- `TokenInterface::setExpiryDateTime()` / claim getters take/return `DateTimeImmutable`, not
+  `DateTime`. `TokenEntityTrait::setUserIdentifier()` takes non-nullable `string` (client_credentials
+  grants must simply not call it, rather than passing null).
+- `ResponseTypeInterface::generateHttpResponse()` and `AuthorizationRequestInterface`'s setters
+  (`setState()`, `setCodeChallenge()`, `setCodeChallengeMethod()`) are now non-nullable/typed;
+  our `AuthorizationRequest::extend()` has to guard the optional ones (state/PKCE) before calling.
+- lcobucci/jwt: `Builder`/`Parser` moved to `Token\Builder`/`Token\Parser`, immutable
+  (`->withClaim()` returns a new instance, not `->set()`), signing is
+  `$builder->getToken($signer, $key)` not `->sign($signer, $key)->getToken()`. Verification moved
+  from `$token->verify()`/`$token->validate()` to `Configuration::validator()->validate($token,
+  ...Constraint\*)`. Keys are `Signer\Key\InMemory::plainText()/file()`, not `Signer\Key`
+  (now an interface). `permittedFor()` (aud) always stores an array even for a single audience.

@@ -10,8 +10,6 @@
 
 namespace EGroupware\OpenID;
 
-// require autoloader from our own vendor dir
-require_once __DIR__ . "/../vendor/autoload.php";
 
 use EGroupware\Api;
 use EGroupware\OpenID\Repositories\AccessTokenRepository;
@@ -80,9 +78,9 @@ class User
 			{
 				case 'delete':
 					$token_repo = new AccessTokenRepository();
-					$token_repo->revokeAccessToken(['access_token_id' => $content['nm']['selected']]);
+					$token_repo->revokeAccessTokenByQuery(['access_token_id' => $content['nm']['selected']]);
 					$refresh_token_repo = new RefreshTokenRepository();
-					$refresh_token_repo->revokeRefreshToken(['access_token_id' => $content['nm']['selected']]);
+					$refresh_token_repo->revokeRefreshTokenByQuery(['access_token_id' => $content['nm']['selected']]);
 					return (count($content['nm']['selected']) > 1 ?
 						count($content['nm']['selected']).' ' : '').
 						lang('Access Token revoked.');

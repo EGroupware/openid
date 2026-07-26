@@ -10,8 +10,6 @@
 
 namespace EGroupware\OpenID;
 
-// require autoloader from our own vendor dir
-require_once __DIR__ . "/../vendor/autoload.php";
 
 use EGroupware\OpenID\Repositories\ScopeRepository;
 

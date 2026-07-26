@@ -111,7 +111,7 @@ class IntrospectionResponse extends AbstractResponseType
      *
      * @return ResponseInterface
      */
-    public function generateHttpResponse(ResponseInterface $response)
+    public function generateHttpResponse(ResponseInterface $response) : ResponseInterface
     {
         $responseParams = $this->getIntrospectionResponseParams();
 

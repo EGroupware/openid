@@ -14,18 +14,6 @@
  * @link https://github.com/thephpleague/oauth2-server
  */
 
-// require autoloader from our own vendor dir
-require_once __DIR__ . "/vendor/autoload.php";
-// make sure our (older) Psr versions are preferred over / loaded before the newer ones in EGroupware itself
-class_exists('Psr\Container\ContainerInterface');
-class_exists('Psr\Log\LoggerInterface');
-class_exists('Psr\Http\Message\MessageInterface');
-class_exists('Psr\Http\Message\ResponseInterface');
-class_exists('Psr\Http\Message\StreamInterface');
-class_exists('Psr\Http\Message\ServerRequestInterface');
-class_exists('Psr\Http\Message\UriInterface');
-class_exists('Psr\Http\Message\UploadedFileInterface');
-
 // until #925 is merged: use League\OAuth2\Server\AuthorizationServer;
 use EGroupware\OpenId\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
@@ -38,10 +26,9 @@ use League\OAuth2\Server\Middleware\ResourceServerMiddleware;
 use League\OAuth2\Server\ResourceServer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\App;
-use Zend\Diactoros\Stream;
+use Slim\Factory\AppFactory;
 use EGroupware\OpenID\ResponseTypes\IdTokenResponse;
-use Bnf\Slim3Psr15\CallableResolver;
+use EGroupware\OpenID\Middleware\LegacyMiddlewareAdapter;
 use EGroupware\OpenID\Repositories\AccessTokenRepository;
 use EGroupware\OpenID\Repositories\AuthCodeRepository;
 use EGroupware\OpenID\Repositories\ClientRepository;
@@ -55,9 +42,6 @@ use EGroupware\OpenID\Authorize;
 use EGroupware\OpenID\Log;
 use EGroupware\OpenID\ClaimExtractor;
 
-// suppress deprecation errors, until we're able to updated steverhoades/oauth2-openid-connect-server and specially lcobucci/jwt
-error_reporting(E_ALL & ~E_DEPRECATED);
-
 $GLOBALS['egw_info'] = array(
 	'flags' => array(
 		// only /authorize needs a session, /access_token does not
@@ -68,95 +52,96 @@ $GLOBALS['egw_info'] = array(
 ));
 include('../header.inc.php');
 
-$app = new App([
-	'settings'    => [
-		'displayErrorDetails' => true,
-	],
-	AuthorizationServer::class => function () {
-		// Init our repositories
-		$clientRepository = new ClientRepository();
-		$scopeRepository = new ScopeRepository();
-		$accessTokenRepository = new AccessTokenRepository();
-		$authCodeRepository = new AuthCodeRepository();
-		$refreshTokenRepository = new RefreshTokenRepository();
-		$keys = new Keys();
-
-		// OpenID Connect Response Type
-		$responseType = new IdTokenResponse(new IdentityRepository(), new ClaimExtractor());
-
-		// Setup the authorization server
-		$server = new AuthorizationServer(
-			$clientRepository,
-			$accessTokenRepository,
-			$scopeRepository,
-			$keys->getPrivateKey(),
-			$keys->getEncryptionKey(),
-			$responseType
-		);
-
-		// Enable the client credentials grant on the server
-		$server->enableGrantType(
-			new ClientCredentialsGrant(),
-			new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
-		);
-
-		// Enable the implicit grant on the server with a token TTL of 1 hour
-		$server->enableGrantType(
-			new ImplicitGrant(
-				$authCodeRepository,
-				new \DateInterval(ClientRepository::getDefaultAuthCodeTTL()),
-				new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
-			)
-		);
-
-		// Enable the authentication code grant on the server
-		$server->enableGrantType(
-			new AuthCodeGrant(
-				$authCodeRepository,
-				$refreshTokenRepository,
-				new \DateInterval(ClientRepository::getDefaultAuthCodeTTL())
-			),
-			new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
-		);
-
-		// Enable the password grant on the server with a token TTL of 1 hour
-		$pwGrant = new PasswordGrant(
-			new UserRepository(),           // instance of UserRepositoryInterface
-			$refreshTokenRepository
-		);
-		$pwGrant->setRefreshTokenTTL(new \DateInterval(ClientRepository::getDefaultRefreshTokenTTL()));
-
-		$server->enableGrantType(
-			$pwGrant,
-			new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
-		);
-
-		// Enable the refresh token grant on the server
-		$refreshGrant = new RefreshTokenGrant($refreshTokenRepository);
-		$refreshGrant->setRefreshTokenTTL(new \DateInterval(ClientRepository::getDefaultRefreshTokenTTL()));
-
-		$server->enableGrantType(
-			$refreshGrant,
-			new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
-		);
-
-		return $server;
-	},
-	ResourceServer::class => function () {
-		$server = new ResourceServer(
-			new AccessTokenRepository(),
-			(new Keys())->getPublicKey()
-		);
-
-		return $server;
-	},
-]);
-
-$app->get('/authorize', function (ServerRequestInterface $request, ResponseInterface $response) use ($app)
+/**
+ * Build the AuthorizationServer, with all grants enabled and client-specific token TTLs
+ *
+ * No DI container is used (Slim 4 doesn't require one for an app this size): these are plain
+ * local variables, built once, captured by the route closures below.
+ */
+function createAuthorizationServer() : AuthorizationServer
 {
-	/* @var \League\OAuth2\Server\AuthorizationServer $server */
-	$server = $app->getContainer()->get(AuthorizationServer::class);
+	// Init our repositories
+	$clientRepository = new ClientRepository();
+	$scopeRepository = new ScopeRepository();
+	$accessTokenRepository = new AccessTokenRepository();
+	$authCodeRepository = new AuthCodeRepository();
+	$refreshTokenRepository = new RefreshTokenRepository();
+	$keys = new Keys();
 
+	// OpenID Connect Response Type
+	$responseType = new IdTokenResponse(new IdentityRepository(), new ClaimExtractor());
+
+	// Setup the authorization server
+	$server = new AuthorizationServer(
+		$clientRepository,
+		$accessTokenRepository,
+		$scopeRepository,
+		$keys->getPrivateKey(),
+		$keys->getEncryptionKey(),
+		$responseType
+	);
+
+	// Enable the client credentials grant on the server
+	$server->enableGrantType(
+		new ClientCredentialsGrant(),
+		new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
+	);
+
+	// Enable the implicit grant on the server with a token TTL of 1 hour
+	$server->enableGrantType(
+		new ImplicitGrant(
+			$authCodeRepository,
+			new \DateInterval(ClientRepository::getDefaultAuthCodeTTL()),
+			new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
+		)
+	);
+
+	// Enable the authentication code grant on the server
+	$server->enableGrantType(
+		new AuthCodeGrant(
+			$authCodeRepository,
+			$refreshTokenRepository,
+			new \DateInterval(ClientRepository::getDefaultAuthCodeTTL())
+		),
+		new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
+	);
+
+	// Enable the password grant on the server with a token TTL of 1 hour
+	$pwGrant = new PasswordGrant(
+		new UserRepository(),           // instance of UserRepositoryInterface
+		$refreshTokenRepository
+	);
+	$pwGrant->setRefreshTokenTTL(new \DateInterval(ClientRepository::getDefaultRefreshTokenTTL()));
+
+	$server->enableGrantType(
+		$pwGrant,
+		new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
+	);
+
+	// Enable the refresh token grant on the server
+	$refreshGrant = new RefreshTokenGrant($refreshTokenRepository);
+	$refreshGrant->setRefreshTokenTTL(new \DateInterval(ClientRepository::getDefaultRefreshTokenTTL()));
+
+	$server->enableGrantType(
+		$refreshGrant,
+		new \DateInterval(ClientRepository::getDefaultAccessTokenTTL())
+	);
+
+	return $server;
+}
+
+$server = createAuthorizationServer();
+$resourceServer = new ResourceServer(
+	new AccessTokenRepository(),
+	(new Keys())->getPublicKey()
+);
+
+$app = AppFactory::create();
+// Slim 4 no longer auto-detects the base path from SCRIPT_NAME like Slim 3 did
+$app->setBasePath($_SERVER['SCRIPT_NAME']);
+
+$app->get('/authorize', function (ServerRequestInterface $request, ResponseInterface $response) use ($server)
+{
 	try {
 		$auth = new Authorize('/openid/'.basename(__FILE__).'/authorize');
 		// validate does NOT return, before user has approved or denied the request!
@@ -170,18 +155,14 @@ $app->get('/authorize', function (ServerRequestInterface $request, ResponseInter
 	}
 	catch (\Exception $exception) {
 		_egw_log_exception($exception);
-		$body = new Stream('php://temp', 'r+');
-		$body->write($exception->getMessage());
+		$response->getBody()->write($exception->getMessage());
 
-		return $response->withStatus(500)->withBody($body);
+		return $response->withStatus(500);
 	}
 });
 
-$app->post('/access_token', function (ServerRequestInterface $request, ResponseInterface $response) use ($app)
+$app->post('/access_token', function (ServerRequestInterface $request, ResponseInterface $response) use ($server)
 {
-	/* @var \League\OAuth2\Server\AuthorizationServer $server */
-	$server = $app->getContainer()->get(AuthorizationServer::class);
-
 	try {
 		return $server->respondToAccessTokenRequest($request, $response);
 	}
@@ -190,19 +171,15 @@ $app->post('/access_token', function (ServerRequestInterface $request, ResponseI
 	}
 	catch (\Exception $exception) {
 		_egw_log_exception($exception);
-		$body = new Stream('php://temp', 'r+');
-		$body->write($exception->getMessage());
+		$response->getBody()->write($exception->getMessage());
 
-		return $response->withStatus(500)->withBody($body);
+		return $response->withStatus(500);
 	}
 });
 
 $app->post(
     '/introspect',
-    function (ServerRequestInterface $request, ResponseInterface $response) use ($app) {
-         /* @var \League\OAuth2\Server\AuthorizationServer $server */
-        $server = $app->getContainer()->get(AuthorizationServer::class);
-
+    function (ServerRequestInterface $request, ResponseInterface $response) use ($server) {
          try {
             // Validate the given introspect request
             $server->validateIntrospectionRequest($request);
@@ -215,9 +192,8 @@ $app->post(
         }
 		catch (\Exception $exception) {
 			_egw_log_exception($exception);
-            $body = $response->getBody();
-            $body->write($exception->getMessage());
-             return $response->withStatus(500)->withBody($body);
+            $response->getBody()->write($exception->getMessage());
+            return $response->withStatus(500);
         }
     }
 );
@@ -242,12 +218,11 @@ $app->get('/userinfo', function (ServerRequestInterface $request, ResponseInterf
 	}
 	catch (\Exception $exception) {
 		_egw_log_exception($exception);
-		$body = new Stream('php://temp', 'r+');
-		$body->write($exception->getMessage());
+		$response->getBody()->write($exception->getMessage());
 
-		return $response->withStatus(500)->withBody($body);
+		return $response->withStatus(500);
 	}
-})->add(new ResourceServerMiddleware($app->getContainer()->get(ResourceServer::class)));
+})->add(new LegacyMiddlewareAdapter(new ResourceServerMiddleware($resourceServer), $app->getResponseFactory()));
 
 $app->get('/jwks', function (ServerRequestInterface $request, ResponseInterface $response)
 {
@@ -263,10 +238,9 @@ $app->get('/jwks', function (ServerRequestInterface $request, ResponseInterface 
 	}
 	catch (\Exception $exception) {
 		_egw_log_exception($exception);
-		$body = new Stream('php://temp', 'r+');
-		$body->write($exception->getMessage());
+		$response->getBody()->write($exception->getMessage());
 
-		return $response->withStatus(500)->withBody($body);
+		return $response->withStatus(500);
 	}
 });
 
@@ -277,15 +251,14 @@ if (function_exists('apache_request_headers') && !isset($_SERVER['HTTP_AUTHORIZA
 	$_SERVER['HTTP_AUTHORIZATION'] = $headers['Authorization'];
 }
 
-// Supply a custom callable resolver for Slim v3, which resolves PSR-15 middlewares
-$container = $app->getContainer();
-$container['callableResolver'] = function ($container)
-{
-    return new CallableResolver($container);
-};
+$app->addRoutingMiddleware();
+$app->addBodyParsingMiddleware();
+
 // Add our PSR-15 middleware logger
 $formatter = new Log\HttpFormatter();
 // create a full request log in "$files/openid/request.log"
 $app->add(new Log\Middleware($formatter, $formatter, new Log\Logger('openid')));
+
+$app->addErrorMiddleware(true, true, true);
 
 $app->run();

@@ -18,9 +18,6 @@ use League\OAuth2\Server\CryptKey;
 use EGroupware\Api;
 use Lcobucci\JWT;
 
-// require PHP 8 fixed class before Lcobucci/JWT loads it
-require_once __DIR__.'/OpenSSL.php';
-
 /**
  * Class to create, store and retrieve our key
  *
@@ -217,8 +214,8 @@ class Keys
 		$privateKey = $this->getPrivateKey();
 		return JWT\Configuration::forAsymmetricSigner(
 			new JWT\Signer\Rsa\Sha256(),
-			new JWT\Signer\Key($privateKey->getKeyPath(), $privateKey->getPassPhrase()),
-			new JWT\Signer\Key($this->getPublicKey())
+			JWT\Signer\Key\InMemory::file($privateKey->getKeyPath(), $privateKey->getPassPhrase() ?? ''),
+			JWT\Signer\Key\InMemory::file($this->getPublicKey())
 		);
 	}
 }

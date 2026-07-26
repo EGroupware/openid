@@ -23,8 +23,6 @@ use League\OAuth2\Server\Exception\OAuthServerException;
 use EGroupware\OpenID\Entities\ScopeEntity;
 use EGroupware\Api;
 
-require_once __DIR__ . "/../../vendor/autoload.php";
-
 class ScopeRepository extends Base implements ScopeRepositoryInterface
 {
 	/**
@@ -108,7 +106,7 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
 	 * @return ScopeEntityInterface
 	 * @throws OAuthServerException
 	 */
-	public function getScopeEntityByIdentifier($identifier)
+	public function getScopeEntityByIdentifier(string $identifier) : ?ScopeEntityInterface
 	{
 		if (str_starts_with($identifier, self::APP_PREFIX) && isset($GLOBALS['egw_info']['apps'][$app=substr($identifier, strlen(self::APP_PREFIX))]))
 		{
@@ -206,11 +204,12 @@ class ScopeRepository extends Base implements ScopeRepositoryInterface
      */
 	public function finalizeScopes(
 		array $scopes,
-		$grantType,
+		string $grantType,
 		ClientEntityInterface $clientEntity,
-		$userIdentifier = null
-	) {
-		unset($userIdentifier);	// not used, but required by function signature
+		?string $userIdentifier = null,
+		?string $authCodeId = null
+	) : array {
+		unset($userIdentifier, $authCodeId);	// not used, but required by function signature
 
 		// check if grantType is allowed for the client
 		if ($grantType && ($limitGrants = $clientEntity->getGrants()) &&

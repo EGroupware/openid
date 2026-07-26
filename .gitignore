@@ -4,3 +4,5 @@
 *.old.xet
 *.min.js*
 *.min.css*
+/vendor/
+/composer.lock

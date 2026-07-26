@@ -17,9 +17,11 @@
 namespace EGroupware\OpenID\ResponseTypes;
 
 use EGroupware\OpenID\RequestTypes\AuthorizationRequest;
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Signer\Key;
+use Lcobucci\JWT\Encoding\ChainedFormatter;
+use Lcobucci\JWT\Encoding\JoseEncoder;
+use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Lcobucci\JWT\Token\Builder;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
@@ -39,17 +41,23 @@ class IdTokenResponse extends BaseIdTokenResponse
 	 * @param UserEntityInterface $userEntity
 	 * @return Builder
 	 */
-	protected function getBuilder(AccessTokenEntityInterface $accessToken, UserEntityInterface $userEntity)
+	protected function getBuilder(AccessTokenEntityInterface $accessToken, UserEntityInterface $userEntity) : Builder
 	{
-		// Add required id_token claims
-		$builder = (new Builder())
-			->setAudience($accessToken->getClient()->getIdentifier())
-			->setIssuer(Http::schema().'://' . Http::host())
-			->setIssuedAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
-			->setExpiration(\DateTimeImmutable::createFromInterface($accessToken->getExpiryDateTime()))
-			->setSubject($userEntity->getIdentifier());
+		$builder = new Builder(new JoseEncoder(), ChainedFormatter::withUnixTimestampDates());
 
-		return $builder;
+		$expiresAt = $accessToken->getExpiryDateTime();
+		if ($expiresAt instanceof \DateTime)
+		{
+			$expiresAt = \DateTimeImmutable::createFromMutable($expiresAt);
+		}
+
+		// Add required id_token claims
+		return $builder
+			->permittedFor($accessToken->getClient()->getIdentifier())
+			->issuedBy(Http::schema().'://' . Http::host())
+			->issuedAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
+			->expiresAt($expiresAt)
+			->relatedTo($userEntity->getIdentifier());
 	}
 
 	protected $nonce;
@@ -72,9 +80,8 @@ class IdTokenResponse extends BaseIdTokenResponse
 	 * @param AccessTokenEntityInterface $accessToken
 	 * @param AuthorizationRequest|null $authorizationRequest
 	 * @return array|string[]
-	 * @throws \EGroupware\Api\Exception\WrongParameter
 	 */
-	public function getExtraParams(AccessTokenEntityInterface $accessToken, ?AuthorizationRequest $authorizationRequest=null)
+	public function getExtraParams(AccessTokenEntityInterface $accessToken, ?AuthorizationRequest $authorizationRequest=null) : array
 	{
 		if (false === $this->isOpenIDRequest($accessToken->getScopes())) {
 			return [];
@@ -106,15 +113,14 @@ class IdTokenResponse extends BaseIdTokenResponse
 		}
 
 		foreach ($claims as $claimName => $claimValue) {
-			$builder->set($claimName, $claimValue);
+			$builder = $builder->withClaim($claimName, $claimValue);
 		}
 
-		$token = $builder
-			->sign(new Sha256(), new Key($this->privateKey->getKeyPath(), $this->privateKey->getPassPhrase()))
-			->getToken();
+		$key = InMemory::plainText($this->privateKey->getKeyContents(), (string)$this->privateKey->getPassPhrase());
+		$token = $builder->getToken(new Sha256(), $key);
 
 		return [
-			'id_token' => (string) $token
+			'id_token' => $token->toString()
 		];
 	}
 

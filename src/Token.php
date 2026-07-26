@@ -14,18 +14,13 @@
 
 namespace EGroupware\OpenID;
 
-// require autoloader from our own vendor dir
-require_once __DIR__ . "/../vendor/autoload.php";
-
-// suppress deprecation errors, until we're able to updated steverhoades/oauth2-openid-connect-server and specially lcobucci/jwt
-error_reporting(E_ALL & ~E_DEPRECATED);
 
 use EGroupware\Api;
 use DateInterval;
-use Lcobucci\JWT\Parser;
-use Lcobucci\JWT\Signer\Keychain;
-use Lcobucci\JWT\Signer\Rsa\Sha256;
-use Lcobucci\JWT\ValidationData;
+use Lcobucci\Clock\SystemClock;
+use Lcobucci\JWT\UnencryptedToken;
+use Lcobucci\JWT\Validation\Constraint\SignedWith;
+use Lcobucci\JWT\Validation\Constraint\StrictValidAt;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Grant\AbstractGrant;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
@@ -77,7 +72,7 @@ class Token extends AbstractGrant
 			return $this->scopeRepository->getScopeEntityByIdentifier($id);
 		}, $scopeIdentifiers);
 
-		$client = $this->clientRepository->getClientEntity($clientIdentifier, null, null, false);
+		$client = $this->clientRepository->getClientEntity($clientIdentifier);
 
 		if (!empty($min_lifetime))
 		{
@@ -98,10 +93,13 @@ class Token extends AbstractGrant
 			}
 			$ttl = new DateInterval($lifetime);
 
-			$token = $this->issueAccessToken($ttl, $client, $this->user, $scopes);
+			$token = $this->issueAccessToken($ttl, $client, (string)$this->user, $scopes);
 		}
-		return $return_jwt === false ? $token :
-			(string)$token->convertToJWT($this->privateKey, is_array($return_jwt) ? $return_jwt : []);
+		if ($return_jwt === false)
+		{
+			return $token;
+		}
+		return $token->convertToJWT($this->privateKey, is_array($return_jwt) ? $return_jwt : [])->toString();
 	}
 
 	/**
@@ -110,13 +108,14 @@ class Token extends AbstractGrant
 	 * We only validate expiration date and signature, not that the token is a (stored and not revoked) access-token.
 	 *
 	 * @param string $jwt
-	 * @return ?Token null if token is expired or signature not valid, otherwise the token to e.g. retrieve a claim
+	 * @return ?UnencryptedToken null if token is expired or signature not valid, otherwise the token to e.g. retrieve a claim
 	 */
 	public function validateJWT($jwt)
 	{
-		$token = (new Parser())->parse($jwt);
+		$config = (new Keys())->jwtConfiguration();
+		$token = $config->parser()->parse($jwt);
 
-		if ($this->isTokenExpired($token) || $this->isTokenUnverified($token))
+		if (!($token instanceof UnencryptedToken) || $this->isTokenExpired($token) || $this->isTokenUnverified($token))
 		{
 			return null;
 		}
@@ -129,13 +128,13 @@ class Token extends AbstractGrant
 	 * @param string $jwt
 	 * @param string $min_lifetime ="PT5M" default 5minutes
 	 * @param ClientEntityInterface|null &$client on return client-entity
-	 * @return ?Token null if token is expired or signature not valid, otherwise the token to e.g. retrieve a claim
+	 * @return ?UnencryptedToken null if token is expired or signature not valid, otherwise the token to e.g. retrieve a claim
 	 * @throws \League\OAuth2\Server\Exception\OAuthServerException
 	 */
 	public function validate($jwt, string $min_lifetime="PT5M", ?ClientEntityInterface &$client=null)
 	{
 		if (($token = $this->validateJWT($jwt)) &&
-			($client = $this->clientRepository->getClientEntity($token->claims()->get('aud')[0], null, null, false)) &&
+			($client = $this->clientRepository->getClientEntity($token->claims()->get('aud'))) &&
 			($account_id = Api\Accounts::getInstance()->name2id($token->claims()->get('sub'))) &&
 			$this->accessTokenRepository->findToken($client, $account_id, $min_lifetime, $token->claims()->get('jti')))
 		{
@@ -147,35 +146,29 @@ class Token extends AbstractGrant
 	/**
 	 * Checks whether the token is unverified.
 	 *
-	 * @param Token $token
+	 * @param UnencryptedToken $token
 	 *
 	 * @return bool
 	 */
-	private function isTokenUnverified(\Lcobucci\JWT\Token $token)
+	private function isTokenUnverified(UnencryptedToken $token)
 	{
-		$keychain = new Keychain();
+		$config = (new Keys())->jwtConfiguration();
 
-		$privateKey = new Keys();
-		$key = $keychain->getPrivateKey(
-			$privateKey->getPrivateKey()->getKeyPath(),
-			$privateKey->getPrivateKey()->getPassPhrase()
-		);
-
-		return $token->verify(new Sha256(), $key->getContent()) === false;
+		return !$config->validator()->validate($token, new SignedWith($config->signer(), $config->verificationKey()));
 	}
 
 	/**
 	 * Ensure access token hasn't expired.
 	 *
-	 * @param Token $token
+	 * @param UnencryptedToken $token
 	 *
 	 * @return bool
 	 */
-	private function isTokenExpired(\Lcobucci\JWT\Token $token)
+	private function isTokenExpired(UnencryptedToken $token)
 	{
-		$data = new ValidationData(time());
+		$config = (new Keys())->jwtConfiguration();
 
-		return !$token->validate($data);
+		return !$config->validator()->validate($token, new StrictValidAt(SystemClock::fromUTC()));
 	}
 
 	/**
@@ -193,10 +186,10 @@ class Token extends AbstractGrant
 			return $this->scopeRepository->getScopeEntityByIdentifier($id);
 		}, $scopeIdentifiers);
 
-		$client = $this->clientRepository->getClientEntity($clientIdentifier, null, null, false);
+		$client = $this->clientRepository->getClientEntity($clientIdentifier);
 		$ttl = new DateInterval(empty($lifetime) ? $lifetime : Repositories\ClientRepository::getDefaultAuthCodeTTL());
 
-		$token = $this->issueAuthCode($ttl, $client, $this->user, $client->getRedirectUri(), $scopes);
+		$token = $this->issueAuthCode($ttl, $client, (string)$this->user, $client->getRedirectUri(), $scopes);
 
 		return $token->getIdentifier();
 	}
@@ -206,22 +199,21 @@ class Token extends AbstractGrant
 	 *
 	 * @return string
 	 */
-	function getIdentifier()
+	function getIdentifier() : string
 	{
-		return null;
+		return '';
 	}
 
  	/**
 	 * Required to extends AbstractGrant
-	 *
-	 * @return string
 	 */
    public function respondToAccessTokenRequest(
         ServerRequestInterface $request,
         ResponseTypeInterface $responseType,
         DateInterval $accessTokenTTL
-    )
+    ) : ResponseTypeInterface
 	{
 		unset($request, $responseType, $accessTokenTTL);
+		throw new \LogicException(__CLASS__.' does not support '.__FUNCTION__);
 	}
 }

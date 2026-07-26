@@ -19,12 +19,15 @@ use GuzzleHttp\RequestOptions;
  *
  * Contract under test: a client can exchange an EGroupware username/password directly for an
  * access_token + refresh_token bound to that user (used eg. by Dovecot). Pass criteria: HTTP 200,
- * access_token + refresh_token present; wrong password rejected with HTTP 401 invalid_credentials
- * and does NOT reveal whether the account itself exists.
+ * access_token + refresh_token present; wrong password rejected with HTTP 400 invalid_grant and
+ * does NOT reveal whether the account itself exists.
  */
 class PasswordGrantTest extends OpenIDTestBase
 {
-	protected static array $test_grants = ['password'];
+	// refresh_token must also be enabled: league/oauth2-server 9 only issues a refresh_token if
+	// the client's grants include 'refresh_token' (AbstractGrant::issueRefreshToken() checks
+	// ClientEntity::supportsGrantType('refresh_token'))
+	protected static array $test_grants = ['password', 'refresh_token'];
 
 	public function testIssuesAccessAndRefreshToken() : void
 	{
@@ -58,9 +61,9 @@ class PasswordGrantTest extends OpenIDTestBase
 				'scope' => 'openid',
 			],
 		]);
-		$this->assertHttpStatus(401, $response);
+		$this->assertHttpStatus(400, $response);
 		$data = $this->jsonDecode($response);
-		$this->assertSame('invalid_credentials', $data['error'] ?? null,
-			'Wrong credentials must map to invalid_credentials, not leak account existence');
+		$this->assertSame('invalid_grant', $data['error'] ?? null,
+			'Wrong credentials must map to invalid_grant, not leak account existence');
 	}
 }
