@@ -15,13 +15,13 @@
  */
 
 // until #925 is merged: use League\OAuth2\Server\AuthorizationServer;
-use EGroupware\OpenId\AuthorizationServer;
+use EGroupware\OpenID\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
-use EGroupware\OpenId\Grant\AuthCodeGrant;
-use EGroupware\OpenId\Grant\ClientCredentialsGrant;
-use EGroupware\OpenId\Grant\ImplicitGrant;
-use EGroupware\OpenId\Grant\PasswordGrant;
-use EGroupware\OpenId\Grant\RefreshTokenGrant;
+use EGroupware\OpenID\Grant\AuthCodeGrant;
+use EGroupware\OpenID\Grant\ClientCredentialsGrant;
+use EGroupware\OpenID\Grant\ImplicitGrant;
+use EGroupware\OpenID\Grant\PasswordGrant;
+use EGroupware\OpenID\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\Middleware\ResourceServerMiddleware;
 use League\OAuth2\Server\ResourceServer;
 use Psr\Http\Message\ResponseInterface;
