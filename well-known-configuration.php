@@ -16,6 +16,7 @@
 
 use EGroupware\Api;
 use EGroupware\OpenID;
+use EGroupware\OpenID\Authorize;
 
 
 $GLOBALS['egw_info'] = array(
