@@ -1,5 +1,34 @@
 # OpenID Connect and OAuth2 server for EGroupware
 
+## 2026 rewrite against current upstream releases
+
+This app used to vendor its own, long-outdated copies of `league/oauth2-server` (7.4.0),
+`steverhoades/oauth2-openid-connect-server` (1.3.0), `lcobucci/jwt` (3.4.6) and `slim/slim`
+(3.13.0, EOL) in its own `vendor/` directory, with several upstream classes copy-pasted into
+`EGroupware\OpenID\*` and patched just to keep running on PHP 8.
+
+It has now been rewritten on top of current upstream releases (`league/oauth2-server` ^9.4,
+`steverhoades/oauth2-openid-connect-server` ^3.0.1, `lcobucci/jwt` ^5.6, `slim/slim` ^4.15),
+reusing the existing DB-backed storage layer (Repositories/Entities) unchanged wherever the new
+interfaces allow it. The app's own `vendor/` directory is gone; it now shares EGroupware's main
+`vendor/` tree like every other app, which also fixed a real bug (see below).
+
+* [`doc/UPSTREAM-OVERRIDES.md`](doc/UPSTREAM-OVERRIDES.md) catalogs every class that forks,
+  patches or extends upstream code, why, and what changed in the rewrite - the API migration
+  notes there are the place to look when touching `AuthorizationServer.php`, the `Grant/*`
+  overrides, `IdTokenResponse.php`, `ClaimExtractor.php` or the JWT signing/validation code.
+* `tests/` has a new black-box HTTP contract test suite (PHPUnit + Guzzle against the real
+  `endpoint.php`, following `api/tests/CalDAVTest.php`'s conventions) covering all grants
+  (client_credentials, password, refresh_token, authorization_code, implicit), `/userinfo`,
+  `/introspect`, `/jwks` and OpenID Discovery. Run it from the main repo root with:
+  `EGW_URL="http://<host>/egroupware" vendor/bin/phpunit -c doc/phpunit.xml openid/tests`
+* Sharing one `vendor/` tree fixed a real bug: `egroupware/status`'s Jitsi backend and this app's
+  `Token.php` (used by rocketchat's SSO integration) used to each load their own, differently
+  versioned copy of `lcobucci/jwt` - since PHP resolves classes globally by name, whichever
+  package's autoloader ran first for a given request "won", and lcobucci/jwt 3.4.6's
+  `class_alias()`-based compat layer made this a permanent, order-dependent landmine. There is now
+  exactly one `lcobucci/jwt` (5.6) in the whole process.
+
 ## Supported endpoints and token issuer
 * Authorization: https://example.org/egroupware/openid/endpoint.php/authorize
 * Token: https://example.org/egroupware/openid/endpoint.php/access_token
@@ -31,16 +60,16 @@
 * [Identity, Claims, & Tokens – An OpenID Connect Primer](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1) in 3 parts
 
 ## Open tasks:
-- [ ] PHP 8.0 compatibility: temporary fix implemented using iii. until we're ready to update steverhoades/oauth2-openid-connect-server
-  1. https://github.com/steverhoades/oauth2-openid-connect-server/pull/33 Support for lcobucci/jwt:4.0
-  1. https://github.com/thephpleague/oauth2-server/pull/1146/files
-  1. https://github.com/lcobucci/jwt/blob/4.0.x/composer.json#L20 lcobucci/jwt:4.0 support PHP 8 [PHP 8 for 3.4](https://github.com/lcobucci/jwt/pull/592/files)
+- [ ] `/introspect` doesn't verify the requesting client's Basic-auth credentials against the
+  token's `client_id` - any client (or none) can introspect any token, see
+  [`doc/UPSTREAM-OVERRIDES.md`](doc/UPSTREAM-OVERRIDES.md) for details
 - [ ] password grant: record and check failed login attempts like login page (see [user.authentication.failed](https://oauth2.thephpleague.com/authorization-server/events/))
 - [ ] wrong password on login looses oath request in session and therefore fails after correct password was entered
 - [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
 - [ ] token endpoint must support response_type=code+id_token
 - [ ] allow users to create personal clients
 - [ ] implement full [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
+- [x] rewritten against current upstream releases (league/oauth2-server 9.4, steverhoades/oauth2-openid-connect-server 3.0.1, lcobucci/jwt 5.6, slim/slim 4.15), own `vendor/` merged into EGroupware's main vendor tree, black-box HTTP contract test suite added (see "2026 rewrite" above)
 - [x] /.well-known/openid-configuration is supported now
 - [x] token endpoint must return nonce of authorization request as claim in id_token
 - [x] fix League OAuth2 server to support multiple response_type(s), currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant, [see response in this ticket](https://github.com/thephpleague/oauth2-server/issues/903#issuecomment-423891504)
