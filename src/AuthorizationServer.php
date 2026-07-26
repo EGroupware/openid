@@ -46,14 +46,19 @@ use Psr\Http\Message\ServerRequestInterface;
 class AuthorizationServer extends BaseAuthorizationServer
 {
     /**
-     * Our own copy of the access-token repository, for the introspector.
+     * Our own copy of the access-token and client repositories, for the introspector.
      *
-     * League's own $accessTokenRepository is a private, promoted constructor property, so a
-     * subclass can't reach it - keep a second reference here instead.
+     * League's own $accessTokenRepository/$clientRepository are private, promoted constructor
+     * properties, so a subclass can't reach them - keep second references here instead.
      *
      * @var AccessTokenRepositoryInterface
      */
     private $accessTokenRepository;
+
+    /**
+     * @var ClientRepositoryInterface
+     */
+    private $clientRepository;
 
     /**
      * @var null|IntrospectionResponse
@@ -81,6 +86,7 @@ class AuthorizationServer extends BaseAuthorizationServer
         parent::__construct($clientRepository, $accessTokenRepository, $scopeRepository, $privateKey, $encryptionKey, $responseType);
 
         $this->accessTokenRepository = $accessTokenRepository;
+        $this->clientRepository = $clientRepository;
     }
 
     /**
@@ -183,7 +189,7 @@ class AuthorizationServer extends BaseAuthorizationServer
     protected function getIntrospectionValidator()
     {
         if ($this->introspectionValidator instanceof IntrospectionValidatorInterface === false) {
-            $this->introspectionValidator = new BearerTokenValidator($this->accessTokenRepository);
+            $this->introspectionValidator = new BearerTokenValidator($this->accessTokenRepository, $this->clientRepository);
 			// not included in OAuth2 Server pull request #926
 			$this->introspectionValidator->setPrivateKey($this->privateKey);
         }
@@ -232,6 +238,7 @@ class AuthorizationServer extends BaseAuthorizationServer
         if (!isset($this->introspector)) {
             $this->introspector = new Introspector(
                 $this->accessTokenRepository,
+                $this->clientRepository,
                 $this->privateKey,
                 $this->getIntrospectionValidator()
             );

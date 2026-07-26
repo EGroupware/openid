@@ -6,6 +6,7 @@ use League\OAuth2\Server\Exception\OAuthServerException;
 use EGroupware\OpenID\IntrospectionValidators\BearerTokenValidator;
 use EGroupware\OpenID\IntrospectionValidators\IntrospectionValidatorInterface;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
+use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use EGroupware\OpenID\ResponseTypes\IntrospectionResponse;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -17,6 +18,11 @@ class Introspector
      * @var AccessTokenRepositoryInterface
      */
     private $accessTokenRepository;
+
+    /**
+     * @var ClientRepositoryInterface
+     */
+    private $clientRepository;
 
     /**
      * @var CryptKey
@@ -32,15 +38,19 @@ class Introspector
      * New Introspector instance.
      *
      * @param AccessTokenRepositoryInterface  $accessTokenRepository
+     * @param ClientRepositoryInterface       $clientRepository used by the default
+     *  BearerTokenValidator to authenticate the requesting client
      * @param CryptKey                        $privateKey
      * @param IntrospectionValidatorInterface $introspectionValidator
      */
     public function __construct(
         AccessTokenRepositoryInterface $accessTokenRepository,
+        ClientRepositoryInterface $clientRepository,
         CryptKey $privateKey,
         IntrospectionValidatorInterface $introspectionValidator = null
     ) {
         $this->accessTokenRepository = $accessTokenRepository;
+        $this->clientRepository = $clientRepository;
         $this->privateKey = $privateKey;
         $this->introspectionValidator = $introspectionValidator;
     }
@@ -89,7 +99,7 @@ class Introspector
     protected function getIntrospectionValidator()
     {
         if ($this->introspectionValidator instanceof IntrospectionValidatorInterface === false) {
-            $this->introspectionValidator = new BearerTokenValidator($this->accessTokenRepository);
+            $this->introspectionValidator = new BearerTokenValidator($this->accessTokenRepository, $this->clientRepository);
             $this->introspectionValidator->setPrivateKey($this->privateKey);
         }
 

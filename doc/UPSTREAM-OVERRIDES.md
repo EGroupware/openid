@@ -97,14 +97,25 @@ this even now (league issue #1473 still open). Client-specific token TTLs. `Admi
 `groups`/`roles`/`email_aliases` claims/scopes. `well-known-configuration.php` (OpenID Discovery -
 no upstream package implements this either).
 
-## Known behavioral gap found while writing tests (not an "override", but worth fixing)
+## Resolved: `/introspect` client authentication gap found while writing tests
 
-`Introspector::validateIntrospectionRequest()` only checks the HTTP method is `POST` - it never
-actually verifies the requesting client's Basic-auth credentials against the token's `client_id`.
-Any client (or no client at all) can introspect any token as long as they have the token string.
-`openid/tests/IntrospectionTest.php` deliberately does NOT assert this is required (to avoid
-encoding the gap as "correct" in the regression suite) - decide during the rewrite whether to add
-proper client authentication to `/introspect`.
+`Introspector::validateIntrospectionRequest()` only checked the HTTP method was `POST` - it never
+verified the requesting client's Basic-auth credentials against the token's `client_id`. Any
+client (or no client at all) could introspect any token as long as they had the token string.
+
+Fixed in `IntrospectionValidators/BearerTokenValidator.php`: `validateIntrospection()` now also
+calls a new `isClientUnauthorized()` check, which extracts client credentials from the
+`Authorization: Basic` header (falling back to `client_id`/`client_secret` POST body params, same
+as the token endpoint), authenticates the client via `ClientRepositoryInterface::getClientEntity()`
++ `validateClient()` (secret only checked for confidential clients, matching how league's own
+`AbstractGrant::validateClient()` treats public clients), and requires the authenticated client's
+identifier to match the token's `aud` claim - only the client a token was issued to can introspect
+it. `BearerTokenValidator` and `Introspector` both gained a `ClientRepositoryInterface` constructor
+parameter to support this (`AuthorizationServer` keeps its own reference to the repository for the
+same reason it already keeps one for `AccessTokenRepositoryInterface` - the base class's own copy
+is a private, promoted constructor property). `openid/tests/IntrospectionTest.php` now asserts
+`active:false` for: no credentials, wrong secret, an unknown client, and a different, validly
+authenticated client trying to introspect another client's token.
 
 ## Rewrite status (`upstream-rebase-2026` branch)
 
