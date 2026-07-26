@@ -123,34 +123,21 @@ lcobucci/jwt 3.x's `Builder`/`Parser`/`->sign()->getToken()`). All 31 `openid/te
 the new stack (`league/oauth2-server` 9.4, `steverhoades` v3.0.1, `slim/slim` 4.15, `lcobucci/jwt`
 5.6, `lcobucci/clock` 3.6).
 
-**Not yet resolved: `Token.php` (used by the `rocketchat` app's SSO integration, called from a hook
-that runs on every EGroupware page).** `EGroupware\OpenID\Token` generates JWTs using our upgraded
-lcobucci/jwt 5.x, but by the time it runs (mid-request, from inside an already-running EGroupware
-page), `header.inc.php` has already loaded EGroupware's *main* `vendor/autoload.php`, which for
-`lcobucci/jwt` 3.4.6 (pulled in by the `egroupware/status` app) unconditionally runs
-`compat/class-aliases.php`:
-```php
-class_exists(Token\Plain::class, false) || class_alias(Token::class, Token\Plain::class);
-```
-Since our namespaced `Token\Plain` hasn't been touched yet at that point, this permanently
-aliases it to the *old*, incompatible `Lcobucci\JWT\Token` class for the rest of that PHP
-process - `class_alias()` cannot be undone. `endpoint.php` avoids this entirely because it's its
-own request from the very start (our vendor loads before `header.inc.php` ever gets a chance to
-run this shim) - `Token.php`, invoked mid-request from a hook, has no such luck; no autoload
-ordering trick can fix it. `Token::accessToken()` currently catches the resulting `TypeError` and
-returns `null` (logged via `_egw_log_exception`) so this degrades to "SSO token unavailable"
-instead of a fatal 500 on every single EGroupware page - but the underlying capability doesn't
-work. Real fixes (needs a decision, not yet made): get `egroupware/status` off lcobucci/jwt 3.x, or
-have `rocketchat`'s SSO call the HTTP `/access_token` endpoint instead of instantiating
-`EGroupware\OpenID\Token` in-process.
+**Resolved: `Token.php` (used by the `rocketchat` app's SSO integration, called from a hook that
+runs on every EGroupware page).** Previously, `EGroupware\OpenID\Token` generated JWTs using our
+upgraded lcobucci/jwt 5.x while `egroupware/status`'s `Jitsi.php` backend still pulled in
+lcobucci/jwt 3.4.6 in the *same* main vendor tree. Since PHP resolves classes globally by name
+regardless of which package "owns" them, whichever copy's autoloader ran first for a given class
+name won for the rest of the process - and lcobucci/jwt 3.4.6's `compat/class-aliases.php`
+(`class_alias(Token::class, Token\Plain::class)`, a `class_alias()` call, which is irreversible)
+made this a permanent, order-dependent landmine whenever both packages were loaded in one request.
 
-The same class-identity problem also hit `Lcobucci\Clock\Clock`/`SystemClock`/`FrozenClock` (same
-compat shim, `interface_exists()`-gated instead of `class_alias()`-gated) - added `lcobucci/clock`
-as an explicit dependency and preloaded it the same way, since `endpoint.php` DOES control its own
-load order. See the `class_exists(...)` preload block at the top of `endpoint.php` before
-`header.inc.php` is included, and the `$openid_loader->unregister(); $openid_loader->register(true);`
-re-prepend right after it - both are required for `endpoint.php` to keep working and are not
-optional cleanup.
+Fixed by porting `egroupware/status`'s `Jitsi.php` to lcobucci/jwt 5.x (see that repo's
+`fix-lcobucci-jwt-5` branch) and merging openid's own `vendor/` directory into EGroupware's main
+vendor tree, so there is now exactly one copy of `lcobucci/jwt` (5.6) and `lcobucci/clock` (3.x) in
+the whole process - the class-identity collision can no longer happen. The defensive try/catch
+around `convertToJWT()` in `Token::accessToken()` and the preload/re-prepend workaround at the top
+of `endpoint.php` (both worked around the collision, not fixed it) have been removed as dead code.
 
 ## API migration notes (league/oauth2-server 7 -> 9, steverhoades 1 -> 3, lcobucci/jwt 3 -> 5)
 

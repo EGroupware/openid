@@ -14,8 +14,6 @@
 
 namespace EGroupware\OpenID;
 
-// require autoloader from our own vendor dir
-require_once __DIR__ . "/../vendor/autoload.php";
 
 use EGroupware\Api;
 use DateInterval;
@@ -101,22 +99,7 @@ class Token extends AbstractGrant
 		{
 			return $token;
 		}
-		try
-		{
-			// KNOWN ISSUE (see openid/doc/UPSTREAM-OVERRIDES.md): when called from within an
-			// already-running EGroupware request (eg. this class is used by rocketchat for SSO),
-			// lcobucci/jwt 3.4.6 in the main vendor dir (pulled in by egroupware/status) has
-			// already permanently class_alias()'d Lcobucci\JWT\Token\Plain to its own incompatible
-			// Token class by the time we get here, which breaks JWT generation with our upgraded
-			// lcobucci/jwt 5.x. Fail soft (null / caught exception in the caller) instead of a
-			// fatal TypeError that would take down the entire page, until that's resolved.
-			return (string)$token->convertToJWT($this->privateKey, is_array($return_jwt) ? $return_jwt : []);
-		}
-		catch (\Throwable $e)
-		{
-			_egw_log_exception($e);
-			return null;
-		}
+		return $token->convertToJWT($this->privateKey, is_array($return_jwt) ? $return_jwt : [])->toString();
 	}
 
 	/**

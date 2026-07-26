@@ -10,8 +10,6 @@
 
 namespace EGroupware\OpenID\AdminCmds;
 
-// require autoloader from our own vendor dir
-require_once __DIR__ . "/../../vendor/autoload.php";
 
 use admin_cmd;
 use EGroupware\Api;

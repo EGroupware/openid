@@ -14,26 +14,6 @@
  * @link https://github.com/thephpleague/oauth2-server
  */
 
-// require autoloader from our own vendor dir
-$openid_loader = require_once __DIR__ . "/vendor/autoload.php";
-// EGroupware's main vendor dir still has lcobucci/jwt 3.4.6 (required by egroupware/status), whose
-// own compat/class-aliases.php does
-//   class_exists(Token\Plain::class, false) || class_alias(Token::class, Token\Plain::class)
-// ie. if Token\Plain isn't loaded YET when that file runs (which happens unconditionally, as a
-// composer "files" autoload entry, the moment header.inc.php requires the main vendor/autoload.php
-// below), it permanently aliases our namespaced Token\Plain to the OLD, unnamespaced, incompatible
-// Token class - and class_alias() can never be undone for the rest of the process. Force OUR real
-// Token\Plain/Token\Signature to be defined first, so that class_exists() check finds them already
-// loaded and the alias is never created.
-class_exists('Lcobucci\JWT\Token\Plain');
-class_exists('Lcobucci\JWT\Token\Signature');
-// Same story for Lcobucci\Clock\Clock/SystemClock/FrozenClock: lcobucci/jwt 3.4.6's
-// compat/lcobucci-clock-polyfill.php defines its own non-PSR-compatible versions of these under
-// `if (!interface_exists(Clock::class))` - force our real (PSR ClockInterface-compatible)
-// lcobucci/clock package to be loaded first so that guard finds them already defined.
-class_exists('Lcobucci\Clock\SystemClock');
-class_exists('Lcobucci\Clock\FrozenClock');
-
 // until #925 is merged: use League\OAuth2\Server\AuthorizationServer;
 use EGroupware\OpenId\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
@@ -71,18 +51,6 @@ $GLOBALS['egw_info'] = array(
 		'autocreate_session_callback' => Authorize::class.'::anon_session',
 ));
 include('../header.inc.php');
-
-// Our own vendor dir has independent (and often newer) copies of several packages also present in
-// EGroupware's main vendor dir (psr/log, lcobucci/jwt, ...). PHP resolves each CLASS independently
-// on first reference, regardless of which package "owns" it - so if one autoloader supplies one
-// class of such a package and another autoloader supplies a different class of that same package,
-// they can be fatally incompatible with each other (eg. an old Psr\Log\LoggerInterface loaded from
-// one, then a new Psr\Log\AbstractLogger from the other). header.inc.php's own bootstrap re-prepends
-// EGroupware's main autoloader ahead of ours, so re-prepend ours again here, now that header.inc.php
-// is done - everything from this point on is our own code and should consistently resolve against
-// our own vendor dir first.
-$openid_loader->unregister();
-$openid_loader->register(true);
 
 /**
  * Build the AuthorizationServer, with all grants enabled and client-specific token TTLs
