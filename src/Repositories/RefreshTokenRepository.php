@@ -41,7 +41,7 @@ class RefreshTokenRepository extends Base implements RefreshTokenRepositoryInter
 	 *
 	 * @throws UniqueTokenIdentifierConstraintViolationException
 	 */
-	public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity)
+	public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity) : void
 	{
 		//error_log(__METHOD__."(".array2string($refreshTokenEntity).")");
 
@@ -63,26 +63,33 @@ class RefreshTokenRepository extends Base implements RefreshTokenRepositoryInter
 
 	/**
 	 * Revoke the refresh token.
-	 *
-	 * @param string|array $tokenId token-identifier or array with query eg. ['access_token_id' => $id]
 	 */
-	public function revokeRefreshToken($tokenId)
+	public function revokeRefreshToken(string $tokenId) : void
+	{
+		$this->revokeRefreshTokenByQuery(['refresh_token_identifier' => $tokenId]);
+	}
+
+	/**
+	 * Revoke refresh token(s) matching an arbitrary query, eg. ['access_token_id' => $id]
+	 *
+	 * Used by User.php to revoke a token selected in the "manage your tokens" UI, where we only
+	 * have the numeric access_token_id, not the (unencrypted, unavailable) token identifier.
+	 *
+	 * @param array $query column => value pairs
+	 */
+	public function revokeRefreshTokenByQuery(array $query) : void
 	{
 		$this->db->update(self::TABLE, [
 			'refresh_token_revoked' => true,
-		], is_array($tokenId) ? $tokenId : [
-			'refresh_token_identifier' => $tokenId,
-		], __LINE__, __FILE__, self::APP);
+		], $query, __LINE__, __FILE__, self::APP);
 	}
 
 	/**
 	 * Check if the refresh token has been revoked.
 	 *
-	 * @param string $tokenId
-	 *
 	 * @return bool Return true if this token has been revoked
 	 */
-	public function isRefreshTokenRevoked($tokenId)
+	public function isRefreshTokenRevoked(string $tokenId) : bool
 	{
 		$revoked = $this->db->select(self::TABLE, 'refresh_token_revoked', [
 			'refresh_token_identifier' => $tokenId,
@@ -93,10 +100,8 @@ class RefreshTokenRepository extends Base implements RefreshTokenRepositoryInter
 
 	/**
 	 * Creates a new refresh token
-	 *
-	 * @return RefreshTokenEntityInterface
 	 */
-	public function getNewRefreshToken()
+	public function getNewRefreshToken() : ?RefreshTokenEntityInterface
 	{
 		return new RefreshTokenEntity();
 	}
@@ -132,13 +137,13 @@ class RefreshTokenRepository extends Base implements RefreshTokenRepositoryInter
 			$token = new RefreshTokenEntity();
 			$token->setId($data['refresh_token_id']);
 			$token->setIdentifier($data['refresh_token_identifier']);
-			$token->setExpiryDateTime(new \DateTime($data['refresh_token_expiration']));
+			$token->setExpiryDateTime(new \DateTimeImmutable($data['refresh_token_expiration']));
 			$access_token = new AccessTokenEntity();
 			$access_token->setClient($clientEntity);
 			$access_token->setId($data['access_token_id']);
 			$access_token->setIdentifier($data['access_token_identifier']);
-			$access_token->setExpiryDateTime(new \DateTime($data['access_token_expiration']));
-			$access_token->setUserIdentifier((int)$data['account_id']);
+			$access_token->setExpiryDateTime(new \DateTimeImmutable($data['access_token_expiration']));
+			$access_token->setUserIdentifier((string)$data['account_id']);
 			if (!empty($data['access_token_scopes']))
 			{
 				try {

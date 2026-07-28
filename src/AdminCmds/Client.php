@@ -10,6 +10,7 @@
 
 namespace EGroupware\OpenID\AdminCmds;
 
+
 use admin_cmd;
 use EGroupware\Api;
 use EGroupware\OpenID\Repositories\ClientRepository;

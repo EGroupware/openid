@@ -45,10 +45,19 @@ class AuthorizationRequest extends RequestTypes\AuthorizationRequest
 		$me->setGrantTypeId($parent->getGrantTypeId());
 		$me->setClient($parent->getClient());
 		$me->setRedirectUri($parent->getRedirectUri());
-		$me->setState($parent->getState());
+		if (($state = $parent->getState()) !== null)
+		{
+			$me->setState($state);
+		}
 		$me->setScopes($parent->getScopes());
-		$me->setCodeChallenge($parent->getCodeChallenge());
-		$me->setCodeChallengeMethod($parent->getCodeChallengeMethod());
+		if (($codeChallenge = $parent->getCodeChallenge()) !== null)
+		{
+			$me->setCodeChallenge($codeChallenge);
+		}
+		if (($codeChallengeMethod = $parent->getCodeChallengeMethod()) !== null)
+		{
+			$me->setCodeChallengeMethod($codeChallengeMethod);
+		}
 
 		return $me;
 	}

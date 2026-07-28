@@ -17,6 +17,7 @@
 namespace EGroupware\OpenID\Repositories;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use EGroupware\OpenID\Entities\UserEntity;
 
@@ -31,11 +32,11 @@ class UserRepository implements UserRepositoryInterface
      * {@inheritdoc}
      */
     public function getUserEntityByUserCredentials(
-        $username,
-        $password,
-        $grantType,
+        string $username,
+        string $password,
+        string $grantType,
         ClientEntityInterface $clientEntity
-    )
+    ) : ?UserEntityInterface
 	{
 		$auth = new Auth();
 
@@ -44,6 +45,6 @@ class UserRepository implements UserRepositoryInterface
             return new UserEntity($username);
         }
 
-        return;
+        return null;
     }
 }

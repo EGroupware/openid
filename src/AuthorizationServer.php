@@ -2,12 +2,16 @@
 /**
  * EGroupware OpenID Connect / OAuth2 server
  *
- * Reimplemented/Overwritten to:
- * Set client-specific access-token TTL (respondToAccessTokenRequest)
+ * Overwritten to:
+ * - set client-specific access-token TTL (respondToAccessTokenRequest)
+ * - carry the response type onto our AuthorizationRequest, so grants can add id_token params
+ *   to the redirect response (completeAuthorizationRequest)
  *
- * Implement RFC7662 OAuth 2.0 Token Introspection
- * Until OAuth2 server pull request #925 is not merged:
- * @link https://github.com/thephpleague/oauth2-server/pull/925
+ * Implement RFC7662 OAuth 2.0 Token Introspection, still not available upstream (as of
+ * league/oauth2-server 9.4 - see https://github.com/thephpleague/oauth2-server/issues/1473).
+ *
+ * Everything else (enableGrantType, validateAuthorizationRequest, getResponseType,
+ * setDefaultScope, ...) is inherited unchanged from League\OAuth2\Server\AuthorizationServer.
  *
  * @link https://www.egroupware.org
  * @author Ralf Becker <rb-At-egroupware.org>
@@ -24,54 +28,37 @@
 namespace EGroupware\OpenID;
 
 use Defuse\Crypto\Key;
-use League\Event\EmitterAwareInterface;
-use League\Event\EmitterAwareTrait;
+use League\OAuth2\Server\AuthorizationServer as BaseAuthorizationServer;
+use League\OAuth2\Server\CryptKeyInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
-use League\OAuth2\Server\Grant\GrantTypeInterface;
 use EGroupware\OpenID\IntrospectionValidators\BearerTokenValidator;
 use EGroupware\OpenID\IntrospectionValidators\IntrospectionValidatorInterface;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
-use League\OAuth2\Server\RequestTypes\AuthorizationRequest;
-use League\OAuth2\Server\ResponseTypes\AbstractResponseType;
+use League\OAuth2\Server\RequestTypes\AuthorizationRequestInterface;
 use EGroupware\OpenID\ResponseTypes\BearerTokenIntrospectionResponse;
-use League\OAuth2\Server\ResponseTypes\BearerTokenResponse;
 use EGroupware\OpenID\ResponseTypes\IntrospectionResponse;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-use League\OAuth2\Server\CryptKey;
-
-class AuthorizationServer implements EmitterAwareInterface
+class AuthorizationServer extends BaseAuthorizationServer
 {
-    use EmitterAwareTrait;
+    /**
+     * Our own copy of the access-token and client repositories, for the introspector.
+     *
+     * League's own $accessTokenRepository/$clientRepository are private, promoted constructor
+     * properties, so a subclass can't reach them - keep second references here instead.
+     *
+     * @var AccessTokenRepositoryInterface
+     */
+    private $accessTokenRepository;
 
     /**
-     * @var GrantTypeInterface[]
+     * @var ClientRepositoryInterface
      */
-    protected $enabledGrantTypes = [];
-
-    /**
-     * @var \DateInterval[]
-     */
-    protected $grantTypeAccessTokenTTL = [];
-
-    /**
-     * @var CryptKey
-     */
-    protected $privateKey;
-
-    /**
-     * @var CryptKey
-     */
-    protected $publicKey;
-
-    /**
-     * @var null|ResponseTypeInterface
-     */
-    protected $responseType;
+    private $clientRepository;
 
     /**
      * @var null|IntrospectionResponse
@@ -88,135 +75,46 @@ class AuthorizationServer implements EmitterAwareInterface
      */
     protected $introspector;
 
-    /**
-     * @var ClientRepositoryInterface
-     */
-    private $clientRepository;
-
-    /**
-     * @var AccessTokenRepositoryInterface
-     */
-    private $accessTokenRepository;
-
-    /**
-     * @var ScopeRepositoryInterface
-     */
-    private $scopeRepository;
-
-    /**
-     * @var string|Key
-     */
-    private $encryptionKey;
-
-    /**
-     * @var string
-     */
-    private $defaultScope = '';
-
-    /**
-     * New server instance.
-     *
-     * @param ClientRepositoryInterface      $clientRepository
-     * @param AccessTokenRepositoryInterface $accessTokenRepository
-     * @param ScopeRepositoryInterface       $scopeRepository
-     * @param CryptKey|string                $privateKey
-     * @param string|Key                     $encryptionKey
-     * @param null|ResponseTypeInterface     $responseType
-     */
     public function __construct(
         ClientRepositoryInterface $clientRepository,
         AccessTokenRepositoryInterface $accessTokenRepository,
         ScopeRepositoryInterface $scopeRepository,
-        $privateKey,
-        $encryptionKey,
+        CryptKeyInterface|string $privateKey,
+        Key|string $encryptionKey,
         ResponseTypeInterface $responseType = null
     ) {
-        $this->clientRepository = $clientRepository;
+        parent::__construct($clientRepository, $accessTokenRepository, $scopeRepository, $privateKey, $encryptionKey, $responseType);
+
         $this->accessTokenRepository = $accessTokenRepository;
-        $this->scopeRepository = $scopeRepository;
-
-        if ($privateKey instanceof CryptKey === false) {
-            $privateKey = new CryptKey($privateKey);
-        }
-        $this->privateKey = $privateKey;
-        $this->encryptionKey = $encryptionKey;
-        $this->responseType = $responseType;
-    }
-
-    /**
-     * Enable a grant type on the server.
-     *
-     * @param GrantTypeInterface $grantType
-     * @param null|\DateInterval $accessTokenTTL
-     */
-    public function enableGrantType(GrantTypeInterface $grantType, \DateInterval $accessTokenTTL = null)
-    {
-        if ($accessTokenTTL instanceof \DateInterval === false) {
-            $accessTokenTTL = new \DateInterval('PT1H');
-        }
-
-        $grantType->setAccessTokenRepository($this->accessTokenRepository);
-        $grantType->setClientRepository($this->clientRepository);
-        $grantType->setScopeRepository($this->scopeRepository);
-        $grantType->setDefaultScope($this->defaultScope);
-        $grantType->setPrivateKey($this->privateKey);
-        $grantType->setEmitter($this->getEmitter());
-        $grantType->setEncryptionKey($this->encryptionKey);
-
-        $this->enabledGrantTypes[$grantType->getIdentifier()] = $grantType;
-        $this->grantTypeAccessTokenTTL[$grantType->getIdentifier()] = $accessTokenTTL;
-    }
-
-    /**
-     * Validate an authorization request
-     *
-     * @param ServerRequestInterface $request
-     *
-     * @throws OAuthServerException
-     *
-     * @return AuthorizationRequest
-     */
-    public function validateAuthorizationRequest(ServerRequestInterface $request)
-    {
-        foreach ($this->enabledGrantTypes as $grantType) {
-            if ($grantType->canRespondToAuthorizationRequest($request)) {
-                return $grantType->validateAuthorizationRequest($request);
-            }
-        }
-
-        throw OAuthServerException::unsupportedGrantType();
+        $this->clientRepository = $clientRepository;
     }
 
     /**
      * Complete an authorization request
      *
-     * @param AuthorizationRequest $authRequest
-     * @param ResponseInterface    $response
-     *
-     * @return ResponseInterface
+     * Reimplemented to carry our response type onto EGroupware\OpenID\RequestTypes\AuthorizationRequest,
+     * so eg. Grant\ImplicitGrant can call $authorizationRequest->getResponse()->getExtraParams() to add
+     * an id_token to a hybrid-flow redirect.
      */
-    public function completeAuthorizationRequest(AuthorizationRequest $authRequest, ResponseInterface $response)
+    public function completeAuthorizationRequest(AuthorizationRequestInterface $authRequest, ResponseInterface $response) : ResponseInterface
     {
         if ($authRequest instanceof \EGroupware\OpenID\RequestTypes\AuthorizationRequest)
         {
             $authRequest->setResponse($this->getResponseType());
         }
-        return $this->enabledGrantTypes[$authRequest->getGrantTypeId()]
-            ->completeAuthorizationRequest($authRequest)
-            ->generateHttpResponse($response);
+        return parent::completeAuthorizationRequest($authRequest, $response);
     }
 
     /**
      * Return an access token response.
      *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface      $response
+     * Reimplemented to set a client-specific access- and refresh-token TTL, if configured on the
+     * client (ClientEntity::getAccessTokenTTL()/getRefreshTokenTTL()), instead of always using the
+     * one global TTL per grant type.
      *
      * @throws OAuthServerException
-     *
-     * @return ResponseInterface
      */
-    public function respondToAccessTokenRequest(ServerRequestInterface $request, ResponseInterface $response)
+    public function respondToAccessTokenRequest(ServerRequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         foreach ($this->enabledGrantTypes as $grantType) {
             if (!$grantType->canRespondToAccessTokenRequest($request)) {
@@ -243,9 +141,7 @@ class AuthorizationServer implements EmitterAwareInterface
                 $ttl
             );
 
-            if ($tokenResponse instanceof ResponseTypeInterface) {
-                return $tokenResponse->generateHttpResponse($response);
-            }
+            return $tokenResponse->generateHttpResponse($response);
         }
 
         throw OAuthServerException::unsupportedGrantType();
@@ -293,7 +189,7 @@ class AuthorizationServer implements EmitterAwareInterface
     protected function getIntrospectionValidator()
     {
         if ($this->introspectionValidator instanceof IntrospectionValidatorInterface === false) {
-            $this->introspectionValidator = new BearerTokenValidator($this->accessTokenRepository);
+            $this->introspectionValidator = new BearerTokenValidator($this->accessTokenRepository, $this->clientRepository);
 			// not included in OAuth2 Server pull request #926
 			$this->introspectionValidator->setPrivateKey($this->privateKey);
         }
@@ -342,40 +238,12 @@ class AuthorizationServer implements EmitterAwareInterface
         if (!isset($this->introspector)) {
             $this->introspector = new Introspector(
                 $this->accessTokenRepository,
+                $this->clientRepository,
                 $this->privateKey,
                 $this->getIntrospectionValidator()
             );
         }
 
         return $this->introspector;
-    }
-
-    /**
-     * Get the token type that grants will return in the HTTP response.
-     *
-     * @return ResponseTypeInterface
-     */
-    protected function getResponseType()
-    {
-        if ($this->responseType instanceof ResponseTypeInterface === false) {
-            $this->responseType = new BearerTokenResponse();
-        }
-
-        if ($this->responseType instanceof AbstractResponseType === true) {
-            $this->responseType->setPrivateKey($this->privateKey);
-        }
-        $this->responseType->setEncryptionKey($this->encryptionKey);
-
-        return $this->responseType;
-    }
-
-    /**
-     * Set the default scope for the authorization server.
-     *
-     * @param string $defaultScope
-     */
-    public function setDefaultScope($defaultScope)
-    {
-        $this->defaultScope = $defaultScope;
     }
 }

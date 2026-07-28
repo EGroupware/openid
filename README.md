@@ -60,16 +60,14 @@ interfaces allow it. The app's own `vendor/` directory is gone; it now shares EG
 * [Identity, Claims, & Tokens – An OpenID Connect Primer](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1) in 3 parts
 
 ## Open tasks:
-- [ ] `/introspect` doesn't verify the requesting client's Basic-auth credentials against the
-  token's `client_id` - any client (or none) can introspect any token, see
-  [`doc/UPSTREAM-OVERRIDES.md`](doc/UPSTREAM-OVERRIDES.md) for details
 - [ ] password grant: record and check failed login attempts like login page (see [user.authentication.failed](https://oauth2.thephpleague.com/authorization-server/events/))
-- [ ] wrong password on login looses oath request in session and therefore fails after correct password was entered
 - [ ] test with more clients, e.g. [Dovecot](https://wiki2.dovecot.org/PasswordDatabase/oauth2)
 - [ ] token endpoint must support response_type=code+id_token
 - [ ] allow users to create personal clients
 - [ ] implement full [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)
 - [x] rewritten against current upstream releases (league/oauth2-server 9.4, steverhoades/oauth2-openid-connect-server 3.0.1, lcobucci/jwt 5.6, slim/slim 4.15), own `vendor/` merged into EGroupware's main vendor tree, black-box HTTP contract test suite added (see "2026 rewrite" above)
+- [x] `/introspect` now verifies the requesting client's credentials and requires the client to be the one the token was issued to
+- [x] wrong password on login no longer looses the pending oauth request - was a `login.php` bug (dropped `phpgw_forward` on a rejected login), not session data loss; see `tests/AuthorizeWrongPasswordTest.php`
 - [x] /.well-known/openid-configuration is supported now
 - [x] token endpoint must return nonce of authorization request as claim in id_token
 - [x] fix League OAuth2 server to support multiple response_type(s), currently it neither [splits response_type by space](https://github.com/thephpleague/oauth2-server/blob/master/src/Grant/ImplicitGrant.php#L109), nor does it send responses for more then one grant, [see response in this ticket](https://github.com/thephpleague/oauth2-server/issues/903#issuecomment-423891504)

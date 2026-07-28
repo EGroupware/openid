@@ -6,17 +6,12 @@
  * @author Ralf Becker <rb-At-egroupware.org>
  * @package openid
  * @license http://opensource.org/licenses/gpl-license.php GPL - GNU General Public License
- *
- * Based on the following MIT Licensed packages:
- * @link https://github.com/php-middleware/log-http-messages
  */
 
 declare (strict_types=1);
 
 namespace EGroupware\OpenID\Log;
 
-use PhpMiddleware\LogHttpMessages\Formatter\ResponseFormatter;
-use PhpMiddleware\LogHttpMessages\Formatter\ServerRequestFormatter;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Http\Server\MiddlewareInterface;
@@ -39,8 +34,8 @@ class Middleware implements MiddlewareInterface
 	private $responseFormatter;
 
 	public function __construct(
-		ServerRequestFormatter $requestFormatter,
-		ResponseFormatter $responseFormatter,
+		HttpFormatter $requestFormatter,
+		HttpFormatter $responseFormatter,
 		Logger $logger=null,
 		string $level = LogLevel::DEBUG
 	) {
@@ -59,13 +54,11 @@ class Middleware implements MiddlewareInterface
      */
 	public function process(ServerRequest $request, RequestHandlerInterface $handler): Response
 	{
-		$formattedRequest = $this->requestFormatter->formatServerRequest($request);
-		$this->logger->log($this->level, $formattedRequest->getValue());
+		$this->logger->log($this->level, $this->requestFormatter->formatServerRequest($request));
 
 		$response = $handler->handle($request);
 
-		$formattedResponse = $this->responseFormatter->formatResponse($response);
-		$this->logger->log($this->level, $formattedResponse->getValue());
+		$this->logger->log($this->level, $this->responseFormatter->formatResponse($response));
 
 		return $response;
 	}

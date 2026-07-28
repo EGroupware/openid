@@ -39,7 +39,7 @@ class AuthCodeRepository extends Base implements AuthCodeRepositoryInterface
      *
      * @throws UniqueTokenIdentifierConstraintViolationException
      */
-    public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity)
+    public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity) : void
     {
 		//error_log(__METHOD__."(".array2string($authCodeEntity).")");
 
@@ -80,7 +80,7 @@ class AuthCodeRepository extends Base implements AuthCodeRepositoryInterface
      *
      * @param string $codeId
      */
-    public function revokeAuthCode($codeId)
+    public function revokeAuthCode(string $codeId) : void
     {
 		$this->db->update(self::TABLE, [
 			'auth_code_revoked' => true,
@@ -96,7 +96,7 @@ class AuthCodeRepository extends Base implements AuthCodeRepositoryInterface
      *
      * @return bool Return true if this code has been revoked
      */
-    public function isAuthCodeRevoked($codeId)
+    public function isAuthCodeRevoked(string $codeId) : bool
     {
 		$revoked = $this->db->select(self::TABLE, 'auth_code_revoked', [
 			'auth_code_identifier' => $codeId,
@@ -110,7 +110,7 @@ class AuthCodeRepository extends Base implements AuthCodeRepositoryInterface
      *
      * @return AuthCodeEntityInterface
      */
-    public function getNewAuthCode()
+    public function getNewAuthCode() : AuthCodeEntityInterface
     {
         $auth_code = new AuthCodeEntity();
 		$auth_code->setUserAgent();

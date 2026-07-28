@@ -24,24 +24,21 @@ class ClientEntity implements ClientEntityInterface
 {
     use EntityTrait, ClientTrait, Traits\IdTrait;
 
-    public function setName($name)
+    /**
+     * getName()/getRedirectUri()/isConfidential()/supportsGrantType() come from ClientTrait,
+     * which only provides getters - these setters are still ours.
+     */
+    public function setName(string $name) : void
     {
         $this->name = $name;
     }
 
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setRedirectUri($uri)
+    /**
+     * @param string|string[] $uri
+     */
+    public function setRedirectUri(string|array $uri) : void
     {
         $this->redirectUri = $uri;
-    }
-
-    public function getRedirectUri()
-    {
-        return $this->redirectUri;
     }
 
 	protected $secretHash;
@@ -54,11 +51,13 @@ class ClientEntity implements ClientEntityInterface
 	public function setSecretHash($hash)
 	{
 		$this->secretHash = $hash;
+		$this->isConfidential = !empty($hash);
 	}
 
 	public function setSecret($secret)
 	{
 		$this->secretHash = password_hash($secret, PASSWORD_BCRYPT);
+		$this->isConfidential = true;
 	}
 
 	/**
@@ -109,6 +108,21 @@ class ClientEntity implements ClientEntityInterface
 	public function getGrants()
 	{
 		return $this->grants;
+	}
+
+	/**
+	 * Whether the given grant type is allowed for this client
+	 *
+	 * Overrides the default (always true) from League\OAuth2\Server\Entities\Traits\ClientTrait,
+	 * called by AbstractGrant::supportsGrantType() to enforce the per-client grant restriction that
+	 * used to be a SQL join filter in ClientRepository::getClientEntity() (league/oauth2-server 7).
+	 *
+	 * @param string $grantType
+	 * @return bool
+	 */
+	function supportsGrantType(string $grantType) : bool
+	{
+		return empty($this->grants) || in_array($grantType, $this->grants);
 	}
 
 	/**

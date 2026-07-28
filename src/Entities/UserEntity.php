@@ -78,9 +78,11 @@ class UserEntity implements UserEntityInterface, ClaimSetInterface
 	 *
 	 * @return mixed
 	 */
-	public function getIdentifier()
+	public function getIdentifier() : string
 	{
-		return empty($this->id) ? null :
+		// empty string, not null: UserEntityInterface::getIdentifier() is non-nullable since
+		// league/oauth2-server 9 - client_credentials grants have no associated user
+		return empty($this->id) ? '' :
 			Api\Accounts::id2name($this->id);//.'@'.$this->account_domain;
 	}
 
