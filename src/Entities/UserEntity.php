@@ -154,7 +154,7 @@ class UserEntity implements UserEntityInterface, ClaimSetInterface
 			}
 		}
 		catch (\Throwable $e) {
-			_egw_log_exception();
+			_egw_log_exception($e);
 		}
 
 		return [
