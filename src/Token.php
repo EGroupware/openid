@@ -72,7 +72,10 @@ class Token extends AbstractGrant
 			return $this->scopeRepository->getScopeEntityByIdentifier($id);
 		}, $scopeIdentifiers);
 
-		$client = $this->clientRepository->getClientEntity($clientIdentifier);
+		if (!($client = $this->clientRepository->getClientEntity($clientIdentifier)))
+		{
+			return null;	// client does not (or no longer) exist
+		}
 
 		if (!empty($min_lifetime))
 		{
