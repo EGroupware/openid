@@ -137,7 +137,10 @@ class Token extends AbstractGrant
 	public function validate($jwt, string $min_lifetime="PT5M", ?ClientEntityInterface &$client=null)
 	{
 		if (($token = $this->validateJWT($jwt)) &&
-			($client = $this->clientRepository->getClientEntity($token->claims()->get('aud'))) &&
+			// lcobucci/jwt 5.x's permittedFor() always stores "aud" as an array; we only ever
+			// issue tokens for a single client
+			($aud = $token->claims()->get('aud')) &&
+			($client = $this->clientRepository->getClientEntity(is_array($aud) ? reset($aud) : $aud)) &&
 			($account_id = Api\Accounts::getInstance()->name2id($token->claims()->get('sub'))) &&
 			$this->accessTokenRepository->findToken($client, $account_id, $min_lifetime, $token->claims()->get('jti')))
 		{
