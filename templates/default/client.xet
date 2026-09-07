@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2.0//EN" "https://www.egroupware.org/etemplate2.0.dtd">
 <overlay>
-	<template id="openid.client.edit" template="" lang="" group="0" version="1.9.001">
+	<et2-template  id="openid.client.edit" template="" lang="" group="0" version="1.9.001">
 		<grid width="100%">
 			<columns>
 				<column width="120"/>
@@ -42,8 +42,8 @@
 				</row>
 			</rows>
 		</grid>
-	</template>
-	<template id="openid.client.app" template="" lang="" group="0" version="1.9.001">
+	</et2-template>
+	<et2-template  id="openid.client.app" template="" lang="" group="0" version="1.9.001">
 		<grid width="100%">
 			<columns>
 				<column width="120"/>
@@ -51,14 +51,13 @@
 			</columns>
 			<rows>
 				<row>
-					<groupbox span="all">
-						<caption label="If an OAuth client is managed as EGroupware app"/>
+					<et2-groupbox  span="all" summary="If an OAuth client is managed as EGroupware app">
 						<et2-vbox>
 							<et2-label  value="- authentication only succeeds if user has run-rights for the application"></et2-label>
 							<et2-label  value="- no explicit user consent required for OAuth login"></et2-label>
 							<et2-label  value="- client application is displayed inside EGroupware (iframe)"></et2-label>
 						</et2-vbox>
-					</groupbox>
+					</et2-groupbox>
 				</row>
 				<row>
 					<et2-label  value="Application name" for="app_name"></et2-label>
@@ -79,13 +78,13 @@
 					<et2-label  value="Icon" for="app_icon"></et2-label>
 					<et2-vbox>
 						<et2-select-thumbnail  id="app_icon" allowFreeEntries="true" class="et2_full_width"></et2-select-thumbnail>
-						<file label="Upload" width="100%" onchange="egw.json('admin.admin_config.ajax_upload_anon_images',[widget.get_value(), []], function(_data){widget._parent._children[0].set_value(_data)}).sendRequest()"/>
+						<et2-file  label="Upload" width="100%" onchange="egw.json('admin.admin_config.ajax_upload_anon_images',[widget.get_value(), []], function(_data){widget._parent._children[0].set_value(_data)}).sendRequest()"></et2-file>
 					</et2-vbox>
 				</row>
 			</rows>
 		</grid>
-	</template>
-	<template id="openid.client" template="" lang="" group="0" version="1.9.001">
+	</et2-template>
+	<et2-template  id="openid.client" template="" lang="" group="0" version="1.9.001">
 		<grid width="100%">
 			<columns>
 				<column width="120"/>
@@ -103,8 +102,8 @@
 							<tab id="app" label="Manage as EGroupware application"/>
 						</tabs>
 						<tabpanels>
-							<template id="openid.client.edit"/>
-							<template id="openid.client.app"/>
+							<et2-template  id="openid.client.edit"></et2-template>
+							<et2-template  id="openid.client.app"></et2-template>
 						</tabpanels>
 					</et2-tabbox>
 				</row>
@@ -127,10 +126,10 @@
 						<et2-button  statustext="Saves the changes made" label="Save" id="button[save]"></et2-button>
 						<et2-button  statustext="Applies the changes made" label="Apply" id="button[apply]"></et2-button>
 						<et2-button  statustext="exists without saving the changes" label="Cancel" id="button[cancel]" onclick="window.close();"></et2-button>
-                        <et2-button align="right" statustext="Disable this client" label="Disable" id="button[delete]" onclick="Et2Dialog.confirm(widget,'Disable this client','Disable');"></et2-button>
+                        <et2-button  align="right" statustext="Disable this client" label="Disable" id="button[delete]" onclick="Et2Dialog.confirm(widget,'Disable this client','Disable');"></et2-button>
 					</et2-hbox>
 				</row>
 			</rows>
 		</grid>
-	</template>
+	</et2-template>
 </overlay>
