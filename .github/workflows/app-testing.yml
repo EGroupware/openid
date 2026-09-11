@@ -1,0 +1,48 @@
+# CI for openid, via EGroupware's reusable test workflow.
+#
+# Builds and installs a full EGroupware instance, replaces the composer-provided copy of openid
+# with the ref under test, then runs openid's tests only.
+#
+# Two reasons to run:
+#   - push / pull_request: test this branch's openid against EGroupware master.
+#   - weekly:              test openid master against EGroupware master, to catch EGroupware
+#                          changes that break it. EGroupware's own CI does run openid's tests on
+#                          every commit, but against the sha pinned in its composer.lock, which
+#                          lags this repository's master.
+#
+# No credentials: this repository is public, so the workflow clones it anonymously.
+name: OpenID Testing
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  schedule:
+    # Mondays 8:23 UTC. Off the hour, where scheduled runs are heavily contended.
+    - cron: '23 8 * * 1'
+  workflow_dispatch:
+    inputs:
+      egw-ref:
+        description: 'EGroupware branch/tag/sha to test against, eg. master or a 26.x release tag'
+        type: string
+        default: master
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    uses: EGroupware/egroupware/.github/workflows/testing.yml@master
+    with:
+      egw-ref: ${{ inputs.egw-ref || 'master' }}
+
+      # github.head_ref is the PR's source branch; github.ref_name covers push, schedule
+      # (always the default branch) and dispatch. This tests the PR head, not the merge result.
+      extra-apps: >-
+        [{"repo": "EGroupware/openid", "dir": "openid",
+          "ref": "${{ github.head_ref || github.ref_name }}"}]
+
+      # Only openid's suite - not the whole EGroupware suite, which its own CI already covers.
+      test-apps: openid
+      test-scope: extra-apps
