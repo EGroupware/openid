@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../../doc/etemplate2/etemplate2.0.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2.0//EN" "https://www.egroupware.org/etemplate2.0.dtd">
 <overlay>
-	<template id="openid.clients.rows" template="" lang="" group="0" version="1.9.001">
+	<et2-template  id="openid.clients.rows" template="" lang="" group="0" version="1.9.001">
 		<grid width="100%">
 			<columns>
 				<column width="30"/>
@@ -21,12 +22,12 @@
 					<nextmatch-sortheader label="ID" id="client_id"/>
 					<nextmatch-sortheader label="Name" id="client_name"/>
 					<nextmatch-sortheader label="Identifier" id="client_identifier"/>
-					<nextmatch-header label="Redirect URI" id="client_redirect_uri"/>
-					<et2-nextmatch-header-filter  id="client_grants" emptyLabel="Grants"/>
-					<et2-nextmatch-header-filter  id="client_scopes" emptyLabel="Scopes"/>
-					<et2-nextmatch-header-filter  id="client_status" emptyLabel="Status"/>
-					<nextmatch-header label="Access-Token TTL" id="client_access_token_ttl"/>
-					<nextmatch-header label="Refresh-Token TTL" id="client_refresh_token_ttl"/>
+					<et2-nextmatch-header  label="Redirect URI" id="client_redirect_uri"></et2-nextmatch-header>
+					<et2-nextmatch-header-filter  id="client_grants" emptyLabel="Grants"></et2-nextmatch-header-filter>
+					<et2-nextmatch-header-filter  id="client_scopes" emptyLabel="Scopes"></et2-nextmatch-header-filter>
+					<et2-nextmatch-header-filter  id="client_status" emptyLabel="Status"></et2-nextmatch-header-filter>
+					<et2-nextmatch-header  label="Access-Token TTL" id="client_access_token_ttl"></et2-nextmatch-header>
+					<et2-nextmatch-header  label="Refresh-Token TTL" id="client_refresh_token_ttl"></et2-nextmatch-header>
 					<nextmatch-sortheader label="Created" id="client_created"/>
 					<nextmatch-sortheader label="Last modified" id="client_updated"/>
 				</row>
@@ -51,12 +52,12 @@
 				</row>
 			</rows>
 		</grid>
-	</template>
-	<template id="openid.clients.header" template="" lang="" group="0" version="1.9.001">
+	</et2-template>
+	<et2-template  id="openid.clients.header" template="" lang="" group="0" version="1.9.001">
 		<et2-button  label="Add" id="add" onclick="egw.open_link('openid.EGroupware\\openid\\Ui.client',false,'600x450');" noSubmit="true"></et2-button>
-	</template>
-	<template id="openid.clients" template="" lang="" group="0" version="1.9.001">
-		<template template="openid.clients.header" slot="main-header"></template>
+	</et2-template>
+	<et2-template  id="openid.clients" template="" lang="" group="0" version="1.9.001">
+		<et2-template  template="openid.clients.header" slot="main-header"></et2-template>
 		<nextmatch id="nm" template="openid.clients.rows"/>
-	</template>
+	</et2-template>
 </overlay>

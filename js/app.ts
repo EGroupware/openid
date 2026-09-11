@@ -8,7 +8,8 @@
  */
 
 import {EgwApp} from '../../api/js/jsapi/egw_app';
-import {app} from "../../api/js/jsapi/egw_global";
+// app is an ambient global (declare global {} in egw_global.d.ts, unconditionally included
+// via tsconfig's "**/*.d.ts") - no import needed or possible.
 import type {etemplate2} from "../../api/js/etemplate/etemplate2";
 import type {AdminApp} from "../../admin/js/app";
 

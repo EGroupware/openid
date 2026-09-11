@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../../doc/etemplate2/etemplate2.0.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2.0//EN" "https://www.egroupware.org/etemplate2.0.dtd">
 <overlay>
-	<template id="openid.authorize" template="" lang="" group="0" version="1.9.003">
-		<groupbox>
+	<et2-template  id="openid.authorize" template="" lang="" group="0" version="1.9.003">
+		<et2-groupbox>
 			<et2-description  id="client" label="%s would like to access"></et2-description>
 			<hrule/>
 			<et2-select  id="scopes" multiple="true" readonly="true"></et2-select>
@@ -11,8 +12,8 @@
 				<et2-button  id="button[approve]" label="Approve" image="check" onclick="widget.getInstanceManager().postSubmit()"></et2-button>
 				<et2-button  id="button[deny]" label="Deny" image="cancelled" onclick="widget.getInstanceManager().postSubmit()"></et2-button>
 			</et2-hbox>
-		</groupbox>
-		<styles>
+		</et2-groupbox>
+		<et2-styles>
 			body {
 				position: absolute;
 				top: 32%;
@@ -32,6 +33,6 @@
 			fieldset > label > span#openid-authorize_client {
 				font-weight: bold;
 			}
-		</styles>
-	</template>
+		</et2-styles>
+	</et2-template>
 </overlay>
