@@ -48,6 +48,9 @@ class User
 					'order' => 'access_token_updated',
 					'sort' => 'DESC',
 					'row_id' => 'access_token_id',
+					// own data cache prefix: the popup's other lists (Preferences' application passwords, webauthn)
+					// default to "preferences" too, and their row ids overlap
+					'dataStorePrefix' => self::APP,
 					'default_cols' => '!client_id',
 					'actions' => self::tokenActions(),
 				],

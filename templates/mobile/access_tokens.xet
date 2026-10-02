@@ -25,6 +25,8 @@
 		</grid>
 	</et2-template>
 	<et2-template  id="openid.access_tokens" template="" lang="" group="0" version="1.9.001">
-		<nextmatch id="nm" template="openid.access_tokens.rows"/>
+		<!-- Shown as a tab of the "Security &amp; Password" popup, which gets no filterbox:
+		     replaceFilters="false" keeps the filters in the column headers -->
+		<et2-nextmatch  id="nm" template="openid.access_tokens.rows" replaceFilters="false"></et2-nextmatch>
 	</et2-template>
 </overlay>

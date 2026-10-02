@@ -14,25 +14,25 @@
 				<column width="120"/> <!-- Created / Last modified -->
 			</columns>
 			<rows>
-				<row>
-					<nextmatch-sortheader label="ID" id="client_id"/>
-					<nextmatch-sortheader label="Client" id="client_name"/>
+				<row class="th">
+					<et2-nextmatch-sortheader  label="ID" id="client_id"></et2-nextmatch-sortheader>
+					<et2-nextmatch-sortheader  label="Client" id="client_name"></et2-nextmatch-sortheader>
 					<et2-vbox>
 						<et2-nextmatch-header-filter  id="client_status" emptyLabel="Client Status"></et2-nextmatch-header-filter>
 						<et2-nextmatch-header-filter  id="access_token_revoked" emptyLabel="Token Revoked"></et2-nextmatch-header-filter>
 					</et2-vbox>
 					<et2-nextmatch-header-filter  id="access_token_scopes" emptyLabel="Scopes"></et2-nextmatch-header-filter>
 					<et2-vbox>
-						<nextmatch-sortheader label="Expiration" id="access_token_expiration"/>
-						<nextmatch-sortheader label="Refresh-Token" id="refresh_token_expiration"/>
+						<et2-nextmatch-sortheader  label="Expiration" id="access_token_expiration"></et2-nextmatch-sortheader>
+						<et2-nextmatch-sortheader  label="Refresh-Token" id="refresh_token_expiration"></et2-nextmatch-sortheader>
 					</et2-vbox>
 					<et2-vbox>
 						<et2-nextmatch-header  label="User Agent" id="user_agent"></et2-nextmatch-header>
 						<et2-nextmatch-header  label="IP Address" id="user_ip"></et2-nextmatch-header>
 					</et2-vbox>
 					<et2-vbox>
-						<nextmatch-sortheader label="Created" id="access_token_created"/>
-						<nextmatch-sortheader label="Last modified" id="access_token_updated"/>
+						<et2-nextmatch-sortheader  label="Created" id="access_token_created"></et2-nextmatch-sortheader>
+						<et2-nextmatch-sortheader  label="Last modified" id="access_token_updated"></et2-nextmatch-sortheader>
 					</et2-vbox>
 				</row>
 				<row class="$row_cont[status_class]">
@@ -60,6 +60,8 @@
 		</grid>
 	</et2-template>
 	<et2-template  id="openid.access_tokens" template="" lang="" group="0" version="1.9.001">
-		<nextmatch id="nm" template="openid.access_tokens.rows"/>
+		<!-- Shown as a tab of the "Security &amp; Password" popup, which gets no filterbox:
+		     replaceFilters="false" keeps the filters in the column headers -->
+		<et2-nextmatch  id="nm" template="openid.access_tokens.rows" replaceFilters="false"></et2-nextmatch>
 	</et2-template>
 </overlay>
