@@ -384,12 +384,12 @@ class ClientRepository extends Api\Storage\Base implements ClientRepositoryInter
 		if (!empty($filter['client_scopes']))
 		{
 			$join .= ' LEFT JOIN '.self::CLIENT_SCOPES_TABLE.' ON '.self::CLIENT_SCOPES_TABLE.'.client_id='.self::TABLE.'.client_id';
-			$filter[] = $this->db->expression(self::CLIENT_SCOPES_TABLE, '(', ['scope_id' => $filter['client_scopes']], ' OR scope_id IS NULL)');
+			$filter[] = Api\Db\SqlFragment::raw($this->db->expression(self::CLIENT_SCOPES_TABLE, '(', ['scope_id' => $filter['client_scopes']], ' OR scope_id IS NULL)'));
 		}
 		if (!empty($filter['client_grants']))
 		{
 			$join .= ' JOIN '.self::CLIENT_GRANTS_TABLE.' ON '.self::CLIENT_GRANTS_TABLE.'.client_id='.self::TABLE.'.client_id';
-			$filter[] = $this->db->expression(self::CLIENT_GRANTS_TABLE, ['grant_id' => $filter['client_grants']]);
+			$filter[] = Api\Db\SqlFragment::raw($this->db->expression(self::CLIENT_GRANTS_TABLE, ['grant_id' => $filter['client_grants']]));
 		}
 		unset($filter['client_grants'], $filter['client_scopes']);
 

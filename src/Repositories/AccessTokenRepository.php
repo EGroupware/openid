@@ -179,7 +179,7 @@ class AccessTokenRepository extends Api\Storage\Base implements AccessTokenRepos
 		$data = $this->db->select(self::TABLE, '*', [
 			'client_id' => $clientEntity->getID(),
 			'access_token_revoked' => false,
-			'access_token_expiration >= '.$this->db->quote($min_expiration, 'timestamp'),
+			Api\Db\SqlFragment::raw('access_token_expiration >= '.$this->db->quote($min_expiration, 'timestamp')),
 		]+($identifier ? ['access_token_identifier' => $identifier] : [])+(isset($userIdentifier)?[
 			'account_id' => is_a($userIdentifier, UserEntity::class) ? $userIdentifier->getID() : $userIdentifier,
 		] : []), __LINE__, __FILE__, 0, 'ORDER BY access_token_expiration DESC', self::APP, 1)->fetch();
@@ -283,11 +283,11 @@ class AccessTokenRepository extends Api\Storage\Base implements AccessTokenRepos
 		if (!empty($filter['access_token_scopes']))
 		{
 			$join .= ' JOIN '.self::TOKEN_SCOPES_TABLE.' ON '.self::TOKEN_SCOPES_TABLE.'.access_token_id='.self::TABLE.'.access_token_id';
-			$filter[] = $this->db->expression(self::TOKEN_SCOPES_TABLE, ['scope_id' => $filter['access_token_scopes']]);
+			$filter[] = Api\Db\SqlFragment::raw($this->db->expression(self::TOKEN_SCOPES_TABLE, ['scope_id' => $filter['access_token_scopes']]));
 		}
 		if (!empty($filter['client_status']))
 		{
-			$filter[] = $this->db->expression(ClientRepository::TABLE, ['client_status' => $filter['client_status']]);
+			$filter[] = Api\Db\SqlFragment::raw($this->db->expression(ClientRepository::TABLE, ['client_status' => $filter['client_status']]));
 		}
 		unset($filter['access_token_scopes'], $filter['client_status']);
 

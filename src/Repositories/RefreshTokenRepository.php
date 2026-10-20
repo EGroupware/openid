@@ -23,6 +23,7 @@ use EGroupware\OpenID\Entities\RefreshTokenEntity;
 use EGroupware\OpenID\Entities\AccessTokenEntity;
 use EGroupware\OpenID\Entities\ClientEntity;
 use EGroupware\OpenID\Entities\UserEntity;
+use EGroupware\Api;
 
 /**
  * Refresh token storage interface.
@@ -122,12 +123,12 @@ class RefreshTokenRepository extends Base implements RefreshTokenRepositoryInter
 
 		$data = $this->db->select(self::TABLE, "*,($access_token_repo->scopes_sql) AS access_token_scopes", [
 			'refresh_token_revoked' => false,
-			'refresh_token_expiration >= '.$this->db->quote($min_expiration, 'timestamp'),
-			$this->db->expression(AccessTokenRepository::TABLE, [
+			Api\Db\SqlFragment::raw('refresh_token_expiration >= '.$this->db->quote($min_expiration, 'timestamp')),
+			Api\Db\SqlFragment::raw($this->db->expression(AccessTokenRepository::TABLE, [
 				'client_id' => $clientEntity->getID(),
 				'account_id' => is_a($userIdentifier, UserEntity::class) ? $userIdentifier->getID() : $userIdentifier,
 				'access_token_revoked' => false,
-			]),
+			])),
 		], __LINE__, __FILE__, 0, 'ORDER BY refresh_token_expiration DESC', self::APP, 1,
 		' JOIN '.AccessTokenRepository::TABLE.' ON '.self::TABLE.'.access_token_id='.
 			AccessTokenRepository::TABLE.'.access_token_id')->fetch();
