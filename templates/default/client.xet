@@ -2,135 +2,64 @@
 <?xml-model href="../../../doc/etemplate2/etemplate2.0.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <!DOCTYPE overlay PUBLIC "-//EGroupware GmbH//eTemplate 2.0//EN" "https://www.egroupware.org/etemplate2.0.dtd">
 <overlay>
-	<et2-template  id="openid.client.edit" template="" lang="" group="0" version="1.9.001">
-		<grid width="100%">
-			<columns>
-				<column width="120"/>
-				<column width="480"/>
-			</columns>
-			<rows>
-				<row>
-					<et2-label  value="Identifier" for="client_identifier"></et2-label>
-					<et2-textbox  id="client_identifier" statustext="Identifier to enter at the client" maxlength="128" required="true"></et2-textbox>
-				</row>
-				<row>
-					<et2-label  value="Secret" for="client_secret"></et2-label>
-					<et2-password  id="client_secret" statustext="Secret/password to enter at the client" maxlength="128" suggest="32"></et2-password>
-				</row>
-				<row>
-					<et2-label  value="Redirect URI" for="client_redirect_uri"></et2-label>
-					<et2-url  id="client_redirect_uri" maxlength="255" required="true"></et2-url>
-				</row>
-				<row>
-					<et2-label  value="Allowed grants" for="client_grants" class="et2_nowrap"></et2-label>
-					<et2-select  id="client_grants" multiple="true" required="true"></et2-select>
-				</row>
-				<row>
-					<et2-label  value="Limit scopes" for="client_scopes"></et2-label>
-					<et2-select  id="client_scopes" multiple="true"></et2-select>
-				</row>
-				<row>
-					<et2-label  value="Status" for="client_status"></et2-label>
-					<et2-select  id="client_status"></et2-select>
-				</row>
-				<row>
-					<et2-label  value="Access-Token TTL" for="client_access_token_ttl"></et2-label>
-					<et2-select  id="client_access_token_ttl" emptyLabel="{Use default of} $cont[default_access_token_ttl]"></et2-select>
-				</row>
-				<row>
-					<et2-label  value="Refresh-Token TTL" for="client_refresh_token_ttl"></et2-label>
-					<et2-select  id="client_refresh_token_ttl" emptyLabel="{Use default of} $cont[default_refresh_token_ttl]"></et2-select>
-				</row>
-			</rows>
-		</grid>
+	<et2-template  id="openid.client.edit" template="" lang="" group="0" version="1.9.003" layout="2-column" style="--column-min-width:50em; --label-width:11em;">
+		<et2-textbox  label="Identifier" id="client_identifier" statustext="Identifier to enter at the client" maxlength="128" required="true"></et2-textbox>
+		<et2-password  label="Secret" id="client_secret" statustext="Secret/password to enter at the client" maxlength="128" suggest="32"></et2-password>
+		<et2-url  label="Redirect URI" id="client_redirect_uri" maxlength="255" required="true"></et2-url>
+		<et2-select  label="Allowed grants" id="client_grants" multiple="true" required="true"></et2-select>
+		<et2-select  label="Limit scopes" id="client_scopes" multiple="true"></et2-select>
+		<et2-select  label="Status" id="client_status"></et2-select>
+		<et2-select  label="Access-Token TTL" id="client_access_token_ttl" emptyLabel="{Use default of} $cont[default_access_token_ttl]"></et2-select>
+		<et2-select  label="Refresh-Token TTL" id="client_refresh_token_ttl" emptyLabel="{Use default of} $cont[default_refresh_token_ttl]"></et2-select>
 	</et2-template>
-	<et2-template  id="openid.client.app" template="" lang="" group="0" version="1.9.001">
-		<grid width="100%">
-			<columns>
-				<column width="120"/>
-				<column width="480"/>
-			</columns>
-			<rows>
-				<row>
-					<et2-groupbox  span="all" summary="If an OAuth client is managed as EGroupware app">
-						<et2-vbox>
-							<et2-label  value="- authentication only succeeds if user has run-rights for the application"></et2-label>
-							<et2-label  value="- no explicit user consent required for OAuth login"></et2-label>
-							<et2-label  value="- client application is displayed inside EGroupware (iframe)"></et2-label>
-						</et2-vbox>
-					</et2-groupbox>
-				</row>
-				<row>
-					<et2-label  value="Application name" for="app_name"></et2-label>
-					<et2-hbox  width="100%">
-						<et2-textbox  id="app_name" statustext="EGroupware internal application name" maxlength="16" class="et2_required"></et2-textbox>
-						<et2-number  label="Order" id="app_order" min="1" max="100" align="right" precision="0"></et2-number>
-					</et2-hbox>
-				</row>
-				<row>
-					<et2-label  value="Start URL" for="app_index"></et2-label>
-					<et2-url  id="app_index" statustext="URL to show when the user opens the app" maxlength="128" class="et2_required"></et2-url>
-				</row>
-				<row>
-					<et2-label  value="Allowed for" for="run_rights"></et2-label>
-					<et2-select-account  id="run_rights" class="et2_full_width et2_required" multiple="true" accountType="both"></et2-select-account>
-				</row>
-				<row valign="top">
-					<et2-label  value="Icon" for="app_icon"></et2-label>
-					<et2-vbox>
-						<et2-select-thumbnail  id="app_icon" allowFreeEntries="true" class="et2_full_width"></et2-select-thumbnail>
-						<et2-file  label="Upload" width="100%" onchange="egw.json('admin.admin_config.ajax_upload_anon_images',[widget.get_value(), []], function(_data){widget._parent._children[0].set_value(_data)}).sendRequest()"></et2-file>
-					</et2-vbox>
-				</row>
-			</rows>
-		</grid>
+	<et2-template  id="openid.client.app" template="" lang="" group="0" version="1.9.003" layout="2-column" style="--column-min-width:50em; --label-width:11em;">
+		<et2-groupbox  span="all" summary="If an OAuth client is managed as EGroupware app">
+			<et2-vbox>
+				<et2-label  value="- authentication only succeeds if user has run-rights for the application"></et2-label>
+				<et2-label  value="- no explicit user consent required for OAuth login"></et2-label>
+				<et2-label  value="- client application is displayed inside EGroupware (iframe)"></et2-label>
+			</et2-vbox>
+		</et2-groupbox>
+		<et2-textbox  label="Application name" id="app_name" statustext="EGroupware internal application name" maxlength="16" class="et2_required"></et2-textbox>
+		<et2-number  label="Order" id="app_order" min="1" max="100" precision="0"></et2-number>
+		<et2-url  label="Start URL" id="app_index" statustext="URL to show when the user opens the app" maxlength="128" class="et2_required"></et2-url>
+		<et2-select-account  label="Allowed for" id="run_rights" class="et2_full_width et2_required" multiple="true" accountType="both"></et2-select-account>
+		<et2-select-thumbnail  label="Icon" id="app_icon" allowFreeEntries="true" class="et2_full_width"></et2-select-thumbnail>
+		<et2-file  label="Upload" width="100%" onchange="egw.json('admin.admin_config.ajax_upload_anon_images',[widget.get_value(), []], function(_data){widget.getRoot().getWidgetById('app_icon').set_value(_data)}).sendRequest()"></et2-file>
 	</et2-template>
-	<et2-template  id="openid.client" template="" lang="" group="0" version="1.9.001">
-		<grid width="100%">
-			<columns>
-				<column width="120"/>
-				<column width="450"/>
-			</columns>
-			<rows>
-				<row>
-					<et2-label  value="Name" for="client_name"></et2-label>
-					<et2-textbox  id="client_name" statustext="Name used inside EGroupware" maxlength="128" required="true"></et2-textbox>
-				</row>
-				<row>
-					<et2-tabbox  id="tabs" class="et2_nowrap" span="all" width="100%" tabHeight="350px">
-						<tabs>
-							<tab id="general" label="General"/>
-							<tab id="app" label="Manage as EGroupware application"/>
-						</tabs>
-						<tabpanels>
-							<et2-template  id="openid.client.edit"></et2-template>
-							<et2-template  id="openid.client.app"></et2-template>
-						</tabpanels>
-					</et2-tabbox>
-				</row>
-				<row disabled="!@client_created">
-					<et2-label  value="Created"></et2-label>
-					<et2-hbox>
-						<et2-select-account  id="client_creator" readonly="true"></et2-select-account>
-						<et2-date-time  id="client_created" readonly="true" align="right"></et2-date-time>
-					</et2-hbox>"
-				</row>
-				<row disabled="!@client_updated">
-					<et2-label  value="Last modified"></et2-label>
-					<et2-hbox>
-						<et2-select-account  id="client_modifier" readonly="true"></et2-select-account>
-						<et2-date-time  id="client_updated" readonly="true" align="right"></et2-date-time>
-					</et2-hbox>
-				</row>
-				<row class="dialogFooterToolbar">
-					<et2-hbox  span="all">
-						<et2-button  statustext="Saves the changes made" label="Save" id="button[save]"></et2-button>
-						<et2-button  statustext="Applies the changes made" label="Apply" id="button[apply]"></et2-button>
-						<et2-button  statustext="exists without saving the changes" label="Cancel" id="button[cancel]" onclick="window.close();"></et2-button>
-                        <et2-button  align="right" statustext="Disable this client" label="Disable" id="button[delete]" onclick="Et2Dialog.confirm(widget,'Disable this client','Disable');"></et2-button>
-					</et2-hbox>
-				</row>
-			</rows>
-		</grid>
+	<et2-template  id="openid.client" template="" lang="" group="0" version="1.9.002" layout="edit">
+		<et2-hbox  class="dialogHeader">
+			<et2-textbox  label="Name" class="et2-label-fixed" id="client_name" statustext="Name used inside EGroupware" maxlength="128" required="true"></et2-textbox>
+		</et2-hbox>
+		<et2-tabbox  id="tabs" class="et2_nowrap" tabHeight="auto">
+			<tabs>
+				<tab id="general" label="General"/>
+				<tab id="app" label="Manage as EGroupware application"/>
+			</tabs>
+			<tabpanels>
+				<et2-template  id="openid.client.edit"></et2-template>
+				<et2-template  id="openid.client.app"></et2-template>
+			</tabpanels>
+		</et2-tabbox>
+		<et2-hbox  class="dialogMeta" hidden="!@client_created">
+			<et2-description  value="Created" for="client_creator"></et2-description>
+			<et2-hbox>
+				<et2-select-account  id="client_creator" readonly="true"></et2-select-account>
+				<et2-date-time  id="client_created" readonly="true"></et2-date-time>
+			</et2-hbox>
+		</et2-hbox>
+		<et2-hbox  class="dialogMeta" hidden="!@client_updated">
+			<et2-description  value="Last modified" for="client_modifier"></et2-description>
+			<et2-hbox>
+				<et2-select-account  id="client_modifier" readonly="true"></et2-select-account>
+				<et2-date-time  id="client_updated" readonly="true"></et2-date-time>
+			</et2-hbox>
+		</et2-hbox>
+		<et2-hbox  class="dialogFooterToolbar" style="min-width:0">
+			<et2-button  statustext="Saves the changes made" label="Save" id="button[save]"></et2-button>
+			<et2-button  statustext="Applies the changes made" label="Apply" id="button[apply]"></et2-button>
+			<et2-button  statustext="exists without saving the changes" label="Cancel" id="button[cancel]" onclick="window.close();"></et2-button>
+			<et2-button  align="right" statustext="Disable this client" label="Disable" id="button[delete]" onclick="Et2Dialog.confirm(widget,'Disable this client','Disable');"></et2-button>
+		</et2-hbox>
 	</et2-template>
 </overlay>
